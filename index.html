@@ -3,398 +3,718 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Tell Checker v3.1 — Multi-Tier &amp; Era-Calibrated Detection Reference</title>
+<title>AI Tell Checker v3.3 — Visual AI Style &amp; Pattern Scanner</title>
 <style>
   :root{
-    --bg:#10141a;
-    --panel:#171c24;
-    --panel-deep:#0c0f14;
-    --panel-line:#262e3b;
-    --ink:#eae6df;
-    --ink-dim:#98a2b0;
-    --amber:#d49b35;
-    --amber-dim:#7a5b21;
-    --red:#cf5640;
-    --red-bright:#f07d67;
-    --purple:#a678de;
-    --green:#5d9870;
-    --blue:#548ec7;
-    --cyan:#47a8b5;
+    --bg:#0d1117;
+    --panel:#151b23;
+    --panel-elev:#1b2330;
+    --panel-deep:#090d12;
+    --panel-line:#293445;
+    --ink:#f0ede6;
+    --ink-dim:#b4c0cf;
+    --amber:#e0a43b;
+    --amber-dim:#8b6623;
+    --red:#df5b43;
+    --red-bright:#ff8770;
+    --purple:#b388eb;
+    --green:#5bbd7e;
+    --blue:#5e9eff;
+    --cyan:#4dc4d4;
     --mono:"IBM Plex Mono","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
   body{
     margin:0;
-    background:var(--bg);
+    background:radial-gradient(circle at 15% 0%, rgba(224,164,59,0.07), transparent 40%),
+               radial-gradient(circle at 85% 10%, rgba(94,158,255,0.07), transparent 42%),
+               var(--bg);
     color:var(--ink);
     font-family:var(--sans);
+    font-size:15px;
+    line-height:1.55;
     min-height:100vh;
   }
-  .wrap{max-width:1260px;margin:0 auto;padding:22px 18px 56px;}
+  .skip-link{
+    position:absolute;
+    top:-100px;
+    left:16px;
+    background:var(--amber);
+    color:#140f04;
+    font-weight:700;
+    padding:10px 16px;
+    border-radius:6px;
+    z-index:999;
+    text-decoration:none;
+    box-shadow:0 6px 20px rgba(0,0,0,.5);
+  }
+  .skip-link:focus{top:14px;outline:3px solid #fff;}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:24px 20px 64px;}
   header{
     border-bottom:1px solid var(--panel-line);
-    padding-bottom:16px;
-    margin-bottom:20px;
+    padding-bottom:18px;
+    margin-bottom:22px;
     display:flex;
     justify-content:space-between;
     align-items:flex-start;
-    gap:16px;
+    gap:18px;
     flex-wrap:wrap;
+  }
+  .brand-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .brand-icon{
+    width:40px;height:40px;
+    border-radius:10px;
+    background:linear-gradient(135deg, rgba(224,164,59,.22), rgba(94,158,255,.18));
+    border:1px solid rgba(224,164,59,.45);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
   }
   .eyebrow{
     font-family:var(--mono);
-    font-size:11px;
+    font-size:11.5px;
     letter-spacing:.08em;
     color:var(--amber);
-    margin:0 0 6px;
+    margin:0 0 2px;
     text-transform:uppercase;
+    font-weight:600;
   }
-  h1{font-size:24px;font-weight:650;margin:0 0 6px;letter-spacing:-0.01em;}
-  .sub{color:var(--ink-dim);font-size:13px;max-width:740px;line-height:1.5;margin:0;}
-  .header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
+  h1{font-size:26px;font-weight:750;margin:0;letter-spacing:-0.02em;line-height:1.15;}
+  .sub{color:var(--ink);font-size:15px;max-width:740px;line-height:1.5;margin:6px 0 10px;font-weight:450;}
+  .trust-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .trust-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;color:var(--ink-dim);
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--panel-line);
+    padding:4px 10px;border-radius:999px;
+  }
+  .header-actions{display:flex;gap:10px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
   .icon-btn{
-    background:rgba(212,155,53,.1);
-    border:1px solid rgba(212,155,53,.4);
+    background:rgba(224,164,59,.12);
+    border:1px solid rgba(224,164,59,.45);
     color:var(--amber);
     font-family:var(--sans);
-    font-size:12px;
+    font-size:13px;
     font-weight:600;
-    padding:7px 14px;
-    border-radius:20px;
+    padding:9px 15px;
+    min-height:40px;
+    border-radius:999px;
     cursor:pointer;
     display:inline-flex;
     align-items:center;
-    gap:6px;
+    gap:7px;
+    transition:all .15s ease;
   }
-  .icon-btn:hover{background:rgba(212,155,53,.2);color:var(--ink);}
+  .icon-btn:hover{background:rgba(224,164,59,.22);color:var(--ink);transform:translateY(-1px);}
   .version-tag{
     font-family:var(--mono);
-    font-size:10.5px;
+    font-size:11.5px;
     color:var(--ink-dim);
     background:var(--panel);
     border:1px solid var(--panel-line);
-    padding:4px 9px;
-    border-radius:12px;
+    padding:6px 11px;
+    border-radius:999px;
     align-self:center;
   }
-  .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;align-items:start;}
-  @media (max-width:960px){.grid{grid-template-columns:1fr;}}
+  .grid{display:grid;grid-template-columns:1fr 1.12fr;gap:22px;align-items:start;}
+  @media (max-width:980px){.grid{grid-template-columns:1fr;}}
   .panel{
-    background:var(--panel);
+    background:linear-gradient(180deg, var(--panel) 0%, #121720 100%);
     border:1px solid var(--panel-line);
-    border-radius:5px;
-    padding:18px;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 12px 32px rgba(0,0,0,.28);
   }
   .panel-head-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:12px;
-    gap:8px;
+    margin-bottom:14px;
+    gap:10px;
     flex-wrap:wrap;
   }
   .panel h2{
-    font-size:11.5px;
+    font-size:13px;
     text-transform:uppercase;
     letter-spacing:.07em;
     color:var(--ink-dim);
     margin:0;
-    font-weight:600;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:7px;
   }
   .genre-select{
     background:var(--panel-deep);
     color:var(--ink);
     border:1px solid var(--panel-line);
-    border-radius:3px;
-    font-family:var(--mono);
-    font-size:11px;
-    padding:4px 8px;
+    border-radius:6px;
+    font-family:var(--sans);
+    font-size:13px;
+    padding:6px 10px;
+    min-height:36px;
   }
   textarea{
     width:100%;
-    min-height:360px;
+    min-height:340px;
     background:var(--panel-deep);
-    border:1px solid var(--panel-line);
-    border-radius:4px;
+    border:1.5px solid var(--panel-line);
+    border-radius:8px;
     color:var(--ink);
-    font-family:var(--mono);
-    font-size:13px;
-    line-height:1.58;
-    padding:14px;
+    font-family:var(--sans);
+    font-size:14.5px;
+    line-height:1.62;
+    padding:16px;
     resize:vertical;
+    transition:border-color .15s ease, box-shadow .15s ease;
   }
-  textarea:focus{outline:1px solid var(--amber);}
+  textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(224,164,59,.2);}
+  textarea.input-error{border-color:var(--red-bright);box-shadow:0 0 0 3px rgba(255,135,112,.22);}
+
+  /* Inline Empty-Input Alert */
+  .input-alert{
+    display:none;
+    align-items:center;
+    gap:10px;
+    background:rgba(223,91,67,.16);
+    border:1px solid rgba(255,135,112,.5);
+    color:#ffd7cf;
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+    font-size:13.5px;
+    font-weight:500;
+  }
+  .input-alert.show{display:flex;}
 
   /* Annotated Evidence Box */
   .annotated-box{
     display:none;
     width:100%;
-    min-height:360px;
+    min-height:340px;
     max-height:540px;
     overflow-y:auto;
     background:var(--panel-deep);
-    border:1px solid var(--panel-line);
-    border-radius:4px;
+    border:1.5px solid var(--panel-line);
+    border-radius:8px;
     color:var(--ink);
-    font-family:var(--mono);
-    font-size:13px;
-    line-height:1.7;
-    padding:14px;
+    font-family:var(--sans);
+    font-size:14.5px;
+    line-height:1.75;
+    padding:16px;
     white-space:pre-wrap;
     word-break:break-word;
   }
   .annotated-box.active{display:block;}
-  .hl-t1{background:rgba(166,120,222,.35);color:#f3e6ff;border-bottom:2px solid var(--purple);padding:1px 4px;border-radius:2px;font-weight:600;}
-  .hl-t2{background:rgba(71,168,181,.28);color:#d6f8fc;border-bottom:2px solid var(--cyan);padding:1px 3px;border-radius:2px;}
-  .hl-t3{background:rgba(207,86,64,.30);color:#ffd9d1;border-bottom:2px solid var(--red-bright);padding:1px 3px;border-radius:2px;}
-  .hl-t4{background:rgba(212,155,53,.28);color:#fff2cc;border-bottom:2px solid var(--amber);padding:1px 3px;border-radius:2px;}
-  .hl-t5{background:rgba(84,142,199,.25);color:#d9ecff;border-bottom:1px dashed var(--blue);padding:1px 2px;border-radius:2px;}
-  .hl-t6{background:rgba(152,162,176,.22);color:#e6ebf2;border-bottom:1px dotted var(--ink-dim);padding:1px 2px;border-radius:2px;}
-  .hl-hum{background:rgba(93,152,112,.26);color:#d4f5dd;border-bottom:2px solid var(--green);padding:1px 3px;border-radius:2px;}
+  .hl-t1{background:rgba(179,136,235,.35);color:#f3e6ff;border-bottom:2px solid var(--purple);padding:1px 4px;border-radius:3px;font-weight:600;}
+  .hl-t2{background:rgba(77,196,212,.28);color:#d6f8fc;border-bottom:2px solid var(--cyan);padding:1px 4px;border-radius:3px;}
+  .hl-t3{background:rgba(223,91,67,.30);color:#ffd9d1;border-bottom:2px solid var(--red-bright);padding:1px 4px;border-radius:3px;}
+  .hl-t4{background:rgba(224,164,59,.28);color:#fff2cc;border-bottom:2px solid var(--amber);padding:1px 4px;border-radius:3px;}
+  .hl-t5{background:rgba(94,158,255,.25);color:#d9ecff;border-bottom:2px dashed var(--blue);padding:1px 3px;border-radius:3px;}
+  .hl-t6{background:rgba(180,192,207,.22);color:#e6ebf2;border-bottom:2px dotted var(--ink-dim);padding:1px 3px;border-radius:3px;}
+  .hl-hum{background:rgba(91,189,126,.26);color:#d4f5dd;border-bottom:2px solid var(--green);padding:1px 4px;border-radius:3px;}
 
   .view-tabs{
     display:inline-flex;
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:4px;
-    padding:2px;
-    gap:2px;
+    border-radius:6px;
+    padding:3px;
+    gap:3px;
   }
   .view-tab{
     background:transparent;
     color:var(--ink-dim);
     border:none;
-    font-size:11px;
+    font-size:12.5px;
     font-weight:600;
-    padding:4px 9px;
-    border-radius:3px;
+    padding:5px 11px;
+    border-radius:4px;
     cursor:pointer;
+    min-height:30px;
   }
-  .view-tab.active{background:var(--panel-line);color:var(--ink);}
+  .view-tab.active{background:var(--panel-elev);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.3);}
   .hl-legend{
     display:none;
-    gap:10px;
-    font-family:var(--mono);
-    font-size:10.5px;
+    gap:12px;
+    font-size:12px;
     color:var(--ink-dim);
-    margin-top:8px;
+    margin-top:10px;
+    padding:8px 12px;
+    background:rgba(255,255,255,.02);
+    border-radius:6px;
     flex-wrap:wrap;
   }
   .hl-legend.active{display:flex;}
-  .hl-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+  .hl-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle;}
 
-  .toolbar{display:flex;gap:7px;margin-top:11px;align-items:center;flex-wrap:wrap;}
+  /* Primary Action Row & Sample Strip */
+  .toolbar-primary{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
   button{
     background:var(--amber);
-    color:#181203;
+    color:#161003;
     border:none;
-    font-weight:600;
-    font-size:12.5px;
-    padding:8px 14px;
-    border-radius:3px;
+    font-weight:700;
+    font-size:14px;
+    padding:10px 20px;
+    min-height:42px;
+    border-radius:7px;
     cursor:pointer;
     font-family:var(--sans);
-    transition:filter .12s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    transition:filter .12s ease, transform .1s ease;
   }
   button.secondary{
-    background:transparent;
-    color:var(--ink-dim);
+    background:var(--panel-elev);
+    color:var(--ink);
     border:1px solid var(--panel-line);
-    padding:7px 10px;
-    font-size:11.5px;
+    padding:8px 13px;
+    min-height:38px;
+    font-size:13px;
+    font-weight:600;
   }
-  button.secondary:hover{color:var(--ink);border-color:var(--amber-dim);}
+  button.secondary:hover{border-color:var(--amber);color:var(--amber);}
   button:hover{filter:brightness(1.08);}
-  button:active{filter:brightness(.95);}
-  .kbd-hint{font-family:var(--mono);font-size:11px;color:var(--ink-dim);}
-  .wc{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);margin-left:auto;}
+  button:active{transform:translateY(1px);}
+  button:focus-visible, select:focus-visible, a:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:2px;
+  }
 
-  /* Score Card */
+  .wc-pill{
+    margin-left:auto;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-dim);
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    padding:6px 12px;
+    border-radius:999px;
+  }
+  .wc-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-dim);}
+  .wc-dot.ready{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .wc-dot.short{background:var(--amber);}
+
+  .sample-strip{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid var(--panel-line);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .sample-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-dim);
+    margin-right:4px;
+  }
+  .sample-chip{
+    background:rgba(255,255,255,.03);
+    color:var(--ink);
+    border:1px solid var(--panel-line);
+    font-size:12.5px;
+    font-weight:600;
+    padding:6px 11px;
+    min-height:34px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .sample-chip:hover{border-color:var(--amber);color:var(--amber);background:rgba(224,164,59,.08);}
+
+  /* Empty State Graphic Card */
+  .empty-state-card{
+    background:var(--panel-deep);
+    border:1px dashed var(--panel-line);
+    border-radius:10px;
+    padding:36px 24px;
+    text-align:center;
+  }
+  .empty-state-icon{
+    width:64px;height:64px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(224,164,59,.18) 0%, rgba(224,164,59,.03) 70%);
+    border:1px solid rgba(224,164,59,.35);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .empty-state-title{font-size:17px;font-weight:700;color:var(--ink);margin:0 0 6px;}
+  .empty-state-sub{font-size:14px;color:var(--ink-dim);max-width:440px;margin:0 auto 18px;}
+  .empty-steps{
+    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+    font-size:12.5px;color:var(--ink-dim);
+  }
+  .empty-step{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    padding:6px 12px;
+    border-radius:999px;
+  }
+
+  /* Executive Verdict Score Card */
   .score-card{
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:4px;
-    padding:16px;
-    margin-bottom:14px;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:16px;
   }
-  .score-top-grid{
+  .verdict-hero{
+    display:grid;
+    grid-template-columns:136px 1fr;
+    gap:20px;
+    align-items:center;
+  }
+  @media (max-width:560px){
+    .verdict-hero{grid-template-columns:1fr;justify-items:center;text-align:center;}
+  }
+  .gauge-box{
+    position:relative;
+    width:132px;
+    height:132px;
     display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:14px;
-    flex-wrap:wrap;
-    margin-bottom:12px;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
   }
-  .score-primary-row{display:flex;align-items:baseline;gap:14px;}
+  .gauge-svg{width:132px;height:132px;transform:rotate(-90deg);}
+  .gauge-bg{fill:none;stroke:#1e2633;stroke-width:10;}
+  .gauge-arc{
+    fill:none;
+    stroke:var(--green);
+    stroke-width:10;
+    stroke-linecap:round;
+    stroke-dasharray:339.29;
+    stroke-dashoffset:339.29;
+    transition:stroke-dashoffset .55s cubic-bezier(.22,1,.36,1), stroke .3s ease;
+  }
+  .gauge-center{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
   .prob-num{
-    font-size:46px;
-    font-weight:700;
+    font-size:38px;
+    font-weight:800;
     font-family:var(--mono);
     line-height:1;
   }
-  .prob-label-col{display:flex;flex-direction:column;gap:5px;}
-  .prob-title{font-size:11.5px;color:var(--ink-dim);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-  .score-band{
-    font-family:var(--mono);
-    font-size:10.5px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    padding:3px 8px;
-    border-radius:3px;
-    display:inline-block;
-    align-self:flex-start;
-    font-weight:600;
-  }
-  .band-low{background:rgba(93,152,112,.18);color:var(--green);border:1px solid rgba(93,152,112,.4);}
-  .band-mod{background:rgba(212,155,53,.18);color:var(--amber);border:1px solid rgba(212,155,53,.4);}
-  .band-high{background:rgba(207,86,64,.18);color:var(--red-bright);border:1px solid rgba(207,86,64,.45);}
-  .band-art{background:rgba(166,120,222,.22);color:#d7b8ff;border:1px solid rgba(166,120,222,.5);}
-
-  .era-badge-box{
-    text-align:right;
+  .prob-outof{
     font-family:var(--mono);
     font-size:11px;
     color:var(--ink-dim);
+    margin-top:3px;
   }
+
+  .verdict-copy{display:flex;flex-direction:column;gap:8px;}
+  .verdict-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  @media (max-width:560px){.verdict-badges{justify-content:center;}}
+  .score-band{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:6px;
+    font-weight:700;
+  }
+  .band-low{background:rgba(91,189,126,.18);color:var(--green);border:1px solid rgba(91,189,126,.45);}
+  .band-mod{background:rgba(224,164,59,.18);color:var(--amber);border:1px solid rgba(224,164,59,.45);}
+  .band-high{background:rgba(223,91,67,.20);color:var(--red-bright);border:1px solid rgba(223,91,67,.5);}
+  .band-art{background:rgba(179,136,235,.22);color:#e0c8ff;border:1px solid rgba(179,136,235,.55);}
+
   .era-pill{
-    display:inline-block;
-    background:#171c24;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    background:var(--panel);
     border:1px solid var(--panel-line);
     color:var(--amber);
-    padding:3px 8px;
-    border-radius:3px;
+    padding:4px 10px;
+    border-radius:6px;
+    font-family:var(--mono);
+    font-size:11.5px;
     font-weight:600;
-    margin-top:2px;
+  }
+  .era-pill.muted{
+    color:var(--ink-dim);
+    background:rgba(255,255,255,.03);
+    border-style:dashed;
+  }
+
+  .verdict-headline{
+    font-size:20px;
+    font-weight:750;
+    color:var(--ink);
+    margin:0;
+    line-height:1.25;
+  }
+  .verdict-why{
+    font-size:14.5px;
+    color:var(--ink);
+    line-height:1.5;
+    margin:0;
+  }
+  .verdict-disclaimer{
+    font-size:12.5px;
+    color:var(--ink-dim);
+    margin:2px 0 0;
   }
 
   /* Caveat Banner */
   .caveat-box{
     display:none;
-    background:rgba(212,155,53,.11);
-    border:1px solid rgba(212,155,53,.38);
-    border-radius:4px;
-    padding:8px 11px;
-    margin:10px 0;
-    font-size:11.5px;
-    color:#f3d89c;
-    line-height:1.45;
+    background:rgba(224,164,59,.13);
+    border:1px solid rgba(224,164,59,.45);
+    border-radius:8px;
+    padding:11px 14px;
+    margin:14px 0 4px;
+    font-size:13.5px;
+    color:#ffe4ad;
+    line-height:1.5;
   }
   .caveat-box.show{display:block;}
 
-  /* Meter */
-  .meter-wrap{margin:10px 0 14px;}
+  /* Spectrum Meter */
+  .meter-wrap{margin:16px 0 14px;}
   .meter-track{
     position:relative;
     height:12px;
-    border-radius:6px;
+    border-radius:999px;
     background:linear-gradient(90deg,
-      rgba(93,152,112,.38) 0%,
-      rgba(93,152,112,.38) 29%,
-      rgba(212,155,53,.40) 30%,
-      rgba(212,155,53,.40) 59%,
-      rgba(207,86,64,.48) 60%,
-      rgba(207,86,64,.65) 89%,
-      rgba(166,120,222,.65) 90%,
-      rgba(166,120,222,.75) 100%);
+      rgba(91,189,126,.45) 0%,
+      rgba(91,189,126,.45) 29%,
+      rgba(224,164,59,.48) 30%,
+      rgba(224,164,59,.48) 59%,
+      rgba(223,91,67,.55) 60%,
+      rgba(223,91,67,.70) 89%,
+      rgba(179,136,235,.75) 90%,
+      rgba(179,136,235,.85) 100%);
     border:1px solid var(--panel-line);
   }
-  .meter-tick{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--panel-line);}
+  .meter-tick{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--bg);}
   .meter-pointer{
     position:absolute;
     top:-5px;
-    width:10px;
+    width:12px;
     height:20px;
-    margin-left:-5px;
-    background:var(--ink);
+    margin-left:-6px;
+    background:#fff;
     border:2px solid var(--bg);
-    border-radius:3px;
-    box-shadow:0 0 8px rgba(0,0,0,.7);
-    transition:left .4s cubic-bezier(.22,1,.36,1);
+    border-radius:4px;
+    box-shadow:0 0 10px rgba(0,0,0,.85);
+    transition:left .45s cubic-bezier(.22,1,.36,1);
   }
   .meter-labels{
     display:flex;
     justify-content:space-between;
-    font-family:var(--mono);
-    font-size:10px;
+    font-size:12px;
     color:var(--ink-dim);
-    margin-top:5px;
+    margin-top:6px;
+    flex-wrap:wrap;
+    gap:4px;
   }
 
-  .assessment-text{
-    font-size:12.5px;
-    color:var(--ink);
-    line-height:1.5;
-    margin:10px 0 12px;
-    padding-left:10px;
-    border-left:3px solid var(--amber);
+  /* Visual Signal Pillars (4-Bar Graphic Summary) */
+  .signal-pillars{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:8px;
+    padding:14px 16px;
+    margin-top:14px;
   }
+  .pillars-title{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-dim);
+    margin:0 0 10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .pillar-row{
+    display:grid;
+    grid-template-columns:175px 1fr 78px;
+    gap:10px;
+    align-items:center;
+    margin-bottom:8px;
+    font-size:13px;
+  }
+  .pillar-row:last-child{margin-bottom:0;}
+  @media (max-width:560px){
+    .pillar-row{grid-template-columns:1fr auto;}
+    .pillar-bar-track{grid-column:1 / -1;}
+  }
+  .pillar-name{color:var(--ink);font-weight:600;}
+  .pillar-bar-track{
+    height:9px;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .pillar-bar-fill{
+    height:100%;
+    border-radius:999px;
+    width:0%;
+    transition:width .45s ease;
+  }
+  .pillar-val{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-dim);
+    text-align:right;
+  }
+
+  /* Top Matched Phrase Chips */
+  .top-chips-box{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid var(--panel-line);
+  }
+  .top-chips-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-dim);
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .chip-list{display:flex;gap:7px;flex-wrap:wrap;}
+  .signal-chip{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:12px;
+    padding:5px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .signal-chip:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* Quick Actions Row in Verdict Card */
+  .verdict-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--panel-line);
+  }
+  .details-toggle-btn{
+    width:100%;
+    margin-top:12px;
+    background:var(--panel);
+    color:var(--ink);
+    border:1px solid var(--panel-line);
+    font-size:13.5px;
+    font-weight:650;
+    padding:11px 16px;
+    border-radius:8px;
+    justify-content:space-between;
+  }
+  .details-toggle-btn:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* Collapsible Technical Telemetry & 6-Tier Drawer */
+  .technical-details-wrap{
+    display:none;
+    margin-top:14px;
+  }
+  .technical-details-wrap.open{display:block;}
 
   /* Tier Points Grid */
   .tier-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:6px;
-    margin:10px 0;
-    font-family:var(--mono);
-    font-size:10.5px;
+    gap:8px;
+    margin:0 0 14px;
   }
-  @media (max-width:600px){.tier-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.tier-grid{grid-template-columns:repeat(2,1fr);}}
   .tier-cell{
-    background:#131820;
+    background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:3px;
-    padding:6px 8px;
+    border-radius:7px;
+    padding:10px 11px;
   }
-  .tier-cell span{color:var(--ink-dim);display:block;font-size:9.5px;}
-  .tier-cell strong{font-size:12.5px;color:var(--ink);}
+  .tier-cell span{color:var(--ink-dim);display:block;font-size:11.5px;font-weight:600;margin-bottom:3px;}
+  .tier-cell strong{font-family:var(--mono);font-size:14px;color:var(--ink);display:block;}
+  .tier-cell small{font-size:11px;color:var(--ink-dim);display:block;margin-top:2px;}
 
   /* Drift & Em-Dash Telemetry Subpanel */
   .telemetry-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:12px;
-    padding-top:12px;
-    border-top:1px solid var(--panel-line);
+    gap:12px;
+    margin-bottom:14px;
   }
   @media (max-width:640px){.telemetry-grid{grid-template-columns:1fr;}}
   .telemetry-box{
-    background:#12171f;
+    background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:4px;
-    padding:10px;
-    font-size:11.5px;
+    border-radius:8px;
+    padding:13px;
+    font-size:13px;
   }
   .telemetry-title{
     font-family:var(--mono);
-    font-size:10px;
+    font-size:11.5px;
     text-transform:uppercase;
     letter-spacing:.05em;
     color:var(--amber);
-    margin-bottom:6px;
+    margin-bottom:8px;
+    font-weight:700;
   }
   .mini-comp-row{
     display:flex;
     justify-content:space-between;
-    font-family:var(--mono);
-    font-size:10.5px;
+    font-size:12.5px;
     color:var(--ink-dim);
-    padding:2px 0;
+    padding:3px 0;
+    gap:8px;
   }
-  .mini-comp-row.you{color:var(--ink);font-weight:700;}
+  .mini-comp-row.you{color:var(--ink);font-weight:650;}
+  .mini-comp-row span:last-child{font-family:var(--mono);}
 
   .rubric-toggle-btn{
     background:none;
     border:none;
     color:var(--amber);
-    font-size:11.5px;
-    padding:0;
+    font-size:13px;
+    font-weight:600;
+    padding:4px 0;
+    min-height:32px;
     cursor:pointer;
     text-decoration:underline;
     font-family:var(--sans);
-    margin-top:10px;
     margin-right:14px;
   }
   .composite-drawer{
@@ -402,9 +722,9 @@
     margin-top:10px;
     background:#12161c;
     border:1px dashed var(--panel-line);
-    border-radius:4px;
+    border-radius:6px;
     padding:12px;
-    font-size:11.5px;
+    font-size:12.5px;
     color:var(--ink-dim);
     line-height:1.5;
   }
@@ -412,10 +732,10 @@
   .json-pre{
     background:#090c10;
     border:1px solid var(--panel-line);
-    padding:10px;
-    border-radius:3px;
+    padding:12px;
+    border-radius:5px;
     font-family:var(--mono);
-    font-size:11px;
+    font-size:12px;
     color:#c9d4e3;
     max-height:280px;
     overflow:auto;
@@ -423,90 +743,90 @@
   }
 
   /* Categories list */
-  .cat{border-top:1px solid var(--panel-line);padding:10px 0;}
-  .cat:first-of-type{border-top:none;padding-top:0;}
-  .cat-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px;}
+  .cat{border-top:1px solid var(--panel-line);padding:12px 0;}
+  .cat:first-of-type{border-top:none;padding-top:4px;}
+  .cat-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:10px;}
   .cat-head:hover .cat-name{color:var(--amber);}
-  .cat-name-box{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-  .cat-name{font-size:13px;font-weight:600;}
+  .cat-name-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .cat-name{font-size:14px;font-weight:650;}
   .tier-tag{
     font-family:var(--mono);
-    font-size:9.5px;
-    padding:1px 6px;
-    border-radius:3px;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:4px;
     font-weight:600;
   }
-  .t-b1{background:rgba(166,120,222,.18);color:#d7b8ff;border:1px solid rgba(166,120,222,.4);}
-  .t-b2{background:rgba(71,168,181,.18);color:#8ce5f0;border:1px solid rgba(71,168,181,.4);}
-  .t-b3{background:rgba(207,86,64,.18);color:var(--red-bright);border:1px solid rgba(207,86,64,.4);}
-  .t-b4{background:rgba(212,155,53,.18);color:var(--amber);border:1px solid rgba(212,155,53,.4);}
-  .t-b5{background:rgba(84,142,199,.18);color:#8ec2f5;border:1px solid rgba(84,142,199,.4);}
-  .t-b6{background:rgba(152,162,176,.18);color:#cbd4e1;border:1px solid rgba(152,162,176,.4);}
-  .t-bh{background:rgba(93,152,112,.18);color:#8cd4a0;border:1px solid rgba(93,152,112,.4);}
+  .t-b1{background:rgba(179,136,235,.18);color:#e0c8ff;border:1px solid rgba(179,136,235,.45);}
+  .t-b2{background:rgba(77,196,212,.18);color:#9beeff;border:1px solid rgba(77,196,212,.45);}
+  .t-b3{background:rgba(223,91,67,.18);color:var(--red-bright);border:1px solid rgba(223,91,67,.45);}
+  .t-b4{background:rgba(224,164,59,.18);color:var(--amber);border:1px solid rgba(224,164,59,.45);}
+  .t-b5{background:rgba(94,158,255,.18);color:#9ec5ff;border:1px solid rgba(94,158,255,.45);}
+  .t-b6{background:rgba(180,192,207,.18);color:#d7e0ec;border:1px solid rgba(180,192,207,.45);}
+  .t-bh{background:rgba(91,189,126,.18);color:#9be6b0;border:1px solid rgba(91,189,126,.45);}
 
   .cat-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .cat-count{
     font-family:var(--mono);
-    font-size:11.5px;
+    font-size:12px;
     color:var(--ink-dim);
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    padding:2px 8px;
-    border-radius:10px;
-    min-width:26px;
+    padding:3px 10px;
+    border-radius:999px;
+    min-width:32px;
     text-align:center;
   }
-  .cat-count.flag{color:var(--red-bright);border-color:rgba(207,86,64,.45);font-weight:600;}
-  .cat-count.hum-flag{color:var(--green);border-color:rgba(93,152,112,.45);font-weight:600;}
-  .cat-desc{font-size:11.5px;color:var(--ink-dim);margin:4px 0 0;line-height:1.45;}
-  .hits{margin-top:8px;display:none;}
+  .cat-count.flag{color:var(--red-bright);border-color:rgba(223,91,67,.5);font-weight:700;}
+  .cat-count.hum-flag{color:var(--green);border-color:rgba(91,189,126,.5);font-weight:700;}
+  .cat-desc{font-size:13px;color:var(--ink-dim);margin:5px 0 0;line-height:1.5;}
+  .hits{margin-top:10px;display:none;}
   .cat.open .hits{display:block;}
   .hit{
     font-family:var(--mono);
-    font-size:11.5px;
+    font-size:12.5px;
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:3px;
-    padding:6px 9px;
-    margin-bottom:5px;
-    color:var(--ink-dim);
+    border-radius:6px;
+    padding:8px 11px;
+    margin-bottom:6px;
+    color:var(--ink);
   }
   .hit-meta{
     display:flex;
     justify-content:space-between;
-    font-size:10px;
+    font-size:11px;
     color:var(--amber);
-    margin-bottom:3px;
+    margin-bottom:4px;
     gap:8px;
     flex-wrap:wrap;
   }
-  mark{background:rgba(212,155,53,.35);color:var(--ink);border-radius:2px;padding:0 2px;}
-  .empty-note{font-size:12px;color:var(--ink-dim);font-style:italic;}
+  mark{background:rgba(224,164,59,.35);color:var(--ink);border-radius:3px;padding:0 3px;font-weight:600;}
+  .empty-note{font-size:13.5px;color:var(--ink-dim);font-style:italic;}
 
   /* Studies & Reference Table Section */
   .ref-section{
-    margin-top:22px;
+    margin-top:24px;
     background:var(--panel);
     border:1px solid var(--panel-line);
-    border-radius:5px;
-    padding:18px;
+    border-radius:12px;
+    padding:20px;
   }
-  .study-table-wrap{overflow-x:auto;margin-top:10px;}
+  .study-table-wrap{overflow-x:auto;margin-top:12px;}
   .study-table{
     width:100%;
     border-collapse:collapse;
-    font-size:12px;
-    line-height:1.45;
+    font-size:13.5px;
+    line-height:1.5;
   }
   .study-table th, .study-table td{
-    padding:8px 10px;
+    padding:10px 12px;
     border-bottom:1px solid var(--panel-line);
     text-align:left;
     vertical-align:top;
   }
   .study-table th{
     font-family:var(--mono);
-    font-size:10.5px;
+    font-size:11.5px;
     text-transform:uppercase;
     color:var(--amber);
     background:var(--panel-deep);
@@ -515,24 +835,24 @@
   .study-table a:hover{text-decoration:underline;}
 
   footer{
-    margin-top:22px;
-    font-size:11.5px;
+    margin-top:24px;
+    font-size:13px;
     color:var(--ink-dim);
     line-height:1.6;
     border-top:1px solid var(--panel-line);
-    padding-top:14px;
+    padding-top:16px;
     display:flex;
     justify-content:space-between;
     gap:16px;
     flex-wrap:wrap;
   }
-  footer a{color:var(--amber);text-decoration:none;cursor:pointer;}
+  footer a{color:var(--amber);text-decoration:none;cursor:pointer;font-weight:600;}
   footer a:hover{text-decoration:underline;}
 
   /* Interactive Multi-Tab Help & Reference Modal */
   .modal-overlay{
     position:fixed;inset:0;
-    background:rgba(0,0,0,.76);
+    background:rgba(0,0,0,.78);
     display:none;
     align-items:flex-start;
     justify-content:center;
@@ -544,7 +864,7 @@
   .modal{
     background:var(--panel);
     border:1px solid var(--panel-line);
-    border-radius:6px;
+    border-radius:12px;
     max-width:960px;
     width:100%;
     padding:24px;
@@ -557,16 +877,18 @@
     background:transparent;
     border:1px solid var(--panel-line);
     color:var(--ink-dim);
-    width:32px;height:32px;
+    width:36px;height:36px;
+    min-height:36px;
     border-radius:50%;
     font-size:15px;
     cursor:pointer;
     padding:0;
+    justify-content:center;
   }
   .modal-close:hover{color:var(--ink);border-color:var(--amber);}
-  .modal h2{font-size:20px;margin:0 0 4px;}
-  .modal h3{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin:18px 0 8px;}
-  .modal p, .modal li{font-size:13px;line-height:1.58;color:var(--ink);}
+  .modal h2{font-size:21px;margin:0 0 4px;}
+  .modal h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin:18px 0 8px;}
+  .modal p, .modal li{font-size:14px;line-height:1.6;color:var(--ink);}
 
   .help-tabs{
     display:flex;
@@ -580,9 +902,10 @@
     background:var(--panel-deep);
     color:var(--ink-dim);
     border:1px solid var(--panel-line);
-    padding:7px 13px;
-    border-radius:4px;
-    font-size:12px;
+    padding:8px 14px;
+    min-height:38px;
+    border-radius:6px;
+    font-size:13px;
     font-weight:600;
     cursor:pointer;
   }
@@ -605,10 +928,10 @@
   .case-card{
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
-    border-radius:5px;
-    padding:14px;
+    border-radius:8px;
+    padding:16px;
   }
-  .case-card h4{margin:0 0 6px;font-size:14px;color:var(--ink);}
+  .case-card h4{margin:0 0 6px;font-size:15px;color:var(--ink);}
   .rule-search-bar{
     display:flex;
     gap:8px;
@@ -621,10 +944,18 @@
     background:var(--panel-deep);
     border:1px solid var(--panel-line);
     color:var(--ink);
-    padding:7px 10px;
-    border-radius:4px;
+    padding:9px 12px;
+    border-radius:6px;
     font-family:var(--mono);
-    font-size:12px;
+    font-size:13px;
+  }
+
+  @media (max-width:480px){
+    .wrap{padding:16px 12px 48px;}
+    .panel{padding:15px;}
+    h1{font-size:22px;}
+    .toolbar-primary button{flex:1 1 auto;justify-content:center;}
+    .wc-pill{width:100%;justify-content:center;margin-left:0;}
   }
 
   .toast{
@@ -633,106 +964,153 @@
     transform:translateX(-50%) translateY(10px);
     background:var(--amber);
     color:#181203;
-    font-size:12.5px;
-    font-weight:600;
-    padding:9px 16px;
-    border-radius:20px;
+    font-size:13.5px;
+    font-weight:700;
+    padding:10px 18px;
+    border-radius:999px;
     opacity:0;
     pointer-events:none;
     transition:opacity .2s ease, transform .2s ease;
     z-index:200;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-<div class="wrap">
+<a href="#input" class="skip-link">Skip to text input</a>
+<div class="wrap" id="mainWorkspace">
   <header>
     <div>
-      <p class="eyebrow">EVIDENCE-BASED AI WRITING AUDIT &bull; TELLS.YAML v3.1.0</p>
-      <h1>AI Tell Checker</h1>
-      <p class="sub">6-Tier + Human-Sign diagnostic engine calibrated to 9 empirical studies (Kobak et al., Liang et al., Reinhart et al. PNAS, Juzek &amp; Ward, Graphite Oct 2026, Czuma, &amp; Wikipedia AI Cleanup). Scores rate per 1,000 words, model-era drift, narrative syntax, and co-occurrence.</p>
+      <div class="brand-row">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e0a43b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M8 11h6"/><path d="M11 8v6"/></svg>
+        </div>
+        <div>
+          <p class="eyebrow">EXPLAINABLE AI WRITING DIAGNOSTIC &bull; TELLS.YAML v3.3</p>
+          <h1>AI Tell Checker</h1>
+        </div>
+      </div>
+      <p class="sub">Paste any passage to check whether it reads like AI-generated writing&mdash;and see the exact phrases, sentence rhythms, and punctuation patterns driving the score.</p>
+      <div class="trust-pills">
+        <span class="trust-pill">&#128218; Calibrated to 9 Peer-Reviewed &amp; Corpus Studies</span>
+        <span class="trust-pill">&#128274; 100% Private Local Browser Scan</span>
+        <span class="trust-pill">&#9878; Stylistic Evidence, Never a Black-Box Verdict</span>
+      </div>
     </div>
     <div class="header-actions">
-      <span class="version-tag" id="versionTag">v3.2.0 &bull; Lexicon 2026-10</span>
-      <button type="button" class="icon-btn" id="promptShieldBtn" style="background:rgba(93,152,112,.16);border-color:rgba(93,152,112,.5);color:#9be6b0;">&#9889; Anti-Tell Prompt Shield</button>
+      <span class="version-tag" id="versionTag">v3.3.0 &bull; Lexicon 2026-10</span>
+      <button type="button" class="icon-btn" id="promptShieldBtn" style="background:rgba(91,189,126,.15);border-color:rgba(91,189,126,.55);color:#9be6b0;">&#9889; Anti-Tell Prompt Shield</button>
       <button type="button" class="icon-btn" id="helpBtn">? Help &amp; Reference Guide</button>
     </div>
   </header>
 
-  <div class="grid">
+  <main class="grid">
     <!-- Left Column: Input & Annotated Evidence View -->
-    <div class="panel">
+    <section class="panel" aria-labelledby="inputHeading">
       <div class="panel-head-row">
-        <h2>Input Passage</h2>
+        <h2 id="inputHeading">1. Input Passage</h2>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <label for="genreSelect" style="font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);">Baseline:</label>
+          <label for="genreSelect" style="font-size:12.5px;color:var(--ink-dim);font-weight:600;">Writing Type:</label>
           <select id="genreSelect" class="genre-select">
-            <option value="web">Web / General Prose (3.14 em-dash/1k)</option>
-            <option value="narrative">Creative / Narrative Fiction</option>
-            <option value="academic">Academic / Preprint</option>
-            <option value="email">Email / Memo</option>
-            <option value="oratory">Historical / 18th-C Oratory</option>
+            <option value="web">General Web / Article</option>
+            <option value="narrative">Creative / Fiction Story</option>
+            <option value="academic">Academic / Technical</option>
+            <option value="email">Email / Workplace Memo</option>
+            <option value="oratory">Historical / Classic Prose</option>
           </select>
-          <div class="view-tabs">
-            <button type="button" class="view-tab active" id="tabEditBtn">Editor</button>
-            <button type="button" class="view-tab" id="tabHighlightBtn">Evidence Spans</button>
+          <div class="view-tabs" role="tablist" aria-label="Editor or highlighted spans">
+            <button type="button" class="view-tab active" id="tabEditBtn">Text Editor</button>
+            <button type="button" class="view-tab" id="tabHighlightBtn">Highlighted Spans</button>
           </div>
         </div>
       </div>
 
-      <textarea id="input" placeholder="Paste text here to scan across Tiers 1–6 and Human-Leaning features..."></textarea>
-      <div id="annotatedView" class="annotated-box"></div>
+      <textarea id="input" aria-label="Passage to analyze" placeholder="Paste or type your passage here (150+ words recommended for a stable rate score)..."></textarea>
+      <div id="annotatedView" class="annotated-box" aria-live="polite"></div>
+
+      <div id="inputErrorBox" class="input-alert" role="alert" aria-live="assertive">
+        <span>&#9888;</span>
+        <span id="inputErrorMsg">Paste some text first (150+ words gives the most stable score), or pick a sample below.</span>
+      </div>
 
       <div id="hlLegend" class="hl-legend">
-        <span><i class="hl-dot" style="background:var(--purple);"></i>T1: Artifact (Floor 90)</span>
-        <span><i class="hl-dot" style="background:var(--cyan);"></i>T2: Unicode/Punct</span>
-        <span><i class="hl-dot" style="background:var(--red);"></i>T3: Measured Lexicon</span>
-        <span><i class="hl-dot" style="background:var(--amber);"></i>T4: Phrase Frame</span>
-        <span><i class="hl-dot" style="background:var(--blue);"></i>T5/T6: Syntax &amp; Format</span>
-        <span><i class="hl-dot" style="background:var(--green);"></i>Human Sign (-3 pts)</span>
+        <span><i class="hl-dot" style="background:var(--purple);"></i>Chat Artifact</span>
+        <span><i class="hl-dot" style="background:var(--cyan);"></i>Punctuation/Unicode</span>
+        <span><i class="hl-dot" style="background:var(--red);"></i>AI Vocabulary</span>
+        <span><i class="hl-dot" style="background:var(--amber);"></i>Rhetorical Frame</span>
+        <span><i class="hl-dot" style="background:var(--blue);"></i>Sentence Syntax</span>
+        <span><i class="hl-dot" style="background:var(--green);"></i>Human Voice Sign (-3 pts)</span>
       </div>
 
-      <div class="toolbar">
-        <button type="button" id="analyzeBtn">Analyze Text</button>
-        <button type="button" id="sampleGeminiStoryBtn" class="secondary" title="Oct 2026 Gemini AI Example: 'Unit-7 Taco Story' (Creative Fiction AI Tells)">Oct 2026 Gemini (Taco Story)</button>
-        <button type="button" id="sample2026Btn" class="secondary" title="Oct 2026 Frontier AI Essay (Opus 5.5 / GPT-6 Astra tells)">Oct 2026 AI Essay</button>
-        <button type="button" id="sample2024Btn" class="secondary" title="2024 GPT-4 style (delve, tapestry, oaicite, U+202F, high em-dash)">2024 GPT-4 + Artifact</button>
-        <button type="button" id="sample1776Btn" class="secondary" title="1776 Declaration of Independence (Pre-2022 Human Baseline)">1776 Human Control</button>
+      <div class="toolbar-primary">
+        <button type="button" id="analyzeBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Analyze Text
+        </button>
         <button type="button" id="clearBtn" class="secondary">Clear</button>
-        <span class="wc" id="wc">0 words</span>
+        <div class="wc-pill" id="wcPill" title="150+ words recommended for stable per-1,000-word rate scoring">
+          <span class="wc-dot" id="wcDot"></span>
+          <span id="wc">0 words (150+ for stable rates)</span>
+        </div>
       </div>
-      <div class="toolbar" style="margin-top:6px;">
-        <span class="kbd-hint">Tip: Rich-text paste from Gemini/ChatGPT preserves bold/italics automatically. Click <strong>? Help &amp; Reference Guide</strong> for case studies &amp; rules.</span>
-      </div>
-    </div>
 
-    <!-- Right Column: Multi-Tier Results, Telemetry & Evidence -->
-    <div class="panel">
+      <div class="sample-strip" aria-label="Calibration sample passages">
+        <span class="sample-label">Try a sample:</span>
+        <button type="button" id="sampleGeminiStoryBtn" class="sample-chip" title="Oct 2026 Gemini AI Story: 'Unit-7 Taco Story'">&#127790; Gemini Taco Story (2026 AI)</button>
+        <button type="button" id="sample2026Btn" class="sample-chip" title="Oct 2026 Frontier AI Essay (Opus 5.5 / GPT-6 Astra tells)">&#129302; 2026 AI Essay</button>
+        <button type="button" id="sample2024Btn" class="sample-chip" title="2024 GPT-4 style (delve, tapestry, oaicite, high em-dash)">&#128203; 2024 GPT-4 + Chat Residue</button>
+        <button type="button" id="sample1776Btn" class="sample-chip" title="1776 Declaration of Independence (Pre-2022 Human Control)">&#128220; 1776 Human Control</button>
+      </div>
+    </section>
+
+    <!-- Right Column: Plain Verdict First + Visual Signal Graphics + Collapsible Technical Details -->
+    <section class="panel" aria-labelledby="resultsHeading" aria-live="polite">
       <div class="panel-head-row">
-        <h2>Diagnostic Evaluation &amp; Era Telemetry</h2>
-        <span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);" id="charStatsLabel">Ready</span>
+        <h2 id="resultsHeading">2. Verdict &amp; Signal Breakdown</h2>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--ink-dim);" id="charStatsLabel">Ready to scan</span>
       </div>
 
-      <div id="resultsEmpty" class="empty-note">Click <strong>Analyze Text</strong> (or load a calibration sample) to run the 8-step pipeline and inspect matched spans.</div>
+      <div id="resultsEmpty" class="empty-state-card">
+        <div class="empty-state-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e0a43b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <p class="empty-state-title">Ready to Check Your Text</p>
+        <p class="empty-state-sub">Paste a passage on the left and press <strong>Analyze Text</strong> (or click a sample button) to get a plain-English verdict, visual signal chart, and highlighted evidence spans.</p>
+        <div class="empty-steps">
+          <span class="empty-step">1. Paste 150+ words</span>
+          <span class="empty-step">2. Press Analyze Text</span>
+          <span class="empty-step">3. Inspect highlighted tells</span>
+        </div>
+      </div>
 
       <div id="results" style="display:none;">
         <div class="score-card">
-          <div class="score-top-grid">
-            <div class="score-primary-row">
-              <div class="prob-num" id="probNum">0</div>
-              <div class="prob-label-col">
-                <div class="prob-title">Composite AI Tell Score (0–100)</div>
-                <div class="score-band band-low" id="probBand">LOW</div>
+          <!-- Hero Verdict: Radial SVG Gauge + Plain-English Summary -->
+          <div class="verdict-hero">
+            <div class="gauge-box" aria-hidden="true">
+              <svg class="gauge-svg" viewBox="0 0 120 120">
+                <circle class="gauge-bg" cx="60" cy="60" r="54"></circle>
+                <circle class="gauge-arc" id="gaugeArc" cx="60" cy="60" r="54"></circle>
+              </svg>
+              <div class="gauge-center">
+                <div class="prob-num" id="probNum">0</div>
+                <div class="prob-outof">OUT OF 100</div>
               </div>
             </div>
-            <div class="era-badge-box">
-              <div>Likely Model Era / Fingerprint</div>
-              <div class="era-pill" id="likelyEraVal">undetermined</div>
+
+            <div class="verdict-copy">
+              <div class="verdict-badges">
+                <span class="score-band band-low" id="probBand">LOW</span>
+                <span class="era-pill" id="likelyEraVal" title="Estimated style era when sample is 150+ words">Style Era: —</span>
+              </div>
+              <h3 class="verdict-headline" id="verdictHeadline">Reads Mostly Like Human Writing</h3>
+              <p class="verdict-why" id="assessmentText"></p>
+              <p class="verdict-disclaimer">&#9432; This score measures stylistic patterns, not proof of authorship.</p>
             </div>
           </div>
 
-          <div class="caveat-box" id="caveatBox"></div>
+          <div class="caveat-box" id="caveatBox" role="status"></div>
 
           <!-- Spectrum Meter -->
           <div class="meter-wrap">
@@ -743,69 +1121,116 @@
               <div class="meter-pointer" id="meterPointer" style="left:0%;"></div>
             </div>
             <div class="meter-labels">
-              <span>0 Low / Human</span>
-              <span>30 Mixed</span>
-              <span>60 High Density</span>
-              <span>90+ Artifact Floor</span>
+              <span>0–29 Human-Consistent</span>
+              <span>30–59 Mixed Signals</span>
+              <span>60–89 High AI Density</span>
+              <span>90+ Chat Artifact</span>
             </div>
           </div>
 
-          <div class="assessment-text" id="assessmentText"></div>
-
-          <!-- Tier Points Breakdown Grid -->
-          <div class="tier-grid">
-            <div class="tier-cell"><span>T1 Artifact (Floor 90)</span><strong id="t1ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>T2 Unicode/Punct ( /35)</span><strong id="t2ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>T3 Lexicon ( /40)</span><strong id="t3ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>T4 Frames ( /30)</span><strong id="t4ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>T5 Syntax ( /25)</span><strong id="t5ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>T6 Format ( /20)</span><strong id="t6ScoreVal">0</strong></div>
-            <div class="tier-cell"><span>Co-Occurrence Bonus</span><strong id="coBonusVal">+0</strong></div>
-            <div class="tier-cell"><span>Human Signs ( / -25)</span><strong id="humScoreVal" style="color:var(--green);">0</strong></div>
-          </div>
-
-          <!-- Two-Sided Em-Dash & Classic 8-Word Drift Telemetry -->
-          <div class="telemetry-grid">
-            <div class="telemetry-box">
-              <div class="telemetry-title">Em-Dash &amp; Punctuation Telemetry (Per 1k Words)</div>
-              <div class="mini-comp-row you"><span>Em-Dashes (<span id="emSplitLabel">0 unspaced / 0 spaced</span>):</span><span id="emUserRate">0.00 / 1k</span></div>
-              <div class="mini-comp-row"><span>GPT-4.1 / GPT-5 (2024–25):</span><span>7.13 / 6.92</span></div>
-              <div class="mini-comp-row"><span>Human Web Baseline (Graphite):</span><span>3.14 / 1k</span></div>
-              <div class="mini-comp-row"><span>GPT-6 Astra / Opus 5.5 / Gemini 3.1:</span><span>0.37 / 0.015 / 0.014</span></div>
-              <div class="mini-comp-row you" style="margin-top:4px;"><span>Dramatic Colons &amp; Semicolon Pivots:</span><span id="colonSemiRate">0.0 / 1k</span></div>
-              <div class="mini-comp-row you"><span>Apostrophe/Quote Style Mixing:</span><span id="quoteMixLabel">None</span></div>
+          <!-- Visual Signal Balance Pillars (4-Bar Graphic Chart) -->
+          <div class="signal-pillars">
+            <div class="pillars-title">
+              <span>Visual Signal Breakdown</span>
+              <span id="totalHitsBadge" style="font-family:var(--mono);color:var(--amber);">0 matched spans</span>
             </div>
-
-            <div class="telemetry-box">
-              <div class="telemetry-title">Lexical Drift &amp; Biber Syntax Ratios (Per 1k Words)</div>
-              <div class="mini-comp-row you"><span>Classic 8-Word List (delve/tapestry/etc.):</span><span id="classic8Rate">0.00 / 1k</span></div>
-              <div class="mini-comp-row you"><span>Participial Clauses (Reinhart PNAS 2–5x):</span><span id="partRateVal">0.0 / 1k</span></div>
-              <div class="mini-comp-row you"><span>Paired Adj, Adj + Noun Phrases:</span><span id="adjPairRateVal">0.0 / 1k</span></div>
-              <div class="mini-comp-row you"><span>Nominalizations (-tion/-ment/-ity):</span><span id="nomRateVal">0.0 / 1k</span></div>
-              <div class="mini-comp-row you"><span>Uncontracted Negations (did not/was not):</span><span id="uncontractedVal">0</span></div>
-              <div class="mini-comp-row you"><span>Sentence Length (Mean / CV / 8–22w %):</span><span id="sentBandVal">-</span></div>
+            <div class="pillar-row">
+              <span class="pillar-name">Phrasing &amp; AI Vocabulary</span>
+              <div class="pillar-bar-track"><div class="pillar-bar-fill" id="barLexFrame" style="background:var(--amber);"></div></div>
+              <span class="pillar-val" id="valLexFrame">0 / 70 pts</span>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-name">Sentence Rhythm &amp; Syntax</span>
+              <div class="pillar-bar-track"><div class="pillar-bar-fill" id="barSyntax" style="background:var(--blue);"></div></div>
+              <span class="pillar-val" id="valSyntax">0 / 25 pts</span>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-name">Punctuation &amp; Formatting</span>
+              <div class="pillar-bar-track"><div class="pillar-bar-fill" id="barPunctFmt" style="background:var(--cyan);"></div></div>
+              <span class="pillar-val" id="valPunctFmt">0 / 55 pts</span>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-name">Human Voice Counterbalance</span>
+              <div class="pillar-bar-track"><div class="pillar-bar-fill" id="barHuman" style="background:var(--green);"></div></div>
+              <span class="pillar-val" id="valHuman" style="color:var(--green);">0 / -25 pts</span>
             </div>
           </div>
 
-          <div>
-            <button type="button" class="rubric-toggle-btn" id="buildRewriteFromHitsBtn" style="color:#9be6b0;font-weight:600;">&#9889; Generate De-Tell Rewrite Prompt from Hits</button>
-            <button type="button" class="rubric-toggle-btn" id="jsonToggleBtn">View JSON Output Schema &darr;</button>
-            <button type="button" class="rubric-toggle-btn" id="copyBtn">Copy Audit Summary</button>
-            <button type="button" class="rubric-toggle-btn" id="copyJsonBtn">Copy JSON Schema</button>
-          </div>
-          <div class="composite-drawer" id="jsonDrawer">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong>Standard Output Schema (Antigravity Spec v3.1):</strong>
-              <span style="font-family:var(--mono);font-size:10px;">Rates normalized per 1,000 words</span>
+          <!-- Top Matched Phrases Preview Chips -->
+          <div class="top-chips-box" id="topChipsBox">
+            <div class="top-chips-label">
+              <span>Top Matched Signals in Your Text (click any chip to highlight in passage):</span>
             </div>
-            <pre class="json-pre" id="jsonOutputPre"></pre>
+            <div class="chip-list" id="topChipsList"></div>
+          </div>
+
+          <!-- Primary Result Actions -->
+          <div class="verdict-actions">
+            <button type="button" class="secondary" id="viewSpansActionBtn">&#128269; Highlight All Spans in Text</button>
+            <button type="button" class="secondary" id="buildRewriteFromHitsBtn" style="border-color:rgba(91,189,126,.55);color:#9be6b0;">&#9889; Generate De-Tell Rewrite Prompt</button>
+            <button type="button" class="secondary" id="copyBtn">&#128203; Copy Summary</button>
+          </div>
+
+          <!-- Collapsible Technical Telemetry & 6-Tier Toggle -->
+          <button type="button" class="details-toggle-btn" id="toggleDetailsBtn" aria-expanded="false">
+            <span id="toggleDetailsLabel">Show Technical Details &amp; 6-Tier Breakdown (points, hits &amp; rates per 1k words)</span>
+            <span id="toggleDetailsArrow">&#9662;</span>
+          </button>
+
+          <div class="technical-details-wrap" id="technicalDetailsWrap">
+            <!-- 8 Tier Tiles with Explicit "X pts from Y hits" -->
+            <div class="tier-grid">
+              <div class="tier-cell"><span>Tier 1: Chat Artifacts</span><strong id="t1ScoreVal">0 pts &bull; 0 hits</strong><small>Floor 90 if present</small></div>
+              <div class="tier-cell"><span>Tier 2: Punctuation/Unicode</span><strong id="t2ScoreVal">0 pts &bull; 0 hits</strong><small>Cap 35 pts</small></div>
+              <div class="tier-cell"><span>Tier 3: AI Vocabulary</span><strong id="t3ScoreVal">0 pts &bull; 0 hits</strong><small>Cap 40 pts (rate-scaled)</small></div>
+              <div class="tier-cell"><span>Tier 4: Phrase Frames</span><strong id="t4ScoreVal">0 pts &bull; 0 hits</strong><small>4 pt/hit &bull; Cap 30 pts</small></div>
+              <div class="tier-cell"><span>Tier 5: Sentence Syntax</span><strong id="t5ScoreVal">0 pts &bull; 0 hits</strong><small>5–10 pt/group &bull; Cap 25</small></div>
+              <div class="tier-cell"><span>Tier 6: Formatting</span><strong id="t6ScoreVal">0 pts &bull; 0 hits</strong><small>3 pt/hit &bull; Cap 20 pts</small></div>
+              <div class="tier-cell"><span>Multi-Tier Bonus</span><strong id="coBonusVal">+0 pts</strong><small>+10 if &ge;3 tiers &ge;5 pts</small></div>
+              <div class="tier-cell"><span>Human Voice Signs</span><strong id="humScoreVal" style="color:var(--green);">0 pts &bull; 0 signs</strong><small>-3 pt/sign &bull; Cap -25</small></div>
+            </div>
+
+            <!-- Two-Sided Em-Dash & Classic 8-Word Drift Telemetry -->
+            <div class="telemetry-grid">
+              <div class="telemetry-box">
+                <div class="telemetry-title">Em-Dash &amp; Punctuation Telemetry (Per 1k Words)</div>
+                <div class="mini-comp-row you"><span>Em-Dashes (<span id="emSplitLabel">0 unspaced / 0 spaced</span>):</span><span id="emUserRate">0.00 / 1k</span></div>
+                <div class="mini-comp-row"><span>GPT-4.1 / GPT-5 (2024–25):</span><span>7.13 / 6.92</span></div>
+                <div class="mini-comp-row"><span>Human Web Baseline (Graphite):</span><span>3.14 / 1k</span></div>
+                <div class="mini-comp-row"><span>GPT-6 Astra / Opus 5.5 / Gemini 3.1:</span><span>0.37 / 0.015 / 0.014</span></div>
+                <div class="mini-comp-row you" style="margin-top:4px;"><span>Dramatic Colons &amp; Semicolon Pivots:</span><span id="colonSemiRate">0.0 / 1k</span></div>
+                <div class="mini-comp-row you"><span>Apostrophe/Quote Style Mixing:</span><span id="quoteMixLabel">Uniform</span></div>
+              </div>
+
+              <div class="telemetry-box">
+                <div class="telemetry-title">Lexical Drift &amp; Syntax Ratios (Per 1k Words)</div>
+                <div class="mini-comp-row you"><span>Classic 8-Word List (delve/tapestry/etc.):</span><span id="classic8Rate">0.00 / 1k</span></div>
+                <div class="mini-comp-row you"><span>Participial Clauses (-ing tails):</span><span id="partRateVal">0.0 / 1k</span></div>
+                <div class="mini-comp-row you"><span>Paired Adj, Adj + Noun Phrases:</span><span id="adjPairRateVal">0.0 / 1k</span></div>
+                <div class="mini-comp-row you"><span>Nominalizations (-tion/-ment/-ity):</span><span id="nomRateVal">0.0 / 1k</span></div>
+                <div class="mini-comp-row you"><span>Uncontracted Negations (did not/was not):</span><span id="uncontractedVal">0</span></div>
+                <div class="mini-comp-row you"><span>Sentence Length (Mean / CV / 8–22w %):</span><span id="sentBandVal">-</span></div>
+              </div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+              <button type="button" class="rubric-toggle-btn" id="jsonToggleBtn">View Raw JSON Output Schema &darr;</button>
+              <button type="button" class="rubric-toggle-btn" id="copyJsonBtn">Copy JSON Schema</button>
+            </div>
+            <div class="composite-drawer" id="jsonDrawer">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <strong>Standard Output Schema (Antigravity Spec v3.3):</strong>
+                <span style="font-family:var(--mono);font-size:11px;">Rates normalized per 1,000 words</span>
+              </div>
+              <pre class="json-pre" id="jsonOutputPre"></pre>
+            </div>
+
+            <div id="categories"></div>
           </div>
         </div>
-
-        <div id="categories"></div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <!-- Empirical Evidence Base Table -->
   <section class="ref-section" aria-label="Evidence Base">
@@ -870,9 +1295,9 @@
 
   <footer>
     <div>
-      <span>AI Tell Checker <strong>v3.1.0</strong> (tells.yaml v3.1.0) &mdash; 100% local client-side execution (Google Sites sandbox ready).</span>
+      <span>AI Tell Checker <strong>v3.3.0</strong> (tells.yaml v3.3.0) &mdash; 100% local client-side execution (Google Sites &amp; 375px mobile ready).</span>
     </div>
-    <a id="helpLink">Open Interactive Help, Case Studies &amp; Rule Explorer &rarr;</a>
+    <a id="helpLink" href="#modalOverlay" onclick="event.preventDefault();">Open Interactive Help, Case Studies &amp; Rule Explorer &rarr;</a>
   </footer>
 </div>
 
@@ -1051,6 +1476,7 @@
 
       <h3>Version Changelog</h3>
       <ul>
+        <li><strong>v3.3.0 (2026-10-31):</strong> Comprehensive UX/UI &amp; Accessibility overhaul: added animated SVG radial score gauge, plain-English headline verdict &amp; dynamic "Why" summary, 4-bar visual Signal Breakdown chart, clickable Top Matched Phrase chips, collapsible Technical Telemetry &amp; 6-Tier Breakdown drawer, explicit <code>X pts &bull; Y hits</code> tier tiles, fixed multi-paragraph sentence parser (<code>0.0w / CV 0.00</code> bug), inline empty-input validation alert, softened era badge under 150 words, regrouped sample strip, WCAG skip-link, higher contrast typography, and 375px phone responsiveness.</li>
         <li><strong>v3.2.0 (2026-10-31):</strong> Added the interactive <strong>Anti-Tell Prompt Shield</strong> (Standalone Chat Preface wrapper, Google Gem / Custom GPT / LM Studio System Prompt generator, and Dynamic Surgical De-Tell Rewrite Prompt builder from current scan hits).</li>
         <li><strong>v3.1.0 (2026-10-31):</strong> Added Oct 2026 Gemini Creative/Narrative AI calibration ("Unit-7 Taco Story"), generalized noun-subject negation-reveal frames (<code>Perfection was not A; it was B</code>), anaphoric double-negation <code>Instead,</code> pivots, colon-led reveal &amp; semicolon pivot telemetry, paired <code>adj, adj + noun</code> density, uncontracted negation uniformity, rich-text paste Markdown preservation, and the 5-tab Interactive Help &amp; Rule Explorer.</li>
         <li><strong>v3.0.0 (2026-10-31):</strong> Implemented full 6-Tier + Human-Sign architecture from @Matthew Jett Hal's Oct 31, 2026 Detection Reference and <code>tells.yaml</code> specification.</li>
@@ -1109,7 +1535,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const LEXICON_VERSION = "3.2.0";
+const LEXICON_VERSION = "3.3.0";
 const LAST_UPDATED = "2026-10-31";
 
 const GENRE_BASELINES = {
@@ -1554,15 +1980,17 @@ function analyzeTier5Syntax(text, words, baseline){
   }
   if(transCount >= 2) syntaxScore += 5;
 
-  const sentences = text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 0);
+  const sentences = text.split(/(?:[.!?]+|\n\s*\n+)/).map(s => s.trim()).filter(s => (s.match(/\S+/g) || []).length >= 2);
   let meanSent = 0, cvSent = 0, band8to22Pct = 0;
-  if(sentences.length >= 5){
-    const lens = sentences.map(s => (s.match(/\S+/g) || []).length).filter(n => n > 0);
+  const lens = sentences.map(s => (s.match(/\S+/g) || []).length).filter(n => n > 0);
+  if(lens.length >= 1){
     meanSent = lens.reduce((a,b) => a + b, 0) / lens.length;
     const variance = lens.reduce((a,b) => a + Math.pow(b - meanSent, 2), 0) / lens.length;
     cvSent = meanSent > 0 ? Math.sqrt(variance) / meanSent : 0;
     const inBand = lens.filter(n => n >= 8 && n <= 22).length;
     band8to22Pct = Math.round((inBand / lens.length) * 100);
+  }
+  if(lens.length >= 5){
     const hasShortOrLong = lens.some(n => n < 6 || n > 34);
     if((cvSent < 0.36 && !hasShortOrLong) || band8to22Pct >= 75){
       syntaxScore += 5;
@@ -1579,14 +2007,16 @@ function analyzeTier5Syntax(text, words, baseline){
   return {
     points: Math.min(25, syntaxScore),
     hits: hits,
+    partCount: partCount,
     partRate: partRate,
+    adjPairCount: adjPairCount,
     adjPairRate: adjPairRate,
     nomRate: nomRate,
     copulaRatio: Math.round(copulaRatio),
     uncontractedCount: uncontractedMatches.length,
     r3Count: r3Hits.length,
     r3Rate: r3Rate,
-    sentStats: sentences.length >= 2 ? (meanSent.toFixed(1) + "w / CV " + cvSent.toFixed(2) + " / " + band8to22Pct + "%") : "n/a"
+    sentStats: lens.length >= 1 ? (meanSent.toFixed(1) + "w / CV " + cvSent.toFixed(2) + " / " + band8to22Pct + "% (" + lens.length + " sents)") : "1 sentence"
   };
 }
 
@@ -1742,33 +2172,113 @@ function animateScore(target){
   requestAnimationFrame(step);
 }
 
+function updateWordCountUI(words){
+  const wcEl = document.getElementById("wc");
+  const dotEl = document.getElementById("wcDot");
+  if(!wcEl || !dotEl) return;
+  if(words === 0){
+    wcEl.textContent = "0 words (150+ for stable rates)";
+    dotEl.className = "wc-dot";
+  } else if(words < 150){
+    wcEl.textContent = words.toLocaleString() + " words (" + (150 - words) + " more for stable rate floor)";
+    dotEl.className = "wc-dot short";
+  } else {
+    wcEl.textContent = words.toLocaleString() + " words (Stable 150+ floor met)";
+    dotEl.className = "wc-dot ready";
+  }
+}
+
+function buildPlainWhySentence(catBuckets, punctStats, t5Result, finalScore, t1Pts){
+  if(t1Pts >= 90){
+    const firstArt = catBuckets.t1.hits[0];
+    return "Main signal: Direct chatbot copy-paste residue (\"" + (firstArt ? firstArt.term : "markup") + "\") was found in the raw text.";
+  }
+  const reasons = [];
+  if(catBuckets.t4.hits.length > 0){
+    reasons.push(catBuckets.t4.hits.length + " rhetorical contrast/importance frame" + (catBuckets.t4.hits.length > 1 ? "s" : ""));
+  }
+  const lexCount = catBuckets.t3_high.hits.length + catBuckets.t3_era.hits.length;
+  if(lexCount > 0){
+    reasons.push(lexCount + " high-frequency AI vocabulary marker" + (lexCount > 1 ? "s" : ""));
+  }
+  if(t5Result.partCount >= 2){
+    reasons.push(t5Result.partCount + " trailing '-ing' participial clauses");
+  }
+  if(t5Result.adjPairCount >= 2){
+    reasons.push(t5Result.adjPairCount + " paired 'adjective, adjective + noun' stacks");
+  }
+  if(punctStats.isElevated){
+    reasons.push(punctStats.total + " em-dashes (" + punctStats.ratePer1k.toFixed(1) + " per 1k words)");
+  } else if(punctStats.colonSemiCount >= 2){
+    reasons.push(punctStats.colonSemiCount + " dramatic colon/semicolon pivots");
+  }
+  if(punctStats.mixedQuotes){
+    reasons.push("mixed curly & straight apostrophes");
+  }
+  if(t5Result.r3Count >= 2){
+    reasons.push(t5Result.r3Count + " rule-of-three lists");
+  }
+  if(catBuckets.t6.hits.length > 0){
+    reasons.push(catBuckets.t6.hits.length + " AI formatting pattern" + (catBuckets.t6.hits.length > 1 ? "s" : ""));
+  }
+
+  const humCount = catBuckets.human.hits.length;
+  if(reasons.length === 0){
+    if(humCount > 0){
+      return "No major AI tells found — " + humCount + " human-voice phrasing sign" + (humCount > 1 ? "s" : "") + " reinforced a natural baseline.";
+    }
+    return "No high-density AI phrase templates, vocabulary spikes, or synthetic punctuation patterns were detected.";
+  }
+
+  const top3 = reasons.slice(0, 3);
+  let joined = top3.length === 1 ? top3[0]
+    : top3.length === 2 ? top3[0] + " and " + top3[1]
+    : top3[0] + ", " + top3[1] + ", and " + top3[2];
+
+  if(finalScore < 30 && humCount > 0){
+    return "Low overall density: " + joined + " appeared, but were offset by " + humCount + " human-voice phrasing sign" + (humCount > 1 ? "s" : "") + ".";
+  }
+  return "Main signals: " + joined + " drove the score.";
+}
+
 function analyze(){
-  const rawText = document.getElementById("input").value;
+  const inputEl = document.getElementById("input");
+  const rawText = inputEl.value;
   const genreKey = document.getElementById("genreSelect").value || "web";
   const baseline = GENRE_BASELINES[genreKey] || GENRE_BASELINES.web;
   const words = countWords(rawText);
+  updateWordCountUI(words);
 
   const resultsEl = document.getElementById("results");
   const emptyEl = document.getElementById("resultsEmpty");
+  const errBox = document.getElementById("inputErrorBox");
+
   if(words === 0){
     resultsEl.style.display = "none";
     emptyEl.style.display = "block";
-    document.getElementById("annotatedView").innerHTML = "<span class=\"empty-note\">No text to highlight.</span>";
+    errBox.classList.add("show");
+    inputEl.classList.add("input-error");
+    inputEl.focus();
+    document.getElementById("charStatsLabel").textContent = "Action needed: paste text first";
+    document.getElementById("annotatedView").innerHTML = "<span class=\"empty-note\">No text to highlight. Paste some text in the Editor tab first.</span>";
     return;
   }
+
+  errBox.classList.remove("show");
+  inputEl.classList.remove("input-error");
 
   const normText = rawText.normalize ? rawText.normalize("NFC") : rawText;
   const allFindings = [];
 
   const catBuckets = {
     t1: { title:"Tier 1: Unambiguous Chat & Markup Artifacts", badge:"Tier 1 &bull; Floor 90", cls:"t-b1", desc:"Deterministic copy-paste residue (oaicite, utm_source=chatgpt.com, unfilled templates, chat openers).", hits:[] },
-    t2: { title:"Tier 2: Invisible Unicode & Punctuation Telemetry", badge:"Tier 2 &bull; Cap 35", cls:"t-b2", desc:"U+202F spaces, quote mixing, colon-led reveals, semicolon antithesis pivots, and two-sided em-dash density.", hits:[] },
-    t3_high: { title:"Tier 3A: High-Ratio Measured Lexicon (≥10x Human)", badge:"Tier 3A &bull; 3pt (Cap 25)", cls:"t-b3", desc:"Words/phrases with 10x–576x measured excess in PubMed, ICLR, or Graphite 2026 corpora.", hits:[] },
-    t3_era: { title:"Tier 3B: Era-Dated, Narrative AI & Folk Lexicon", badge:"Tier 3B &bull; 1.5–2pt (Cap 15)", cls:"t-b3", desc:"GPT-4 (2023–24), GPT-4o (2024–25), 2026+ vocabulary, Narrative AI sensory clichés, and folk markers.", hits:[] },
+    t2: { title:"Tier 2: Punctuation & Invisible Unicode", badge:"Tier 2 &bull; Cap 35", cls:"t-b2", desc:"U+202F spaces, quote mixing, colon-led reveals, semicolon antithesis pivots, and em-dash density.", hits:[] },
+    t3_high: { title:"Tier 3A: High-Ratio AI Vocabulary (≥10x Human)", badge:"Tier 3A &bull; 3pt (Cap 25)", cls:"t-b3", desc:"Words/phrases with 10x–576x measured excess in PubMed, ICLR, or Graphite 2026 corpora.", hits:[] },
+    t3_era: { title:"Tier 3B: Era-Dated & Narrative AI Clichés", badge:"Tier 3B &bull; 1.5–2pt (Cap 15)", cls:"t-b3", desc:"GPT-4 (2023–24), GPT-4o (2024–25), 2026+ vocabulary, Narrative AI sensory clichés, and folk markers.", hits:[] },
     t4: { title:"Tier 4: Phrase Templates & Rhetorical Frames", badge:"Tier 4 &bull; 4pt (Cap 30)", cls:"t-b4", desc:"Negative parallelism ('not just X; it Y'), negation-reveal ('was not A; it was B'), double-negation 'Instead,' pivots, and -ing tails.", hits:[] },
-    t5: { title:"Tier 5: Syntax & Grammar Patterns (Biber / POS)", badge:"Tier 5 &bull; 5–10pt (Cap 25)", cls:"t-b5", desc:"Participial clauses (2x–5x), paired 'adj, adj + noun' phrases, uncontracted negations, nominalizations, and sentence uniformity.", hits:[] },
-    t6: { title:"Tier 6: Structure & Formatting Fingerprints", badge:"Tier 6 &bull; 3pt (Cap 20)", cls:"t-b6", desc:"Inline-header bullets, bold/italic emphasis markers, heading boilerplate, emoji markers, and paragraph uniformity.", hits:[] },
-    human: { title:"Human-Leaning Features (Negative Weight)", badge:"Human &bull; -3pt (Cap -25)", cls:"t-bh", desc:"Plain copulas ('there is a'), plain verbs ('wrote, used, tried'), conversational idioms, and pre-2022 dates.", hits:[] }
+    t5: { title:"Tier 5: Sentence Rhythm & Syntax (Biber / POS)", badge:"Tier 5 &bull; 5–10pt (Cap 25)", cls:"t-b5", desc:"Participial clauses (2x–5x), paired 'adj, adj + noun' phrases, uncontracted negations, nominalizations, and sentence uniformity.", hits:[] },
+    t6: { title:"Tier 6: Formatting & Structure Fingerprints", badge:"Tier 6 &bull; 3pt (Cap 20)", cls:"t-b6", desc:"Inline-header bullets, bold/italic emphasis markers, heading boilerplate, emoji markers, and paragraph uniformity.", hits:[] },
+    human: { title:"Human Voice Counterbalance (Negative Weight)", badge:"Human &bull; -3pt (Cap -25)", cls:"t-bh", desc:"Plain copulas ('there is a'), plain verbs ('wrote, used, tried'), conversational idioms, and pre-2022 dates.", hits:[] }
   };
 
   RULES.forEach(rule => {
@@ -1859,47 +2369,51 @@ function analyze(){
   const finalScore = Math.max(0, Math.min(100, Math.round(totalScore)));
 
   let band = "low";
-  let bandLabel = "LOW";
+  let bandLabel = "LOW (HUMAN-CONSISTENT)";
   let bandCls = "band-low";
   let scoreColor = "var(--green)";
+  let headlineText = "Reads Mostly Like Human Writing";
 
   if(t1Pts >= 90){
     band = "artifact";
-    bandLabel = "ARTIFACT FLOOR (90+)";
+    bandLabel = "CHAT ARTIFACT (90+)";
     bandCls = "band-art";
     scoreColor = "var(--purple)";
+    headlineText = "Direct Chatbot Copy-Paste Residue Found";
   } else if(finalScore >= 60){
     band = "high";
-    bandLabel = "HIGH DENSITY";
+    bandLabel = "HIGH AI DENSITY";
     bandCls = "band-high";
     scoreColor = "var(--red-bright)";
+    headlineText = "Strong AI Writing Patterns Detected";
   } else if(finalScore >= 30){
     band = "mixed";
-    bandLabel = "MIXED / PROBABLE AI";
+    bandLabel = "MIXED SIGNALS";
     bandCls = "band-mod";
     scoreColor = "var(--amber)";
+    headlineText = "Mixed Style Signals — Editing Recommended";
   }
 
   const eraVotes = {
-    "2023-24 GPT-4": 0,
-    "2024-25 GPT-4o": 0,
-    "2025-26 GPT-5": 0,
+    "2023–24 GPT-4 Style": 0,
+    "2024–25 GPT-4o Style": 0,
+    "2025–26 GPT-5 Style": 0,
     "2026+ Gemini 3 / Opus 5.5 / GPT-6": 0
   };
   allFindings.forEach(f => {
     if(!f.era) return;
     if(f.era.indexOf("2026") !== -1 || f.era.indexOf("Gemini") !== -1) eraVotes["2026+ Gemini 3 / Opus 5.5 / GPT-6"] += 3;
-    if(f.era.indexOf("2025") !== -1) eraVotes["2025-26 GPT-5"] += 2.5;
-    if(f.era.indexOf("2024-25") !== -1) eraVotes["2024-25 GPT-4o"] += 2;
-    if(f.era.indexOf("2023-24") !== -1) eraVotes["2023-24 GPT-4"] += 2.5;
+    if(f.era.indexOf("2025") !== -1) eraVotes["2025–26 GPT-5 Style"] += 2.5;
+    if(f.era.indexOf("2024-25") !== -1) eraVotes["2024–25 GPT-4o Style"] += 2;
+    if(f.era.indexOf("2023-24") !== -1) eraVotes["2023–24 GPT-4 Style"] += 2.5;
   });
-  if(classic8Rate >= 2.0) eraVotes["2023-24 GPT-4"] += 4;
-  if(punctStats.isElevated) eraVotes["2024-25 GPT-4o"] += 3;
+  if(classic8Rate >= 2.0) eraVotes["2023–24 GPT-4 Style"] += 4;
+  if(punctStats.isElevated) eraVotes["2024–25 GPT-4o Style"] += 3;
   if(punctStats.ratePer1k < 0.2 && punctStats.colonSemiCount >= 2 && finalScore >= 40){
     eraVotes["2026+ Gemini 3 / Opus 5.5 / GPT-6"] += 4;
   }
 
-  let likelyEra = "undetermined";
+  let likelyEra = "Undetermined Style Era";
   let maxVote = 2;
   Object.keys(eraVotes).forEach(k => {
     if(eraVotes[k] > maxVote){
@@ -1909,6 +2423,17 @@ function analyze(){
   });
   if(finalScore < 25 && t1Pts === 0){
     likelyEra = "Human / Pre-2022 Baseline";
+  }
+
+  // Finding 4 Fix: Do not present a confident era label when sample is under 150 words (unless Tier 1 artifact)
+  const eraEl = document.getElementById("likelyEraVal");
+  if(words < 150 && t1Pts === 0){
+    likelyEra = "Not enough text (<150w)";
+    eraEl.textContent = "Era: Not enough text (<150w)";
+    eraEl.classList.add("muted");
+  } else {
+    eraEl.textContent = "Style Era: " + likelyEra;
+    eraEl.classList.remove("muted");
   }
 
   const caveats = [];
@@ -1922,41 +2447,89 @@ function analyze(){
 
   const caveatBox = document.getElementById("caveatBox");
   if(words < 150 && t1Pts === 0){
-    caveatBox.innerHTML = "<strong>&#9888; Short Text Guardrail (&lt;150 words):</strong> Sample is " + words + " words. Per build spec, rate-per-1k metrics require &ge;150 words for stability. Individual matched spans are shown below.";
+    caveatBox.innerHTML = "<strong>&#9888; Short Sample Warning (" + words + " words):</strong> Rate-per-1,000-word metrics need <strong>150+ words</strong> to stabilize. Treat this score as tentative and check the highlighted phrases below.";
     caveatBox.classList.add("show");
   } else {
     caveatBox.classList.remove("show");
   }
 
-  let assessment = "";
-  if(band === "artifact"){
-    assessment = "Deterministic Artifact Detected: Raw input contains unambiguous chatbot residue (Tier 1), setting a score floor of 90.";
-  } else if(band === "high"){
-    assessment = "High Multi-Tier AI Tell Co-Occurrence: Elevated density across narrative/lexical markers, contrast frames, and Biber syntactic features (" + tiersAbove5 + " tiers ≥ 5 pts).";
-  } else if(band === "mixed"){
-    assessment = "Mixed / Probable AI Signals: Multiple rhetorical frames, participial clauses, or lexical clusters detected (" + tiersAbove5 + " tiers ≥ 5 pts). Editorial inspection of highlighted spans advised.";
-  } else {
-    assessment = "Low AI Tell Density (Human-Consistent): Minimal LLM phrase templates or high-ratio markers; human-leaning constructions or isolated historical rhetoric dominate.";
-  }
+  const plainWhy = buildPlainWhySentence(catBuckets, punctStats, t5Result, finalScore, t1Pts);
 
   animateScore(finalScore);
   document.getElementById("probNum").style.color = scoreColor;
+  const arcEl = document.getElementById("gaugeArc");
+  if(arcEl){
+    const circumference = 339.29;
+    const offset = circumference - (finalScore / 100) * circumference;
+    arcEl.style.strokeDashoffset = offset.toFixed(2);
+    arcEl.style.stroke = scoreColor;
+  }
+
   const bandEl = document.getElementById("probBand");
   bandEl.textContent = bandLabel;
   bandEl.className = "score-band " + bandCls;
-  document.getElementById("likelyEraVal").textContent = likelyEra;
+  document.getElementById("verdictHeadline").textContent = headlineText;
   document.getElementById("meterPointer").style.left = finalScore + "%";
-  document.getElementById("assessmentText").textContent = assessment;
-  document.getElementById("charStatsLabel").textContent = words.toLocaleString() + " words (" + genreKey + " baseline)";
+  document.getElementById("assessmentText").textContent = plainWhy;
+  document.getElementById("charStatsLabel").textContent = words.toLocaleString() + " words • " + genreKey + " baseline";
 
-  document.getElementById("t1ScoreVal").textContent = Math.round(t1Pts);
-  document.getElementById("t2ScoreVal").textContent = Math.round(t2Pts * 10) / 10;
-  document.getElementById("t3ScoreVal").textContent = Math.round(t3Pts * 10) / 10;
-  document.getElementById("t4ScoreVal").textContent = Math.round(t4Pts * 10) / 10;
-  document.getElementById("t5ScoreVal").textContent = Math.round(t5Pts * 10) / 10;
-  document.getElementById("t6ScoreVal").textContent = Math.round(t6Pts * 10) / 10;
-  document.getElementById("coBonusVal").textContent = "+" + coOccurrenceBonus;
-  document.getElementById("humScoreVal").textContent = Math.round(humanPts * 10) / 10;
+  // Visual 4-Bar Signal Pillars
+  const lexFramePts = Math.round((t3Pts + t4Pts) * 10) / 10;
+  const punctFmtPts = Math.round((t1Pts + t2Pts + t6Pts) * 10) / 10;
+  const synPtsRound = Math.round(t5Pts * 10) / 10;
+  const humPtsRound = Math.round(humanPts * 10) / 10;
+
+  document.getElementById("barLexFrame").style.width = Math.min(100, (lexFramePts / 70) * 100) + "%";
+  document.getElementById("valLexFrame").textContent = lexFramePts + " / 70 pts";
+  document.getElementById("barSyntax").style.width = Math.min(100, (synPtsRound / 25) * 100) + "%";
+  document.getElementById("valSyntax").textContent = synPtsRound + " / 25 pts";
+  document.getElementById("barPunctFmt").style.width = Math.min(100, (punctFmtPts / 55) * 100) + "%";
+  document.getElementById("valPunctFmt").textContent = punctFmtPts + " / 55 pts";
+  document.getElementById("barHuman").style.width = Math.min(100, (Math.abs(humPtsRound) / 25) * 100) + "%";
+  document.getElementById("valHuman").textContent = humPtsRound + " / -25 pts";
+
+  const aiSpanHits = allFindings.filter(f => f.tier > 0);
+  document.getElementById("totalHitsBadge").textContent = aiSpanHits.length + " AI tell" + (aiSpanHits.length === 1 ? "" : "s") + (catBuckets.human.hits.length > 0 ? " • " + catBuckets.human.hits.length + " human sign" + (catBuckets.human.hits.length === 1 ? "" : "s") : "");
+
+  // Top Matched Phrase Chips
+  const chipsListEl = document.getElementById("topChipsList");
+  chipsListEl.innerHTML = "";
+  const seenTerms = new Set();
+  const topHits = [];
+  aiSpanHits.slice().sort((a,b) => (a.tier - b.tier)).forEach(h => {
+    const cleanTerm = (h.term || "").trim();
+    if(!cleanTerm || seenTerms.has(cleanTerm.toLowerCase())) return;
+    seenTerms.add(cleanTerm.toLowerCase());
+    topHits.push(h);
+  });
+  if(topHits.length === 0){
+    chipsListEl.innerHTML = "<span class=\"empty-note\">No prominent AI tell phrases detected in this passage.</span>";
+  } else {
+    topHits.slice(0, 6).forEach(h => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "signal-chip";
+      const shortTerm = h.term.length > 42 ? h.term.slice(0, 39) + "..." : h.term;
+      btn.innerHTML = "<span class=\"tier-tag t-b" + h.tier + "\">T" + h.tier + "</span><span>\"" + escapeHtml(shortTerm) + "\"</span>";
+      btn.title = "Click to view highlighted in passage (" + h.rule_id + ")";
+      btn.addEventListener("click", () => {
+        setEditorTab("highlight");
+        document.getElementById("annotatedView").scrollIntoView({ behavior:"smooth", block:"nearest" });
+      });
+      chipsListEl.appendChild(btn);
+    });
+  }
+
+  // Finding 1 Fix: Explicit "X pts • Y hits" on every Tier Tile + Human Voice Signs
+  const t3HitCount = catBuckets.t3_high.hits.length + catBuckets.t3_era.hits.length;
+  document.getElementById("t1ScoreVal").textContent = Math.round(t1Pts) + " pts • " + catBuckets.t1.hits.length + (catBuckets.t1.hits.length === 1 ? " hit" : " hits");
+  document.getElementById("t2ScoreVal").textContent = (Math.round(t2Pts * 10) / 10) + " pts • " + catBuckets.t2.hits.length + (catBuckets.t2.hits.length === 1 ? " hit" : " hits");
+  document.getElementById("t3ScoreVal").textContent = (Math.round(t3Pts * 10) / 10) + " pts • " + t3HitCount + (t3HitCount === 1 ? " hit" : " hits");
+  document.getElementById("t4ScoreVal").textContent = (Math.round(t4Pts * 10) / 10) + " pts • " + catBuckets.t4.hits.length + (catBuckets.t4.hits.length === 1 ? " hit" : " hits");
+  document.getElementById("t5ScoreVal").textContent = (Math.round(t5Pts * 10) / 10) + " pts • " + catBuckets.t5.hits.length + (catBuckets.t5.hits.length === 1 ? " hit" : " hits");
+  document.getElementById("t6ScoreVal").textContent = (Math.round(t6Pts * 10) / 10) + " pts • " + catBuckets.t6.hits.length + (catBuckets.t6.hits.length === 1 ? " hit" : " hits");
+  document.getElementById("coBonusVal").textContent = "+" + coOccurrenceBonus + " pts (" + tiersAbove5 + " tiers ≥5)";
+  document.getElementById("humScoreVal").textContent = humPtsRound + " pts • " + catBuckets.human.hits.length + (catBuckets.human.hits.length === 1 ? " sign" : " signs");
 
   document.getElementById("emSplitLabel").textContent = punctStats.unspaced + " unspaced / " + punctStats.spaced + " spaced";
   document.getElementById("emUserRate").textContent = punctStats.ratePer1k.toFixed(2) + " / 1k";
@@ -1983,7 +2556,7 @@ function analyze(){
       t5: Math.round(t5Pts * 10) / 10,
       t6: Math.round(t6Pts * 10) / 10,
       co_occurrence_bonus: coOccurrenceBonus,
-      human: Math.round(humanPts * 10) / 10
+      human: humPtsRound
     },
     telemetry_per_1k: {
       em_dash_rate: Number(punctStats.ratePer1k.toFixed(2)),
@@ -2056,9 +2629,10 @@ function analyze(){
   document.getElementById("annotatedView").innerHTML = buildAnnotatedHtml(rawText, allFindings);
   lastFindings = allFindings.slice();
 
-  lastSummary = "AI Tell Checker v" + LEXICON_VERSION + " — Score: " + finalScore + "/100 (" + bandLabel + ") | Likely Era: " + likelyEra + "\n" +
-    "Words: " + words + " | Em-Dash Rate: " + punctStats.ratePer1k.toFixed(2) + "/1k | Classic 8-Word Rate: " + classic8Rate.toFixed(2) + "/1k\n" +
-    "Tiers: T1=" + Math.round(t1Pts) + ", T2=" + Math.round(t2Pts) + ", T3=" + Math.round(t3Pts) + ", T4=" + Math.round(t4Pts) + ", T5=" + Math.round(t5Pts) + ", T6=" + Math.round(t6Pts) + ", CoBonus=+" + coOccurrenceBonus + ", Human=" + Math.round(humanPts);
+  lastSummary = "AI Tell Checker v" + LEXICON_VERSION + " — Score: " + finalScore + "/100 (" + bandLabel + ") | " + headlineText + "\n" +
+    plainWhy + "\n" +
+    "Words: " + words + " | Style Era: " + likelyEra + " | Em-Dash Rate: " + punctStats.ratePer1k.toFixed(2) + "/1k\n" +
+    "Tiers: T1=" + Math.round(t1Pts) + ", T2=" + Math.round(t2Pts) + ", T3=" + Math.round(t3Pts) + ", T4=" + Math.round(t4Pts) + ", T5=" + Math.round(t5Pts) + ", T6=" + Math.round(t6Pts) + ", CoBonus=+" + coOccurrenceBonus + ", Human=" + humPtsRound;
 
   emptyEl.style.display = "none";
   resultsEl.style.display = "block";
@@ -2167,7 +2741,7 @@ document.getElementById("input").addEventListener("paste", (e) => {
         const start = ta.selectionStart || 0;
         const end = ta.selectionEnd || 0;
         ta.value = ta.value.slice(0, start) + converted + ta.value.slice(end);
-        document.getElementById("wc").textContent = countWords(ta.value) + " words";
+        updateWordCountUI(countWords(ta.value));
       }
     }
   }catch(err){}
@@ -2179,27 +2753,35 @@ document.getElementById("genreSelect").addEventListener("change", () => {
 });
 document.getElementById("sampleGeminiStoryBtn").addEventListener("click", () => {
   document.getElementById("input").value = SAMPLE_GEMINI_TACO;
-  document.getElementById("wc").textContent = countWords(SAMPLE_GEMINI_TACO) + " words";
+  document.getElementById("genreSelect").value = "narrative";
+  setEditorTab("edit");
   analyze();
 });
 document.getElementById("sample2026Btn").addEventListener("click", () => {
   document.getElementById("input").value = SAMPLE_2026_AI;
-  document.getElementById("wc").textContent = countWords(SAMPLE_2026_AI) + " words";
+  document.getElementById("genreSelect").value = "web";
+  setEditorTab("edit");
   analyze();
 });
 document.getElementById("sample2024Btn").addEventListener("click", () => {
   document.getElementById("input").value = SAMPLE_2024_ARTIFACT;
-  document.getElementById("wc").textContent = countWords(SAMPLE_2024_ARTIFACT) + " words";
+  document.getElementById("genreSelect").value = "web";
+  setEditorTab("edit");
   analyze();
 });
 document.getElementById("sample1776Btn").addEventListener("click", () => {
   document.getElementById("input").value = SAMPLE_HUMAN_1776;
-  document.getElementById("wc").textContent = countWords(SAMPLE_HUMAN_1776) + " words";
+  document.getElementById("genreSelect").value = "oratory";
+  setEditorTab("edit");
   analyze();
 });
 document.getElementById("clearBtn").addEventListener("click", () => {
-  document.getElementById("input").value = "";
-  document.getElementById("wc").textContent = "0 words";
+  const inputEl = document.getElementById("input");
+  inputEl.value = "";
+  inputEl.classList.remove("input-error");
+  document.getElementById("inputErrorBox").classList.remove("show");
+  updateWordCountUI(0);
+  document.getElementById("charStatsLabel").textContent = "Ready to scan";
   document.getElementById("results").style.display = "none";
   document.getElementById("resultsEmpty").style.display = "block";
   document.getElementById("annotatedView").innerHTML = "";
@@ -2212,8 +2794,27 @@ document.getElementById("tabHighlightBtn").addEventListener("click", () => {
   }
   setEditorTab("highlight");
 });
+document.getElementById("viewSpansActionBtn").addEventListener("click", () => {
+  setEditorTab("highlight");
+  document.getElementById("annotatedView").scrollIntoView({ behavior:"smooth", block:"nearest" });
+});
+document.getElementById("toggleDetailsBtn").addEventListener("click", () => {
+  const wrap = document.getElementById("technicalDetailsWrap");
+  const isOpen = wrap.classList.toggle("open");
+  const btn = document.getElementById("toggleDetailsBtn");
+  btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  document.getElementById("toggleDetailsLabel").textContent = isOpen
+    ? "Hide Technical Details & 6-Tier Breakdown"
+    : "Show Technical Details & 6-Tier Breakdown (points, hits & rates per 1k words)";
+  document.getElementById("toggleDetailsArrow").innerHTML = isOpen ? "&#9652;" : "&#9662;";
+});
 document.getElementById("input").addEventListener("input", (e) => {
-  document.getElementById("wc").textContent = countWords(e.target.value) + " words";
+  const w = countWords(e.target.value);
+  updateWordCountUI(w);
+  if(w > 0){
+    e.target.classList.remove("input-error");
+    document.getElementById("inputErrorBox").classList.remove("show");
+  }
 });
 document.getElementById("input").addEventListener("keydown", (e) => {
   if((e.metaKey || e.ctrlKey) && e.key === "Enter") analyze();
@@ -2221,7 +2822,7 @@ document.getElementById("input").addEventListener("keydown", (e) => {
 document.getElementById("jsonToggleBtn").addEventListener("click", () => {
   const d = document.getElementById("jsonDrawer");
   const open = d.classList.toggle("open");
-  document.getElementById("jsonToggleBtn").innerHTML = open ? "Hide JSON Output Schema &uarr;" : "View JSON Output Schema &darr;";
+  document.getElementById("jsonToggleBtn").innerHTML = open ? "Hide Raw JSON Output Schema &uarr;" : "View Raw JSON Output Schema &darr;";
 });
 document.getElementById("copyBtn").addEventListener("click", () => {
   if(lastSummary) copyTextFallback(lastSummary, "Audit summary");
@@ -2335,10 +2936,10 @@ function buildShieldPrompt(){
   const aiHits = lastFindings.filter(f => f.tier > 0);
   const uniqueRules = {};
   aiHits.forEach(h => {
-    const key = h.ruleName;
-    if(!uniqueRules[key]) uniqueRules[key] = { name:h.ruleName, tier:h.tier, samples:[] };
-    if(uniqueRules[key].samples.length < 4 && uniqueRules[key].samples.indexOf(h.match) === -1){
-      uniqueRules[key].samples.push(h.match);
+    const key = h.rule_id || "rule";
+    if(!uniqueRules[key]) uniqueRules[key] = { name:h.rule_id, tier:h.tier, samples:[] };
+    if(uniqueRules[key].samples.length < 4 && h.term && uniqueRules[key].samples.indexOf(h.term) === -1){
+      uniqueRules[key].samples.push(h.term);
     }
   });
   const ruleList = Object.keys(uniqueRules).map(k => {

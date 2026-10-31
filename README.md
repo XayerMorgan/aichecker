@@ -1,7 +1,7 @@
-# AI Tell Checker (`v3.2.0`)
+# AI Tell Checker (`v3.3.0`)
 
 **Evidence-Based, Multi-Tier & Era-Calibrated AI Writing Diagnostic Scanner + Anti-Tell Prompt Shield**  
-*100% Client-Side HTML/CSS/JS • Google Sites & Sandboxed `<iframe>` Ready • Versioned `tells.yaml` Lexicon*
+*100% Client-Side HTML/CSS/JS • Google Sites & 375px Mobile Ready • Versioned `tells.yaml` Lexicon*
 
 ---
 
