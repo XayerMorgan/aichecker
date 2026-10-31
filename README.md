@@ -1,4 +1,4 @@
-# AI Tell Checker (`v3.3.0`)
+# AI Tell Checker (`v3.4.0`)
 
 **Evidence-Based, Multi-Tier & Era-Calibrated AI Writing Diagnostic Scanner + Anti-Tell Prompt Shield**  
 *100% Client-Side HTML/CSS/JS • Google Sites & 375px Mobile Ready • Versioned `tells.yaml` Lexicon*
@@ -34,10 +34,12 @@
 
 | Sample Button | Score & Band | Likely Model Era | Diagnostic Highlights |
 | :--- | :--- | :--- | :--- |
-| **`Oct 2026 Gemini (Taco Story)`** | **91–94 / 100** (`HIGH DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | `0.00/1k` em-dashes & `0.00/1k` Classic-8 words, caught via 4 contrast/negation frames, colon/semicolon pivots, curly/straight apostrophe mixing (`city’s` vs `Unit-7's`), 7 participial clauses (`19.7/1k`), and 6 paired `adj, adj + noun` phrases (`16.9/1k`). |
-| **`Oct 2026 AI Essay`** | **100 / 100** (`HIGH DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | High-ratio 2026 markers (*why X matters*, *the _ is not simply*, *is more than a _ it*, *rather than simply*, *does not by itself establish*, *looking ahead, the*). |
-| **`2024 GPT-4 + Artifact`** | **100 / 100** (`ARTIFACT FLOOR 90+`) | `2023-24 GPT-4` | Tier 1 artifacts (`Certainly!`, `[Company Name]`, `contentReference[oaicite:0]`, `utm_source=chatgpt.com`, `↩1`), `[U+202F]` narrow no-break space, `37.04/1k` em-dashes, `44.44/1k` Classic-8 rate. |
-| **`1776 Human Control`** | **0 / 100** (`LOW`) | `Human / Pre-2022 Baseline` | Declaration of Independence excerpt: classical triads and stone-engraving `--` pauses lack Tier 1/3/4/6 corroboration and are offset by `-18 pts` of human/historical markers. |
+| **`💬 Grok Social Post (2026)`** | **89 / 100** (`HIGH AI DENSITY`) | `2025–26+ Grok / Social Creator-Bot` | Creator-bot aphorism hook (*"Sometimes a single analogy changes how you measure everything"*), 2-fragment dramatic echo, 4 tributary contrast/synthesis frames (*"While X provided the narrative spark, the visual heart... belongs to Y"*), conversational negative-stitch + totalizing range frame (*"wasn't stitched together... The entire camera choreography, from the X to the Y, was..."*), 5 structural colons (`9.5/1k`), curly/straight quote mixing across the embedded video prompt, 6 participial clauses, and 9-paragraph hook-story-echo sandwich geometry. |
+| **`🌮 Gemini Taco Story (2026 AI)`** | **94 / 100** (`HIGH AI DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | `0.00/1k` em-dashes & `0.00/1k` Classic-8 words, caught via 4 contrast/negation frames, colon/semicolon pivots, curly/straight apostrophe mixing (`city’s` vs `Unit-7's`), 7 participial clauses (`19.7/1k`), and 6 paired `adj, adj + noun` phrases (`16.9/1k`). |
+| **`🛡️ Gemini Stealth Essay (2026)`** | **88 / 100** (`HIGH AI DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | Caught via 14 stripped compound-modifier hyphens (*"non native"*, *"pre 2022"*, *"co occurrence"* no-dash evasion overcorrection), period-split negation-reveal (*"is no longer A. It is B"*), 6 expository scaffolding frames, and 5-paragraph clone geometry ($\text{CV}=0.11$). |
+| **`🤖 2026 AI Essay`** | **100 / 100** (`HIGH AI DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | High-ratio 2026 markers (*why X matters*, *the _ is not simply*, *is more than a _ it*, *rather than simply*, *does not by itself establish*, *looking ahead, the*). |
+| **`📋 2024 GPT-4 + Chat Residue`** | **100 / 100** (`CHAT ARTIFACT 90+`) | `2023-24 GPT-4` | Tier 1 artifacts (`Certainly!`, `[Company Name]`, `contentReference[oaicite:0]`, `utm_source=chatgpt.com`, `↩1`), `[U+202F]` narrow no-break space, `37.04/1k` em-dashes, `44.44/1k` Classic-8 rate. |
+| **`📜 1776 Human Control`** | **0 / 100** (`LOW`) | `Human / Pre-2022 Baseline` | Declaration of Independence excerpt: classical triads and stone-engraving `--` pauses lack Tier 1/3/4/6 corroboration and are offset by `-18 pts` of human/historical markers. |
 
 ---
 

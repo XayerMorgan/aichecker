@@ -1,9 +1,9 @@
 # AI Tell Checker — Versioned Lexicon & Rule Specification (tells.yaml)
-# Version: 3.0.0
+# Version: 3.4.0
 # Updated: 2026-10-31
 # Author/Reference: @Matthew Jett Hal — "AI Writing Tells: Detection Reference for AI Tell Checker"
 
-version: "3.0.0"
+version: "3.4.0"
 updated: "2026-10-31"
 baselines:
   em_dash_per_1k: 3.14
@@ -602,4 +602,62 @@ rules:
     era: "2024-26+ Narrative AI"
     models: ["Google Gemini", "Claude", "GPT"]
     source: "Wikipedia AI Cleanup (Negation-Pivot Cadence)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # v3.3.0 & v3.4.0 ADDITIONS: Stealth De-Hyphenated Expository & Grok / Social Creator-Bot Rules
+  # ==========================================
+  - id: "t2.stripped_compound_hyphens"
+    tier: 2
+    category: "punctuation_evasion"
+    pattern: "\\b(non\\s+native|pre\\s+20\\d\\d|co\\s+occurrence|first\\s+generation|instruction\\s+tuned|machine\\s+generated|black\\s+box|evidence\\s+based|rule\\s+of\\s+three|false\\s+positive|era\\s+calibrated|human\\s+sign|sentence\\s+length\\s+uniformity|adjective\\s+noun)\\b"
+    type: "regex"
+    weight: 1.5
+    era: "2025-26+ Stealth / No-Dash Evasion"
+    models: ["Google Gemini", "Claude", "GPT"]
+    source: "Detection Reference Tier 2 (Hyphen-Stripping Evasion Artifact)"
+    added: "2026-10-31"
+
+  - id: "lex.grok_social_creator"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(striking\\s+visual|infinite\\s+scale|overwhelming\\s+scale|narrative\\s+spark|visual\\s+heart|faith\\s+journey|pivotal\\s+influences|from\\s+a\\s+technical\\s+standpoint|what\\s+blows\\s+my\\s+mind|camera\\s+choreography|sweeping\\s+drone\\s+(?:shot|pullback)|golden\\s+hour\\s+on\\s+an\\s+empty|empty\\s+pristine\\s+beach|glittering\\s+in\\s+the\\s+backlight|endless\\s+beautiful\\s+coastline|reverent,\\s+contemplative\\s+tone|pointing\\s+toward\\s+something\\s+much\\s+bigger)\\b"
+    type: "regex"
+    weight: 1.8
+    era: "2025-26+ Grok / Social Creator-Bot"
+    models: ["Grok", "ChatGPT", "Claude"]
+    source: "Detection Reference Tier 3B (Creator-Bot & Prompt Collocations)"
+    added: "2026-10-31"
+
+  - id: "frame.social_hook_aphorism"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "(?:^|\\n)Sometimes\\s+a\\s+single\\s+\\w+\\s+changes\\s+how\\s+you\\s+\\w+\\s+everything\\b|\\bOne\\s+[\\w\\s]{3,28}\\s+against\\s+an\\s+endless\\s+\\w+\\.\\s+Our\\s+brief\\s+time\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2025-26+ Grok / Social Creator-Bot"
+    models: ["Grok", "ChatGPT", "Claude"]
+    source: "Wikipedia AI Cleanup (Creator-Bot Hook & Contrast Echo)"
+    added: "2026-10-31"
+
+  - id: "frame.tribute_contrast_bridge"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(While\\s+[^,.\\n]{3,35}\\s+provided\\s+the\\s+[\\w\\s]{3,25},\\s+the\\s+(?:visual\\s+)?(?:heart|core|soul)\\s+of\\s+this\\s+\\w+\\s+belongs\\s+to|took\\s+concepts\\s+that\\s+once\\s+felt\\s+distant\\s+and\\s+made\\s+them\\s+real|brings\\s+two\\s+pivotal\\s+influences\\s+in\\s+my\\s+[\\w\\s]{3,25}\\s+together\\s+in\\s+one\\s+frame|If\\s+[^,.\\n]{3,35}\\s+captures\\s+the\\s+[^,.\\n]{3,35},\\s+[^,.\\n]{3,30}\\s+is\\s+the\\s+one\\s+who\\s+showed\\s+me\\s+how\\s+to|To\\s+[A-Z][^:\\n]{3,50}:\\s+thank\\s+you\\s+both\\s+for\\s+pointing\\s+toward\\s+something\\s+much\\s+bigger)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2025-26+ Grok / Social Creator-Bot"
+    models: ["Grok", "ChatGPT", "Claude"]
+    source: "Wikipedia AI Cleanup (Tributary Contrast & Callback Frames)"
+    added: "2026-10-31"
+
+  - id: "frame.conversational_neg_range"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b((?:what\\s+blows\\s+my\\s+mind\\s+is\\s+that\\s+)?(?:this|it)\\s+wasn'?t\\s+\\w+ed\\s+(?:together\\s+)?from\\s+[^.!?]{3,45}\\s+or\\s+\\w+ed\\s+in\\s+[^.!?]{3,30}|The\\s+entire\\s+[\\w\\s]{3,30},\\s+from\\s+the\\s+[^.!?]{5,65}\\s+to\\s+the\\s+[^.!?]{5,65},\\s+was\\s+generated|here\\s+is\\s+the\\s+exact\\s+prompt\\s+I\\s+used\\s*:)"
+    type: "regex"
+    weight: 4.0
+    era: "2025-26+ Grok / Social Creator-Bot"
+    models: ["Grok", "ChatGPT", "Claude"]
+    source: "Wikipedia AI Cleanup (Conversational Negation & Totalizing Range)"
     added: "2026-10-31"
