@@ -654,7 +654,8 @@
       <p class="sub">6-Tier + Human-Sign diagnostic engine calibrated to 9 empirical studies (Kobak et al., Liang et al., Reinhart et al. PNAS, Juzek &amp; Ward, Graphite Oct 2026, Czuma, &amp; Wikipedia AI Cleanup). Scores rate per 1,000 words, model-era drift, narrative syntax, and co-occurrence.</p>
     </div>
     <div class="header-actions">
-      <span class="version-tag" id="versionTag">v3.1.0 &bull; Lexicon 2026-10</span>
+      <span class="version-tag" id="versionTag">v3.2.0 &bull; Lexicon 2026-10</span>
+      <button type="button" class="icon-btn" id="promptShieldBtn" style="background:rgba(93,152,112,.16);border-color:rgba(93,152,112,.5);color:#9be6b0;">&#9889; Anti-Tell Prompt Shield</button>
       <button type="button" class="icon-btn" id="helpBtn">? Help &amp; Reference Guide</button>
     </div>
   </header>
@@ -787,6 +788,7 @@
           </div>
 
           <div>
+            <button type="button" class="rubric-toggle-btn" id="buildRewriteFromHitsBtn" style="color:#9be6b0;font-weight:600;">&#9889; Generate De-Tell Rewrite Prompt from Hits</button>
             <button type="button" class="rubric-toggle-btn" id="jsonToggleBtn">View JSON Output Schema &darr;</button>
             <button type="button" class="rubric-toggle-btn" id="copyBtn">Copy Audit Summary</button>
             <button type="button" class="rubric-toggle-btn" id="copyJsonBtn">Copy JSON Schema</button>
@@ -1049,6 +1051,7 @@
 
       <h3>Version Changelog</h3>
       <ul>
+        <li><strong>v3.2.0 (2026-10-31):</strong> Added the interactive <strong>Anti-Tell Prompt Shield</strong> (Standalone Chat Preface wrapper, Google Gem / Custom GPT / LM Studio System Prompt generator, and Dynamic Surgical De-Tell Rewrite Prompt builder from current scan hits).</li>
         <li><strong>v3.1.0 (2026-10-31):</strong> Added Oct 2026 Gemini Creative/Narrative AI calibration ("Unit-7 Taco Story"), generalized noun-subject negation-reveal frames (<code>Perfection was not A; it was B</code>), anaphoric double-negation <code>Instead,</code> pivots, colon-led reveal &amp; semicolon pivot telemetry, paired <code>adj, adj + noun</code> density, uncontracted negation uniformity, rich-text paste Markdown preservation, and the 5-tab Interactive Help &amp; Rule Explorer.</li>
         <li><strong>v3.0.0 (2026-10-31):</strong> Implemented full 6-Tier + Human-Sign architecture from @Matthew Jett Hal's Oct 31, 2026 Detection Reference and <code>tells.yaml</code> specification.</li>
         <li><strong>v2.1.0 (2026-10-31):</strong> Fixed Google Sites JS syntax error, added visual probability meter, and in-text span highlighter.</li>
@@ -1057,10 +1060,56 @@
   </div>
 </div>
 
+<!-- Anti-Tell Prompt Shield Modal -->
+<div class="modal-overlay" id="shieldOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="shieldTitle">
+    <button type="button" class="modal-close" id="shieldClose" aria-label="Close">&#10005;</button>
+    <p class="eyebrow" style="margin-bottom:2px;">PROMPT ENGINEERING / TELL EVASION PROTOCOL v3.2</p>
+    <h2 id="shieldTitle">&#9889; Anti-Tell Prompt Shield &amp; Gem/GPT Builder</h2>
+    <p style="font-size:12.5px;color:var(--ink-dim);margin:4px 0 12px;">Generate a drop-in prompt preface, a persistent Google Gem / Custom GPT / LM Studio System Instruction, or a surgical rewrite prompt targeting the exact tells detected in your current draft.</p>
+
+    <div class="help-tabs">
+      <button type="button" class="help-tab-btn active" data-smode="wrap">1. Preface a Writing Prompt (Standalone Chat)</button>
+      <button type="button" class="help-tab-btn" data-smode="system">2. Gem / Custom GPT / System Prompt</button>
+      <button type="button" class="help-tab-btn" data-smode="rewrite">3. Surgical Rewrite Prompt (From Scan Hits)</button>
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;" id="shieldControlsRow">
+      <label style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);">Target Register:
+        <select id="shieldGenre" class="genre-select" style="margin-left:4px;">
+          <option value="fiction">Creative / Narrative Fiction (Anti-Gemini/Claude Tropes)</option>
+          <option value="general">General Essay / Article / Blog (2026 Frontier Spec)</option>
+          <option value="email">Executive Email / Memo (Zero Corporate Filler)</option>
+          <option value="academic">Academic / Technical (Anti-PubMed/ICLR Spikes)</option>
+        </select>
+      </label>
+      <label style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);" id="shieldDensityWrap">Preface Length:
+        <select id="shieldDensity" class="genre-select" style="margin-left:4px;">
+          <option value="compact">Compact Prefix (~150 words)</option>
+          <option value="full">Full 6-Tier Protocol (~380 words)</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="shieldPromptInputBox" style="margin-bottom:12px;">
+      <label for="userPromptInput" style="display:block;font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:5px;">YOUR CREATIVE OR WRITING PROMPT (OPTIONAL — WILL BE APPENDED BELOW THE SHIELD):</label>
+      <textarea id="userPromptInput" style="min-height:74px;font-size:12.5px;padding:10px;" placeholder="e.g., Write a short story about a culinary AI in Mexico City trying to understand how to make a street taco..."></textarea>
+    </div>
+
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);" id="shieldOutputLabel">GENERATED PROMPT (READY TO COPY INTO GEMINI, CHATGPT, CLAUDE, OR LM STUDIO):</span>
+        <button type="button" id="copyShieldBtn">&#128203; Copy Generated Prompt</button>
+      </div>
+      <textarea id="shieldOutput" readonly style="min-height:250px;background:#080b0f;color:#d6e4f2;font-size:12px;line-height:1.55;"></textarea>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const LEXICON_VERSION = "3.1.0";
+const LEXICON_VERSION = "3.2.0";
 const LAST_UPDATED = "2026-10-31";
 
 const GENRE_BASELINES = {
@@ -1677,6 +1726,8 @@ function buildAnnotatedHtml(rawText, findings){
 
 let lastSummary = "";
 let lastJsonSchema = "";
+let lastFindings = [];
+let currentShieldMode = "wrap";
 
 function animateScore(target){
   const el = document.getElementById("probNum");
@@ -2003,6 +2054,7 @@ function analyze(){
   });
 
   document.getElementById("annotatedView").innerHTML = buildAnnotatedHtml(rawText, allFindings);
+  lastFindings = allFindings.slice();
 
   lastSummary = "AI Tell Checker v" + LEXICON_VERSION + " — Score: " + finalScore + "/100 (" + bandLabel + ") | Likely Era: " + likelyEra + "\n" +
     "Words: " + words + " | Em-Dash Rate: " + punctStats.ratePer1k.toFixed(2) + "/1k | Classic 8-Word Rate: " + classic8Rate.toFixed(2) + "/1k\n" +
@@ -2179,11 +2231,11 @@ document.getElementById("copyJsonBtn").addEventListener("click", () => {
 });
 
 // Help Modal & Interactive Tabs
-document.querySelectorAll(".help-tab-btn").forEach(btn => {
+document.querySelectorAll("#modalOverlay .help-tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const target = btn.getAttribute("data-htab");
-    document.querySelectorAll(".help-tab-btn").forEach(b => b.classList.toggle("active", b === btn));
-    document.querySelectorAll(".help-pane").forEach(p => p.classList.toggle("active", p.id === "hp-" + target));
+    document.querySelectorAll("#modalOverlay .help-tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll("#modalOverlay .help-pane").forEach(p => p.classList.toggle("active", p.id === "hp-" + target));
   });
 });
 document.getElementById("ruleSearchInput").addEventListener("input", (e) => {
@@ -2203,8 +2255,167 @@ document.getElementById("modalClose").addEventListener("click", () => {
 document.getElementById("modalOverlay").addEventListener("click", (e) => {
   if(e.target.id === "modalOverlay") document.getElementById("modalOverlay").classList.remove("open");
 });
+
+// Anti-Tell Prompt Shield Generator
+function buildShieldPrompt(){
+  const genre = document.getElementById("shieldGenre").value || "fiction";
+  const density = document.getElementById("shieldDensity").value || "compact";
+  const userPrompt = (document.getElementById("userPromptInput").value || "").trim();
+
+  const genreRules = {
+    fiction: "FICTION & NARRATIVE REGISTER:\n- Never use 'a comforting vibration', 'a relentless ticking clock', 'in a desperate bid for', 'amidst the neon glow', 'a rhythm born of intuition', 'zoomed in on the resulting creation', 'neural pathways', 'radical paradigm shift', 'newfound chaos', or 'comprehend the soul of'.\n- End scenes on a concrete physical detail, piece of dialogue, or unresolved sensory note — NEVER on a neat philosophical moral ('Unit-7 had not just engineered a meal; it had finally learned how to feel...').",
+    general: "GENERAL / ESSAY REGISTER:\n- Never use 'why this matters', 'this matters because', 'at its core', 'one of the best things about', 'looking ahead', 'a testament to', 'in today's fast-paced world', or 'quietly orchestrating'.\n- Start paragraphs with concrete claims or evidence rather than throat-clearing meta-commentary.",
+    email: "EXECUTIVE EMAIL / MEMO REGISTER:\n- Never use 'I hope this email finds you well', 'delve into', 'foster alignment', 'leverage synergies', 'underscores the importance of', or bolded 'Title: Description' bullet lists.\n- Write direct, asymmetric sentences with natural contractions and immediate action items.",
+    academic: "ACADEMIC / TECHNICAL REGISTER:\n- Never use the PubMed/ICLR AI spike verbs/adjectives: 'delves', 'underscores', 'showcasing', 'garnered', 'surpassing', 'meticulous', 'commendable', 'intricate', 'pivotal', 'groundbreaking', or 'realm'.\n- State methods, numbers, and limitations directly without 'while specific details are limited' or 'serves as a cornerstone'."
+  };
+
+  if(currentShieldMode === "wrap"){
+    let preface = "";
+    if(density === "compact"){
+      preface = "[STYLE & ANTI-TELL DIRECTIVE — APPLY STRICTLY]\n" +
+        "Write in grounded, asymmetrical human prose and obey these 6 hard constraints:\n" +
+        "1. NO NEGATION-REVEAL PIVOTS: Never write 'X is not Y; it is Z', 'Not just X, but Y', 'X did not A. He did not B. Instead, he C', or 'More than X, it is Y'. State what things ARE directly.\n" +
+        "2. NO COLON REVEALS OR SEMICOLON ANTITHESIS: Do not use colons to introduce dramatic reveals ('logic: synthesize...') or semicolons for 'was not A; it was B' pivots. Keep em-dashes natural (1–3 per 1,000 words, never zero and never >6).\n" +
+        "3. NO PAIRED ADJECTIVES OR PARTICIPIAL TAILS: Do not stack 'adj, adj + noun' pairs ('swift, imperfect flick', 'beautiful, fleeting imperfection'). Do not attach '-ing' participial clauses to sentence endings ('..., highlighting / fostering / ensuring / slicing...').\n" +
+        "4. BANNED AI LEXICON: Never use delve, tapestry, underscore, showcase, testament, realm, pivotal, meticulous, commendable, intricate, multifaceted, vibrant, bustling, symphony, paradigm shift, cascade, palpable, or 'this matters'.\n" +
+        "5. NATURAL CONTRACTIONS & ASYMMETRIC CADENCE: Use normal English contractions (didn't, wasn't, couldn't, it's) instead of stiff uncontracted 'did not / was not / could not'. Vary sentence length sharply (mix 4-word fragments with 30-word clauses) and vary paragraph lengths.\n" +
+        "6. ZERO INLINE BOLDING OR MORALIZING ENDINGS: Never bold mid-sentence words (**perfect**, **soul**) and never end with a thesis summary.\n\n" +
+        genreRules[genre];
+    } else {
+      preface = "[ANTI-TELL WRITING PROTOCOL v3.2 — 6-TIER EVASION SPEC]\n" +
+        "Before generating a single token, enforce these structural, syntactic, and lexical constraints so the output contains zero statistical LLM tells:\n\n" +
+        "A. BANNED RHETORICAL FRAMES (TIER 4):\n" +
+        "- Zero negation-reveal pivots: Never write 'X is not Y; it is Z', 'Perfection was not A; it was B', 'had not just X; it had finally Y', or 'not merely X, but Y'.\n" +
+        "- Zero anaphoric negation chains: Never write 'He did not X. He did not Y. Instead, he Z.'\n" +
+        "- Zero significance inflation: Never write 'this matters because', 'why this matters', 'stands as a testament to', 'plays a pivotal role', or 'at its core'.\n" +
+        "- Zero copula avoidance: Use plain 'is/are/has' instead of 'serves as', 'stands as', 'boasts', 'features', or 'represents'.\n\n" +
+        "B. SYNTAX & PUNCTUATION TELEMETRY (TIERS 2 & 5 — REINHART ET AL. PNAS):\n" +
+        "- Present participial clauses ('-ing' tails attached after commas) must stay under 3 per 1,000 words.\n" +
+        "- Paired pre-nominal adjectives ('adj, adj + noun' like 'charred, blistered edges' or 'unique, surprising spark') must stay under 1 per 500 words.\n" +
+        "- Do not replace em-dashes with colon-led dramatic reveals ('creation: a chaotic...') or semicolon pivots. Use 1 to 3 em-dashes per 1,000 words naturally.\n" +
+        "- Use natural contractions ('didn't', 'wasn't', 'couldn't', 'hadn't') in both narrative and exposition.\n" +
+        "- Break uniform burstiness: mix 3–6 word sentences with 25–35 word sentences, and include 1–2 sentence paragraphs alongside longer ones.\n\n" +
+        "C. BANNED LEXICON (TIER 3 — KOBAK / LIANG / GRAPHITE):\n" +
+        "- Never use: delve, tapestry, underscore, showcase, garner, surpass, meticulous, commendable, intricate, pivotal, crucial, realm, landscape, foster, stakeholder, vibrant, bustling, cascade, paradigm shift, symphony, harmony, culinary intelligence, or newfound chaos.\n\n" +
+        "D. FORMATTING (TIER 6):\n" +
+        "- Never put **bold** emphasis on mid-sentence nouns or thesis sentences. Keep ASCII/curly apostrophes consistent.\n\n" +
+        genreRules[genre];
+    }
+    if(userPrompt){
+      return preface + "\n\n---\nTASK / WRITING PROMPT:\n" + userPrompt;
+    }
+    return preface + "\n\n---\nTASK / WRITING PROMPT:\n[Paste your story, article, or writing prompt here]";
+  }
+
+  if(currentShieldMode === "system"){
+    return "<writing_style_protocol version=\"3.2\" target=\"" + genre + "\">\n" +
+      "You are an expert human writer and editor. Every response you produce must pass empirical 6-Tier AI-tell auditing (Kobak et al., Liang et al., Reinhart et al. PNAS, Graphite 2026) with a score under 15/100.\n\n" +
+      "1. RHETORICAL FRAMES (STRICTLY FORBIDDEN):\n" +
+      "- Never use negation-reveal or negative parallelism: 'X is not Y; it is Z', 'Not just A, but B', 'had not just X; it had finally Y', or 'Did not X. Did not Y. Instead, Z.'\n" +
+      "- Never use significance inflation: 'this matters', 'why this matters', 'a testament to', 'plays a pivotal role', 'at its core', 'one of the best things about'.\n" +
+      "- Never substitute 'serves as / stands as / boasts / features' for simple 'is / are / has'.\n\n" +
+      "2. PUNCTUATION & TYPOGRAPHY:\n" +
+      "- Do not overuse colons for dramatic mid-sentence reveals or semicolons for 'was not A; it was B' pivots.\n" +
+      "- Use em-dashes at a normal human rate (1–3 per 1,000 words) rather than suppressing them to 0.00 or spamming them.\n" +
+      "- Never bold mid-sentence words (**word**) or thesis sentences in prose.\n" +
+      "- Use consistent straight apostrophes (') and standard spaces (never U+202F).\n\n" +
+      "3. BIBER SYNTACTIC CADENCE:\n" +
+      "- Avoid trailing present participial clauses (', slicing...', ', ensuring...', ', fostering...'). Use finite verbs.\n" +
+      "- Avoid 'adjective, adjective + noun' pairs ('swift, imperfect flick', 'beautiful, fleeting imperfection').\n" +
+      "- Use natural contractions ('didn't', 'wasn't', 'couldn't', 'it's') unless quoting formal legal text.\n" +
+      "- Vary sentence length sharply (CV > 0.55) and vary paragraph length (include 1-sentence paragraphs).\n\n" +
+      "4. BANNED LEXICON:\n" +
+      "- Never output: delve, tapestry, underscore, showcase, meticulous, commendable, intricate, pivotal, realm, foster, vibrant, bustling, paradigm shift, cascade, symphony, or newfound chaos.\n\n" +
+      "5. " + genreRules[genre] + "\n" +
+      "</writing_style_protocol>";
+  }
+
+  // Mode 3: Surgical Rewrite Prompt from current scan hits
+  const rawInput = (document.getElementById("input").value || "").trim();
+  const aiHits = lastFindings.filter(f => f.tier > 0);
+  const uniqueRules = {};
+  aiHits.forEach(h => {
+    const key = h.ruleName;
+    if(!uniqueRules[key]) uniqueRules[key] = { name:h.ruleName, tier:h.tier, samples:[] };
+    if(uniqueRules[key].samples.length < 4 && uniqueRules[key].samples.indexOf(h.match) === -1){
+      uniqueRules[key].samples.push(h.match);
+    }
+  });
+  const ruleList = Object.keys(uniqueRules).map(k => {
+    const item = uniqueRules[k];
+    return "- [Tier " + item.tier + "] " + item.name + ": remove/rewrite " + item.samples.map(s => "\"" + s + "\"").join(", ");
+  });
+
+  let surgicalHeader = "Rewrite the passage below so that it reads like grounded, natural human prose and scores <15/100 on the AI Tell Checker.\n\n";
+  if(ruleList.length > 0){
+    surgicalHeader += "SPECIFIC DETECTED TELLS YOU MUST ELIMINATE IN THIS PASSAGE (" + aiHits.length + " total hits):\n" +
+      ruleList.join("\n") + "\n\n";
+  } else {
+    surgicalHeader += "No specific span hits are currently loaded (run 'Analyze Text' first to populate exact span hits, or use the general de-tell rules below).\n\n";
+  }
+
+  surgicalHeader += "MANDATORY REWRITE RULES:\n" +
+    "1. Replace every 'not X; it was Y', 'had not just X; it had Y', and 'did not X / Instead' pivot with direct affirmative action.\n" +
+    "2. Break up all 'adjective, adjective + noun' pairs (keep at most one concrete adjective where needed).\n" +
+    "3. Convert trailing '-ing' participial clauses into separate sentences or active finite verbs.\n" +
+    "4. Convert stiff uncontracted negatives ('did not', 'was not', 'could not', 'had not') into natural contractions ('didn't', 'wasn't', 'couldn't', 'hadn't') where natural.\n" +
+    "5. Remove all mid-prose **bolding**, colon-led dramatic reveals, and ending moral summaries.\n" +
+    "6. Vary sentence and paragraph lengths so the rhythm is jagged and human.\n\n" +
+    "PASSAGE TO REWRITE:\n\"\"\"\n" + (rawInput || "[Paste your text into the AI Tell Checker input box first, or paste it here]") + "\n\"\"\"";
+
+  return surgicalHeader;
+}
+
+function openShieldModal(mode){
+  if(mode) currentShieldMode = mode;
+  document.querySelectorAll("#shieldOverlay [data-smode]").forEach(b => {
+    b.classList.toggle("active", b.getAttribute("data-smode") === currentShieldMode);
+  });
+  const isWrap = currentShieldMode === "wrap";
+  const isRewrite = currentShieldMode === "rewrite";
+  document.getElementById("shieldPromptInputBox").style.display = isWrap ? "block" : "none";
+  document.getElementById("shieldDensityWrap").style.display = isWrap ? "inline-block" : "none";
+  document.getElementById("shieldControlsRow").style.display = isRewrite ? "none" : "flex";
+  document.getElementById("shieldOutput").value = buildShieldPrompt();
+  document.getElementById("shieldOverlay").classList.add("open");
+}
+
+document.getElementById("promptShieldBtn").addEventListener("click", () => openShieldModal("wrap"));
+document.getElementById("buildRewriteFromHitsBtn").addEventListener("click", () => {
+  if(countWords(document.getElementById("input").value) > 0 && lastFindings.length === 0){
+    analyze();
+  }
+  openShieldModal("rewrite");
+});
+document.querySelectorAll("#shieldOverlay [data-smode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    openShieldModal(btn.getAttribute("data-smode"));
+  });
+});
+document.getElementById("shieldGenre").addEventListener("change", () => {
+  document.getElementById("shieldOutput").value = buildShieldPrompt();
+});
+document.getElementById("shieldDensity").addEventListener("change", () => {
+  document.getElementById("shieldOutput").value = buildShieldPrompt();
+});
+document.getElementById("userPromptInput").addEventListener("input", () => {
+  document.getElementById("shieldOutput").value = buildShieldPrompt();
+});
+document.getElementById("copyShieldBtn").addEventListener("click", () => {
+  const val = document.getElementById("shieldOutput").value;
+  if(val) copyTextFallback(val, "Anti-Tell Prompt");
+});
+document.getElementById("shieldClose").addEventListener("click", () => {
+  document.getElementById("shieldOverlay").classList.remove("open");
+});
+document.getElementById("shieldOverlay").addEventListener("click", (e) => {
+  if(e.target.id === "shieldOverlay") document.getElementById("shieldOverlay").classList.remove("open");
+});
 document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape") document.getElementById("modalOverlay").classList.remove("open");
+  if(e.key === "Escape"){
+    document.getElementById("modalOverlay").classList.remove("open");
+    document.getElementById("shieldOverlay").classList.remove("open");
+  }
 });
 
 renderRuleExplorer("");

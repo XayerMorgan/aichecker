@@ -1,6 +1,6 @@
-# AI Tell Checker (`v3.1.0`)
+# AI Tell Checker (`v3.2.0`)
 
-**Evidence-Based, Multi-Tier & Era-Calibrated AI Writing Diagnostic Scanner**  
+**Evidence-Based, Multi-Tier & Era-Calibrated AI Writing Diagnostic Scanner + Anti-Tell Prompt Shield**  
 *100% Client-Side HTML/CSS/JS • Google Sites & Sandboxed `<iframe>` Ready • Versioned `tells.yaml` Lexicon*
 
 ---
@@ -38,6 +38,16 @@
 | **`Oct 2026 AI Essay`** | **100 / 100** (`HIGH DENSITY`) | `2026+ Gemini 3 / Opus 5.5 / GPT-6` | High-ratio 2026 markers (*why X matters*, *the _ is not simply*, *is more than a _ it*, *rather than simply*, *does not by itself establish*, *looking ahead, the*). |
 | **`2024 GPT-4 + Artifact`** | **100 / 100** (`ARTIFACT FLOOR 90+`) | `2023-24 GPT-4` | Tier 1 artifacts (`Certainly!`, `[Company Name]`, `contentReference[oaicite:0]`, `utm_source=chatgpt.com`, `↩1`), `[U+202F]` narrow no-break space, `37.04/1k` em-dashes, `44.44/1k` Classic-8 rate. |
 | **`1776 Human Control`** | **0 / 100** (`LOW`) | `Human / Pre-2022 Baseline` | Declaration of Independence excerpt: classical triads and stone-engraving `--` pauses lack Tier 1/3/4/6 corroboration and are offset by `-18 pts` of human/historical markers. |
+
+---
+
+## ⚡ Anti-Tell Prompt Shield & Gem/GPT Builder (`v3.2.0`)
+
+Click **⚡ Anti-Tell Prompt Shield** in the top bar (or see [`PROMPTS.md`](./PROMPTS.md)) to turn the checker's 6-Tier detection rules into a preventative prompt wrapper or system instruction:
+
+1. **Preface a Writing Prompt (Standalone Chat):** Select your register (*Creative/Narrative Fiction*, *General Essay*, *Executive Email*, or *Academic/Technical*) and length (*Compact ~150w* or *Full 6-Tier Protocol ~380w*), type your creative prompt, and copy a ready-to-paste prompt that blocks negation-reveal pivots, paired `adj, adj + noun` stacks, trailing `-ing` participial clauses, colon-led dramatic reveals, mid-sentence bolding, and high-ratio AI lexicon before generation starts.
+2. **Gem / Custom GPT / LM Studio System Prompt:** Copy the `<writing_style_protocol version="3.2">` system block directly into a **Google Gem**, **OpenAI Custom GPT**, **Claude Project**, or **LM Studio System Prompt**.
+3. **Surgical De-Tell Rewrite Prompt (From Scan Hits):** After scanning any draft, click **⚡ Generate De-Tell Rewrite Prompt from Hits** to build a customized rewrite prompt that lists every specific Tier 1–6 span matched in your text and instructs the LLM how to rewrite the passage cleanly.
 
 ---
 
