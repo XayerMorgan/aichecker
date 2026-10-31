@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Tell Checker v3.1 — Multi-Tier &amp; Era-Calibrated Detection Reference</title>
+<style>
+  :root{
+    --bg:#10141a;
+    --panel:#171c24;
+    --panel-deep:#0c0f14;
+    --panel-line:#262e3b;
+    --ink:#eae6df;
+    --ink-dim:#98a2b0;
+    --amber:#d49b35;
+    --amber-dim:#7a5b21;
+    --red:#cf5640;
+    --red-bright:#f07d67;
+    --purple:#a678de;
+    --green:#5d9870;
+    --blue:#548ec7;
+    --cyan:#47a8b5;
+    --mono:"IBM Plex Mono","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    min-height:100vh;
+  }
+  .wrap{max-width:1260px;margin:0 auto;padding:22px 18px 56px;}
+  header{
+    border-bottom:1px solid var(--panel-line);
+    padding-bottom:16px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    color:var(--amber);
+    margin:0 0 6px;
+    text-transform:uppercase;
+  }
+  h1{font-size:24px;font-weight:650;margin:0 0 6px;letter-spacing:-0.01em;}
+  .sub{color:var(--ink-dim);font-size:13px;max-width:740px;line-height:1.5;margin:0;}
+  .header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
+  .icon-btn{
+    background:rgba(212,155,53,.1);
+    border:1px solid rgba(212,155,53,.4);
+    color:var(--amber);
+    font-family:var(--sans);
+    font-size:12px;
+    font-weight:600;
+    padding:7px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .icon-btn:hover{background:rgba(212,155,53,.2);color:var(--ink);}
+  .version-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--ink-dim);
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    padding:4px 9px;
+    border-radius:12px;
+    align-self:center;
+  }
+  .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;align-items:start;}
+  @media (max-width:960px){.grid{grid-template-columns:1fr;}}
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:5px;
+    padding:18px;
+  }
+  .panel-head-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .panel h2{
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    color:var(--ink-dim);
+    margin:0;
+    font-weight:600;
+  }
+  .genre-select{
+    background:var(--panel-deep);
+    color:var(--ink);
+    border:1px solid var(--panel-line);
+    border-radius:3px;
+    font-family:var(--mono);
+    font-size:11px;
+    padding:4px 8px;
+  }
+  textarea{
+    width:100%;
+    min-height:360px;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.58;
+    padding:14px;
+    resize:vertical;
+  }
+  textarea:focus{outline:1px solid var(--amber);}
+
+  /* Annotated Evidence Box */
+  .annotated-box{
+    display:none;
+    width:100%;
+    min-height:360px;
+    max-height:540px;
+    overflow-y:auto;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.7;
+    padding:14px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .annotated-box.active{display:block;}
+  .hl-t1{background:rgba(166,120,222,.35);color:#f3e6ff;border-bottom:2px solid var(--purple);padding:1px 4px;border-radius:2px;font-weight:600;}
+  .hl-t2{background:rgba(71,168,181,.28);color:#d6f8fc;border-bottom:2px solid var(--cyan);padding:1px 3px;border-radius:2px;}
+  .hl-t3{background:rgba(207,86,64,.30);color:#ffd9d1;border-bottom:2px solid var(--red-bright);padding:1px 3px;border-radius:2px;}
+  .hl-t4{background:rgba(212,155,53,.28);color:#fff2cc;border-bottom:2px solid var(--amber);padding:1px 3px;border-radius:2px;}
+  .hl-t5{background:rgba(84,142,199,.25);color:#d9ecff;border-bottom:1px dashed var(--blue);padding:1px 2px;border-radius:2px;}
+  .hl-t6{background:rgba(152,162,176,.22);color:#e6ebf2;border-bottom:1px dotted var(--ink-dim);padding:1px 2px;border-radius:2px;}
+  .hl-hum{background:rgba(93,152,112,.26);color:#d4f5dd;border-bottom:2px solid var(--green);padding:1px 3px;border-radius:2px;}
+
+  .view-tabs{
+    display:inline-flex;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    padding:2px;
+    gap:2px;
+  }
+  .view-tab{
+    background:transparent;
+    color:var(--ink-dim);
+    border:none;
+    font-size:11px;
+    font-weight:600;
+    padding:4px 9px;
+    border-radius:3px;
+    cursor:pointer;
+  }
+  .view-tab.active{background:var(--panel-line);color:var(--ink);}
+  .hl-legend{
+    display:none;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--ink-dim);
+    margin-top:8px;
+    flex-wrap:wrap;
+  }
+  .hl-legend.active{display:flex;}
+  .hl-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+
+  .toolbar{display:flex;gap:7px;margin-top:11px;align-items:center;flex-wrap:wrap;}
+  button{
+    background:var(--amber);
+    color:#181203;
+    border:none;
+    font-weight:600;
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:var(--sans);
+    transition:filter .12s ease;
+  }
+  button.secondary{
+    background:transparent;
+    color:var(--ink-dim);
+    border:1px solid var(--panel-line);
+    padding:7px 10px;
+    font-size:11.5px;
+  }
+  button.secondary:hover{color:var(--ink);border-color:var(--amber-dim);}
+  button:hover{filter:brightness(1.08);}
+  button:active{filter:brightness(.95);}
+  .kbd-hint{font-family:var(--mono);font-size:11px;color:var(--ink-dim);}
+  .wc{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);margin-left:auto;}
+
+  /* Score Card */
+  .score-card{
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .score-top-grid{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .score-primary-row{display:flex;align-items:baseline;gap:14px;}
+  .prob-num{
+    font-size:46px;
+    font-weight:700;
+    font-family:var(--mono);
+    line-height:1;
+  }
+  .prob-label-col{display:flex;flex-direction:column;gap:5px;}
+  .prob-title{font-size:11.5px;color:var(--ink-dim);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .score-band{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:3px;
+    display:inline-block;
+    align-self:flex-start;
+    font-weight:600;
+  }
+  .band-low{background:rgba(93,152,112,.18);color:var(--green);border:1px solid rgba(93,152,112,.4);}
+  .band-mod{background:rgba(212,155,53,.18);color:var(--amber);border:1px solid rgba(212,155,53,.4);}
+  .band-high{background:rgba(207,86,64,.18);color:var(--red-bright);border:1px solid rgba(207,86,64,.45);}
+  .band-art{background:rgba(166,120,222,.22);color:#d7b8ff;border:1px solid rgba(166,120,222,.5);}
+
+  .era-badge-box{
+    text-align:right;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-dim);
+  }
+  .era-pill{
+    display:inline-block;
+    background:#171c24;
+    border:1px solid var(--panel-line);
+    color:var(--amber);
+    padding:3px 8px;
+    border-radius:3px;
+    font-weight:600;
+    margin-top:2px;
+  }
+
+  /* Caveat Banner */
+  .caveat-box{
+    display:none;
+    background:rgba(212,155,53,.11);
+    border:1px solid rgba(212,155,53,.38);
+    border-radius:4px;
+    padding:8px 11px;
+    margin:10px 0;
+    font-size:11.5px;
+    color:#f3d89c;
+    line-height:1.45;
+  }
+  .caveat-box.show{display:block;}
+
+  /* Meter */
+  .meter-wrap{margin:10px 0 14px;}
+  .meter-track{
+    position:relative;
+    height:12px;
+    border-radius:6px;
+    background:linear-gradient(90deg,
+      rgba(93,152,112,.38) 0%,
+      rgba(93,152,112,.38) 29%,
+      rgba(212,155,53,.40) 30%,
+      rgba(212,155,53,.40) 59%,
+      rgba(207,86,64,.48) 60%,
+      rgba(207,86,64,.65) 89%,
+      rgba(166,120,222,.65) 90%,
+      rgba(166,120,222,.75) 100%);
+    border:1px solid var(--panel-line);
+  }
+  .meter-tick{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--panel-line);}
+  .meter-pointer{
+    position:absolute;
+    top:-5px;
+    width:10px;
+    height:20px;
+    margin-left:-5px;
+    background:var(--ink);
+    border:2px solid var(--bg);
+    border-radius:3px;
+    box-shadow:0 0 8px rgba(0,0,0,.7);
+    transition:left .4s cubic-bezier(.22,1,.36,1);
+  }
+  .meter-labels{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--ink-dim);
+    margin-top:5px;
+  }
+
+  .assessment-text{
+    font-size:12.5px;
+    color:var(--ink);
+    line-height:1.5;
+    margin:10px 0 12px;
+    padding-left:10px;
+    border-left:3px solid var(--amber);
+  }
+
+  /* Tier Points Grid */
+  .tier-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin:10px 0;
+    font-family:var(--mono);
+    font-size:10.5px;
+  }
+  @media (max-width:600px){.tier-grid{grid-template-columns:repeat(2,1fr);}}
+  .tier-cell{
+    background:#131820;
+    border:1px solid var(--panel-line);
+    border-radius:3px;
+    padding:6px 8px;
+  }
+  .tier-cell span{color:var(--ink-dim);display:block;font-size:9.5px;}
+  .tier-cell strong{font-size:12.5px;color:var(--ink);}
+
+  /* Drift & Em-Dash Telemetry Subpanel */
+  .telemetry-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--panel-line);
+  }
+  @media (max-width:640px){.telemetry-grid{grid-template-columns:1fr;}}
+  .telemetry-box{
+    background:#12171f;
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    padding:10px;
+    font-size:11.5px;
+  }
+  .telemetry-title{
+    font-family:var(--mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--amber);
+    margin-bottom:6px;
+  }
+  .mini-comp-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--ink-dim);
+    padding:2px 0;
+  }
+  .mini-comp-row.you{color:var(--ink);font-weight:700;}
+
+  .rubric-toggle-btn{
+    background:none;
+    border:none;
+    color:var(--amber);
+    font-size:11.5px;
+    padding:0;
+    cursor:pointer;
+    text-decoration:underline;
+    font-family:var(--sans);
+    margin-top:10px;
+    margin-right:14px;
+  }
+  .composite-drawer{
+    display:none;
+    margin-top:10px;
+    background:#12161c;
+    border:1px dashed var(--panel-line);
+    border-radius:4px;
+    padding:12px;
+    font-size:11.5px;
+    color:var(--ink-dim);
+    line-height:1.5;
+  }
+  .composite-drawer.open{display:block;}
+  .json-pre{
+    background:#090c10;
+    border:1px solid var(--panel-line);
+    padding:10px;
+    border-radius:3px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#c9d4e3;
+    max-height:280px;
+    overflow:auto;
+    margin:6px 0 0;
+  }
+
+  /* Categories list */
+  .cat{border-top:1px solid var(--panel-line);padding:10px 0;}
+  .cat:first-of-type{border-top:none;padding-top:0;}
+  .cat-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px;}
+  .cat-head:hover .cat-name{color:var(--amber);}
+  .cat-name-box{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .cat-name{font-size:13px;font-weight:600;}
+  .tier-tag{
+    font-family:var(--mono);
+    font-size:9.5px;
+    padding:1px 6px;
+    border-radius:3px;
+    font-weight:600;
+  }
+  .t-b1{background:rgba(166,120,222,.18);color:#d7b8ff;border:1px solid rgba(166,120,222,.4);}
+  .t-b2{background:rgba(71,168,181,.18);color:#8ce5f0;border:1px solid rgba(71,168,181,.4);}
+  .t-b3{background:rgba(207,86,64,.18);color:var(--red-bright);border:1px solid rgba(207,86,64,.4);}
+  .t-b4{background:rgba(212,155,53,.18);color:var(--amber);border:1px solid rgba(212,155,53,.4);}
+  .t-b5{background:rgba(84,142,199,.18);color:#8ec2f5;border:1px solid rgba(84,142,199,.4);}
+  .t-b6{background:rgba(152,162,176,.18);color:#cbd4e1;border:1px solid rgba(152,162,176,.4);}
+  .t-bh{background:rgba(93,152,112,.18);color:#8cd4a0;border:1px solid rgba(93,152,112,.4);}
+
+  .cat-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .cat-count{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-dim);
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    padding:2px 8px;
+    border-radius:10px;
+    min-width:26px;
+    text-align:center;
+  }
+  .cat-count.flag{color:var(--red-bright);border-color:rgba(207,86,64,.45);font-weight:600;}
+  .cat-count.hum-flag{color:var(--green);border-color:rgba(93,152,112,.45);font-weight:600;}
+  .cat-desc{font-size:11.5px;color:var(--ink-dim);margin:4px 0 0;line-height:1.45;}
+  .hits{margin-top:8px;display:none;}
+  .cat.open .hits{display:block;}
+  .hit{
+    font-family:var(--mono);
+    font-size:11.5px;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:3px;
+    padding:6px 9px;
+    margin-bottom:5px;
+    color:var(--ink-dim);
+  }
+  .hit-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    color:var(--amber);
+    margin-bottom:3px;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  mark{background:rgba(212,155,53,.35);color:var(--ink);border-radius:2px;padding:0 2px;}
+  .empty-note{font-size:12px;color:var(--ink-dim);font-style:italic;}
+
+  /* Studies & Reference Table Section */
+  .ref-section{
+    margin-top:22px;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:5px;
+    padding:18px;
+  }
+  .study-table-wrap{overflow-x:auto;margin-top:10px;}
+  .study-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+    line-height:1.45;
+  }
+  .study-table th, .study-table td{
+    padding:8px 10px;
+    border-bottom:1px solid var(--panel-line);
+    text-align:left;
+    vertical-align:top;
+  }
+  .study-table th{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    color:var(--amber);
+    background:var(--panel-deep);
+  }
+  .study-table a{color:var(--amber);text-decoration:none;font-weight:600;}
+  .study-table a:hover{text-decoration:underline;}
+
+  footer{
+    margin-top:22px;
+    font-size:11.5px;
+    color:var(--ink-dim);
+    line-height:1.6;
+    border-top:1px solid var(--panel-line);
+    padding-top:14px;
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  footer a{color:var(--amber);text-decoration:none;cursor:pointer;}
+  footer a:hover{text-decoration:underline;}
+
+  /* Interactive Multi-Tab Help & Reference Modal */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,.76);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 14px;
+    z-index:100;
+    overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    max-width:960px;
+    width:100%;
+    padding:24px;
+    position:relative;
+    box-shadow:0 20px 50px rgba(0,0,0,.6);
+  }
+  .modal-close{
+    position:absolute;
+    top:16px;right:16px;
+    background:transparent;
+    border:1px solid var(--panel-line);
+    color:var(--ink-dim);
+    width:32px;height:32px;
+    border-radius:50%;
+    font-size:15px;
+    cursor:pointer;
+    padding:0;
+  }
+  .modal-close:hover{color:var(--ink);border-color:var(--amber);}
+  .modal h2{font-size:20px;margin:0 0 4px;}
+  .modal h3{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin:18px 0 8px;}
+  .modal p, .modal li{font-size:13px;line-height:1.58;color:var(--ink);}
+
+  .help-tabs{
+    display:flex;
+    gap:6px;
+    border-bottom:1px solid var(--panel-line);
+    padding-bottom:10px;
+    margin:14px 0 16px;
+    flex-wrap:wrap;
+  }
+  .help-tab-btn{
+    background:var(--panel-deep);
+    color:var(--ink-dim);
+    border:1px solid var(--panel-line);
+    padding:7px 13px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .help-tab-btn:hover{color:var(--ink);}
+  .help-tab-btn.active{
+    background:var(--amber);
+    color:#181203;
+    border-color:var(--amber);
+  }
+  .help-pane{display:none;}
+  .help-pane.active{display:block;}
+
+  .case-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:10px;
+  }
+  @media (max-width:740px){.case-grid{grid-template-columns:1fr;}}
+  .case-card{
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    border-radius:5px;
+    padding:14px;
+  }
+  .case-card h4{margin:0 0 6px;font-size:14px;color:var(--ink);}
+  .rule-search-bar{
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .rule-search-input{
+    flex:1;
+    min-width:200px;
+    background:var(--panel-deep);
+    border:1px solid var(--panel-line);
+    color:var(--ink);
+    padding:7px 10px;
+    border-radius:4px;
+    font-family:var(--mono);
+    font-size:12px;
+  }
+
+  .toast{
+    position:fixed;
+    bottom:20px;left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--amber);
+    color:#181203;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:20px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:200;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">EVIDENCE-BASED AI WRITING AUDIT &bull; TELLS.YAML v3.1.0</p>
+      <h1>AI Tell Checker</h1>
+      <p class="sub">6-Tier + Human-Sign diagnostic engine calibrated to 9 empirical studies (Kobak et al., Liang et al., Reinhart et al. PNAS, Juzek &amp; Ward, Graphite Oct 2026, Czuma, &amp; Wikipedia AI Cleanup). Scores rate per 1,000 words, model-era drift, narrative syntax, and co-occurrence.</p>
+    </div>
+    <div class="header-actions">
+      <span class="version-tag" id="versionTag">v3.1.0 &bull; Lexicon 2026-10</span>
+      <button type="button" class="icon-btn" id="helpBtn">? Help &amp; Reference Guide</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- Left Column: Input & Annotated Evidence View -->
+    <div class="panel">
+      <div class="panel-head-row">
+        <h2>Input Passage</h2>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <label for="genreSelect" style="font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);">Baseline:</label>
+          <select id="genreSelect" class="genre-select">
+            <option value="web">Web / General Prose (3.14 em-dash/1k)</option>
+            <option value="narrative">Creative / Narrative Fiction</option>
+            <option value="academic">Academic / Preprint</option>
+            <option value="email">Email / Memo</option>
+            <option value="oratory">Historical / 18th-C Oratory</option>
+          </select>
+          <div class="view-tabs">
+            <button type="button" class="view-tab active" id="tabEditBtn">Editor</button>
+            <button type="button" class="view-tab" id="tabHighlightBtn">Evidence Spans</button>
+          </div>
+        </div>
+      </div>
+
+      <textarea id="input" placeholder="Paste text here to scan across Tiers 1–6 and Human-Leaning features..."></textarea>
+      <div id="annotatedView" class="annotated-box"></div>
+
+      <div id="hlLegend" class="hl-legend">
+        <span><i class="hl-dot" style="background:var(--purple);"></i>T1: Artifact (Floor 90)</span>
+        <span><i class="hl-dot" style="background:var(--cyan);"></i>T2: Unicode/Punct</span>
+        <span><i class="hl-dot" style="background:var(--red);"></i>T3: Measured Lexicon</span>
+        <span><i class="hl-dot" style="background:var(--amber);"></i>T4: Phrase Frame</span>
+        <span><i class="hl-dot" style="background:var(--blue);"></i>T5/T6: Syntax &amp; Format</span>
+        <span><i class="hl-dot" style="background:var(--green);"></i>Human Sign (-3 pts)</span>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" id="analyzeBtn">Analyze Text</button>
+        <button type="button" id="sampleGeminiStoryBtn" class="secondary" title="Oct 2026 Gemini AI Example: 'Unit-7 Taco Story' (Creative Fiction AI Tells)">Oct 2026 Gemini (Taco Story)</button>
+        <button type="button" id="sample2026Btn" class="secondary" title="Oct 2026 Frontier AI Essay (Opus 5.5 / GPT-6 Astra tells)">Oct 2026 AI Essay</button>
+        <button type="button" id="sample2024Btn" class="secondary" title="2024 GPT-4 style (delve, tapestry, oaicite, U+202F, high em-dash)">2024 GPT-4 + Artifact</button>
+        <button type="button" id="sample1776Btn" class="secondary" title="1776 Declaration of Independence (Pre-2022 Human Baseline)">1776 Human Control</button>
+        <button type="button" id="clearBtn" class="secondary">Clear</button>
+        <span class="wc" id="wc">0 words</span>
+      </div>
+      <div class="toolbar" style="margin-top:6px;">
+        <span class="kbd-hint">Tip: Rich-text paste from Gemini/ChatGPT preserves bold/italics automatically. Click <strong>? Help &amp; Reference Guide</strong> for case studies &amp; rules.</span>
+      </div>
+    </div>
+
+    <!-- Right Column: Multi-Tier Results, Telemetry & Evidence -->
+    <div class="panel">
+      <div class="panel-head-row">
+        <h2>Diagnostic Evaluation &amp; Era Telemetry</h2>
+        <span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);" id="charStatsLabel">Ready</span>
+      </div>
+
+      <div id="resultsEmpty" class="empty-note">Click <strong>Analyze Text</strong> (or load a calibration sample) to run the 8-step pipeline and inspect matched spans.</div>
+
+      <div id="results" style="display:none;">
+        <div class="score-card">
+          <div class="score-top-grid">
+            <div class="score-primary-row">
+              <div class="prob-num" id="probNum">0</div>
+              <div class="prob-label-col">
+                <div class="prob-title">Composite AI Tell Score (0–100)</div>
+                <div class="score-band band-low" id="probBand">LOW</div>
+              </div>
+            </div>
+            <div class="era-badge-box">
+              <div>Likely Model Era / Fingerprint</div>
+              <div class="era-pill" id="likelyEraVal">undetermined</div>
+            </div>
+          </div>
+
+          <div class="caveat-box" id="caveatBox"></div>
+
+          <!-- Spectrum Meter -->
+          <div class="meter-wrap">
+            <div class="meter-track">
+              <div class="meter-tick" style="left:30%;" title="30: Mixed Signal Threshold"></div>
+              <div class="meter-tick" style="left:60%;" title="60: High AI Tell Density"></div>
+              <div class="meter-tick" style="left:90%;" title="90: Deterministic Artifact Floor"></div>
+              <div class="meter-pointer" id="meterPointer" style="left:0%;"></div>
+            </div>
+            <div class="meter-labels">
+              <span>0 Low / Human</span>
+              <span>30 Mixed</span>
+              <span>60 High Density</span>
+              <span>90+ Artifact Floor</span>
+            </div>
+          </div>
+
+          <div class="assessment-text" id="assessmentText"></div>
+
+          <!-- Tier Points Breakdown Grid -->
+          <div class="tier-grid">
+            <div class="tier-cell"><span>T1 Artifact (Floor 90)</span><strong id="t1ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>T2 Unicode/Punct ( /35)</span><strong id="t2ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>T3 Lexicon ( /40)</span><strong id="t3ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>T4 Frames ( /30)</span><strong id="t4ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>T5 Syntax ( /25)</span><strong id="t5ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>T6 Format ( /20)</span><strong id="t6ScoreVal">0</strong></div>
+            <div class="tier-cell"><span>Co-Occurrence Bonus</span><strong id="coBonusVal">+0</strong></div>
+            <div class="tier-cell"><span>Human Signs ( / -25)</span><strong id="humScoreVal" style="color:var(--green);">0</strong></div>
+          </div>
+
+          <!-- Two-Sided Em-Dash & Classic 8-Word Drift Telemetry -->
+          <div class="telemetry-grid">
+            <div class="telemetry-box">
+              <div class="telemetry-title">Em-Dash &amp; Punctuation Telemetry (Per 1k Words)</div>
+              <div class="mini-comp-row you"><span>Em-Dashes (<span id="emSplitLabel">0 unspaced / 0 spaced</span>):</span><span id="emUserRate">0.00 / 1k</span></div>
+              <div class="mini-comp-row"><span>GPT-4.1 / GPT-5 (2024–25):</span><span>7.13 / 6.92</span></div>
+              <div class="mini-comp-row"><span>Human Web Baseline (Graphite):</span><span>3.14 / 1k</span></div>
+              <div class="mini-comp-row"><span>GPT-6 Astra / Opus 5.5 / Gemini 3.1:</span><span>0.37 / 0.015 / 0.014</span></div>
+              <div class="mini-comp-row you" style="margin-top:4px;"><span>Dramatic Colons &amp; Semicolon Pivots:</span><span id="colonSemiRate">0.0 / 1k</span></div>
+              <div class="mini-comp-row you"><span>Apostrophe/Quote Style Mixing:</span><span id="quoteMixLabel">None</span></div>
+            </div>
+
+            <div class="telemetry-box">
+              <div class="telemetry-title">Lexical Drift &amp; Biber Syntax Ratios (Per 1k Words)</div>
+              <div class="mini-comp-row you"><span>Classic 8-Word List (delve/tapestry/etc.):</span><span id="classic8Rate">0.00 / 1k</span></div>
+              <div class="mini-comp-row you"><span>Participial Clauses (Reinhart PNAS 2–5x):</span><span id="partRateVal">0.0 / 1k</span></div>
+              <div class="mini-comp-row you"><span>Paired Adj, Adj + Noun Phrases:</span><span id="adjPairRateVal">0.0 / 1k</span></div>
+              <div class="mini-comp-row you"><span>Nominalizations (-tion/-ment/-ity):</span><span id="nomRateVal">0.0 / 1k</span></div>
+              <div class="mini-comp-row you"><span>Uncontracted Negations (did not/was not):</span><span id="uncontractedVal">0</span></div>
+              <div class="mini-comp-row you"><span>Sentence Length (Mean / CV / 8–22w %):</span><span id="sentBandVal">-</span></div>
+            </div>
+          </div>
+
+          <div>
+            <button type="button" class="rubric-toggle-btn" id="jsonToggleBtn">View JSON Output Schema &darr;</button>
+            <button type="button" class="rubric-toggle-btn" id="copyBtn">Copy Audit Summary</button>
+            <button type="button" class="rubric-toggle-btn" id="copyJsonBtn">Copy JSON Schema</button>
+          </div>
+          <div class="composite-drawer" id="jsonDrawer">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>Standard Output Schema (Antigravity Spec v3.1):</strong>
+              <span style="font-family:var(--mono);font-size:10px;">Rates normalized per 1,000 words</span>
+            </div>
+            <pre class="json-pre" id="jsonOutputPre"></pre>
+          </div>
+        </div>
+
+        <div id="categories"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empirical Evidence Base Table -->
+  <section class="ref-section" aria-label="Evidence Base">
+    <div class="panel-head-row" style="margin-bottom:4px;">
+      <h2>Empirical Evidence Base &amp; Measured Corpus Studies</h2>
+      <span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);">Every rule weight and era tag traces to these primary sources</span>
+    </div>
+    <div class="study-table-wrap">
+      <table class="study-table">
+        <thead>
+          <tr>
+            <th>Study / Source</th>
+            <th>Corpus Analyzed</th>
+            <th>Key Measured Finding Used in Checker</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://arxiv.org/abs/2406.07016v5" target="_blank" rel="noopener noreferrer">Kobak et al. (Science Advances 2025)</a></td>
+            <td>14.4M+ PubMed abstracts (2010–2024)</td>
+            <td><em>delves</em> r=28.0, <em>underscores</em> r=10.9, <em>showcasing</em> r=10.2; 66% of excess words were verbs, 14% adjectives.</td>
+          </tr>
+          <tr>
+            <td><a href="https://arxiv.org/html/2403.07183v1" target="_blank" rel="noopener noreferrer">Liang et al. (ICML 2024)</a> &amp; <a href="https://arxiv.org/abs/2404.01268" target="_blank" rel="noopener noreferrer">COLM 2024</a></td>
+            <td>ICLR/NeurIPS peer reviews &amp; 950,965 papers</td>
+            <td><em>meticulous</em> 34.7x, <em>intricate</em> 11.2x, <em>commendable</em> 9.8x per sentence; CS abstract LLM share reached 17.5%.</td>
+          </tr>
+          <tr>
+            <td><a href="https://arxiv.org/html/2410.16107v2" target="_blank" rel="noopener noreferrer">Reinhart et al. (PNAS 2025)</a></td>
+            <td>Parallel human/LLM corpora (Biber tagger)</td>
+            <td>Instruction-tuned LLMs use present participial clauses at 2x–5x and nominalizations at 1.5x–2x the human rate.</td>
+          </tr>
+          <tr>
+            <td><a href="https://arxiv.org/pdf/2412.11385" target="_blank" rel="noopener noreferrer">Juzek &amp; Ward (COLING 2025)</a></td>
+            <td>10,000 PubMed abstracts vs. 9,953 rewrites</td>
+            <td>21 focal lexical markers identified; links lexical spikes directly to RLHF / human-feedback training stages.</td>
+          </tr>
+          <tr>
+            <td><a href="https://blog.pebblous.ai/report/opus-5-5-em-dash-ai-tells-drift/en/" target="_blank" rel="noopener noreferrer">Graphite AI Tells (Sept/Oct 2026)</a></td>
+            <td>10k pre-ChatGPT web articles vs. 90k AI articles (11 models)</td>
+            <td><em>"the _ is not simply"</em> 576x (Astra), <em>"this matters"</em> 116x (Opus 5.5); em-dash inversion (0.014–0.37 in 2026 models vs 3.14 human).</td>
+          </tr>
+          <tr>
+            <td><a href="https://chatpaper.com/paper/304952" target="_blank" rel="noopener noreferrer">Czuma (medRxiv 2026)</a> &amp; <a href="https://arxiv.org/pdf/2608.05889" target="_blank" rel="noopener noreferrer">arXiv:2608.05889</a></td>
+            <td>medRxiv preprints &amp; US Congressional releases</td>
+            <td>Discussion em-dash presence rose 4.23% &rarr; 11.58% (OR 2.96); unspaced prose dash density doubled in 2025.</td>
+          </tr>
+          <tr>
+            <td><a href="https://psychologytoday.com/us/blog/the-future-brain/202307/a-hitch-in-accurate-detection-of-ai-written-content" target="_blank" rel="noopener noreferrer">Liang et al., Detector Bias (Patterns 2023)</a></td>
+            <td>91 TOEFL essays vs. 88 US 8th-grade essays</td>
+            <td>61.3% mean false-positive rate on non-native English essays across 7 commercial perplexity detectors.</td>
+          </tr>
+          <tr>
+            <td><a href="https://hn.jakechampion.name/reader/https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup/AI_catchphrases" target="_blank" rel="noopener noreferrer">Wikipedia: Signs of AI Writing (Oct 2026)</a> &amp; <a href="https://assuredinformation.blogspot.com/2026/09/the-ai-tells-nobody-agrees-on-and-ones.html" target="_blank" rel="noopener noreferrer">Assured Information</a></td>
+            <td>WikiProject AI Cleanup 25-year comparison</td>
+            <td>Era-dated catchphrases, oaicite/UTM residue, copula avoidance (&gt;10% drop in "is/are"), and negative-weight human signs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <span>AI Tell Checker <strong>v3.1.0</strong> (tells.yaml v3.1.0) &mdash; 100% local client-side execution (Google Sites sandbox ready).</span>
+    </div>
+    <a id="helpLink">Open Interactive Help, Case Studies &amp; Rule Explorer &rarr;</a>
+  </footer>
+</div>
+
+<!-- Interactive Multi-Tab Help & Reference Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close">&#10005;</button>
+    <h2 id="modalTitle">AI Tell Checker — Help, Case Studies &amp; Rule Explorer</h2>
+    <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);margin:2px 0 0;">Detection Reference: @Matthew Jett Hal (Oct 31, 2026) &bull; Lexicon: tells.yaml v3.1.0</p>
+
+    <div class="help-tabs" role="tablist">
+      <button type="button" class="help-tab-btn active" data-htab="quickstart">1. Quick Start &amp; Bands</button>
+      <button type="button" class="help-tab-btn" data-htab="tiers">2. Six Tiers &amp; Scoring Math</button>
+      <button type="button" class="help-tab-btn" data-htab="cases">3. Case Studies (Oct 2026 Gemini vs 1776)</button>
+      <button type="button" class="help-tab-btn" data-htab="explorer">4. Lexicon &amp; Rule Explorer</button>
+      <button type="button" class="help-tab-btn" data-htab="sources">5. Drift, Bias &amp; Changelog</button>
+    </div>
+
+    <!-- Pane 1: Quick Start -->
+    <div class="help-pane active" id="hp-quickstart">
+      <h3>How to Use This Tool</h3>
+      <ul>
+        <li><strong>Step 1 — Paste or Load a Sample:</strong> Paste any article, essay, email, or creative story into the <strong>Input Passage</strong> box. When pasting directly from Gemini or ChatGPT web pages, the tool intercepts rich-text formatting to preserve `**bold**` and `*italic*` emphasis for Tier 6 analysis.</li>
+        <li><strong>Step 2 — Choose Your Genre Baseline:</strong> Select <em>Web / General Prose</em>, <em>Creative / Narrative Fiction</em>, <em>Academic / Preprint</em>, <em>Email / Memo</em>, or <em>Historical / 18th-C Oratory</em>. Baselines adjust expected rates for nominalizations, em-dashes, and triads.</li>
+        <li><strong>Step 3 — Inspect Evidence Spans:</strong> Switch the input toggle from <strong>Editor</strong> to <strong>Evidence Spans</strong> to see every matched tell color-coded in context. Hover over any highlighted span to inspect its `rule_id`, model era, and academic source.</li>
+      </ul>
+
+      <h3>Understanding the Score Bands (0–100)</h3>
+      <ul>
+        <li><span class="score-band band-low">0–29: LOW (Human-Consistent)</span> Isolated stylistic patterns or historical rhetoric without multi-tier LLM corroboration, or strong negative-weight human signs.</li>
+        <li><span class="score-band band-mod">30–59: MIXED / PROBABLE AI</span> Moderate clusters of phrase frames, lexical markers, or Biber syntactic features. Common in lightly edited AI drafts or heavily templated corporate prose.</li>
+        <li><span class="score-band band-high">60–89: HIGH DENSITY</span> Multi-tier saturation across measured vocabulary, rhetorical negation frames, participial clauses, and structural formatting.</li>
+        <li><span class="score-band band-art">90–100: ARTIFACT FLOOR</span> Triggered automatically when <strong>Tier 1 deterministic residue</strong> (`contentReference[oaicite:0]`, `utm_source=chatgpt.com`, unfilled `[Company Name]` placeholders, `↩` footnote arrows, or chat openers like `"Certainly! Here is..."`) is present in raw input, or when multi-tier points + co-occurrence reach 90+.</li>
+      </ul>
+    </div>
+
+    <!-- Pane 2: Six Tiers & Math -->
+    <div class="help-pane" id="hp-tiers">
+      <h3>The Five Design Rules</h3>
+      <ol>
+        <li><strong>Tier the signals:</strong> Deterministic chat residue (Tier 1) sets a score floor of 90. Probabilistic signals (Tiers 2–6) are weighted and capped so no single habit dominates.</li>
+        <li><strong>Normalize per 1,000 words:</strong> Raw counts penalize long human documents. All probabilistic tiers scale against word count (excluding fenced code blocks and URLs).</li>
+        <li><strong>Version by model era:</strong> Consecutive model versions share only 18.7%–45.5% of their tells (Graphite 2026). Every rule carries an era fingerprint.</li>
+        <li><strong>Never invert a reversed signal silently:</strong> Em-dashes (`0.014/1k` in Gemini 3.1 Pro, `0.015/1k` in Opus 5.5 vs. `3.14/1k` human) and the classic 8-word <em>delve/tapestry</em> list now run below the human rate in 2026 models. High rates flag 2023–25 models; low rates are never scored as AI.</li>
+        <li><strong>Show evidence, not a verdict:</strong> Every matched span is highlighted with its source and rule ID, and Human-Leaning features deduct up to `-25 pts`.</li>
+      </ol>
+
+      <h3>Tier Weights, Caps &amp; Co-Occurrence Bonus</h3>
+      <div class="study-table-wrap">
+        <table class="study-table">
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Default Weight</th>
+              <th>Tier Cap</th>
+              <th>What It Measures</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tier-tag t-b1">Tier 1</span></td>
+              <td>Sets score floor at 90</td>
+              <td>90 Floor</td>
+              <td><code>oaicite</code>, <code>turn0search</code>, <code>utm_source=chatgpt.com</code>, self-ID, cutoff disclaimers, chat openers/closers, <code>[Insert X]</code> templates, <code>↩</code> arrows, Gemini <code>&lt;mark&gt;</code> tags.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-b2">Tier 2</span></td>
+              <td>8 pt (Unicode) / 10 pt (Em-dash) / 2–3 pt (Pivots)</td>
+              <td>35 pts</td>
+              <td>Raw <code>U+202F</code> &amp; zero-width chars, em-dash density &gt;2x baseline, curly/straight apostrophe mixing, colon-led reveals, semicolon antithesis pivots.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-b3">Tier 3</span></td>
+              <td>3 pt (&ge;10x ratio) / 1.5–2 pt (Era/Narrative) / 0.75 pt (Folk)</td>
+              <td>40 pts (25+15)</td>
+              <td>Measured excess words (<em>this matters</em> 116x, <em>not simply</em> 157x, <em>meticulous</em> 34.7x, <em>delves</em> 28x), 2023–26 era lists, and Narrative AI sensory clichés.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-b4">Tier 4</span></td>
+              <td>4 pt per frame (rate-normalized)</td>
+              <td>30 pts</td>
+              <td>Negative parallelism (<code>not just X; it Y</code>), negation-reveal (<code>was not A; it was B</code>), double-negation <code>Instead,</code> pivots, importance flags, puffery, <code>-ing</code> tails.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-b5">Tier 5</span></td>
+              <td>5–10 pt per elevated Biber/POS feature</td>
+              <td>25 pts</td>
+              <td>Participial clauses (2x–5x human), paired <code>adj, adj + noun</code> phrases, 100% uncontracted negations, nominalizations, copula avoidance, rule-of-three (&gt;10/1k), uniform sentence length.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-b6">Tier 6</span></td>
+              <td>3 pt per formatting feature</td>
+              <td>20 pts</td>
+              <td>Inline-header bullets (<code>- **Term:**</code>), bold/italic emphasis density, heading boilerplate, emoji markers, <code>---</code> dividers, 3–7 sentence paragraph uniformity.</td>
+            </tr>
+            <tr>
+              <td><span class="tier-tag t-bh">Human</span></td>
+              <td>-3 pt per human sign</td>
+              <td>-25 pts</td>
+              <td>Plain <em>there is / it has</em> copulas, plain verbs (<em>wrote, moved, used, tried, died</em>), conversational idioms (<em>in order to, the fact that</em>), pre-2022 datelines.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:8px;"><strong>Co-Occurrence Bonus (+10 pts):</strong> Added automatically when <strong>3 or more tiers (T1–T6)</strong> each contribute at least 5 points.</p>
+    </div>
+
+    <!-- Pane 3: Case Studies -->
+    <div class="help-pane" id="hp-cases">
+      <h3>Calibration Case Studies: Why Multi-Tier Co-Occurrence Beats Single Tells</h3>
+      <div class="case-grid">
+        <div class="case-card">
+          <span class="score-band band-high" style="margin-bottom:6px;">SCORE: 91–94 / 100 (HIGH DENSITY)</span>
+          <h4>Case Study A: Oct 2026 Gemini AI Example ("Unit-7 Taco Story")</h4>
+          <p style="font-size:12px;color:var(--ink-dim);">356 words &bull; Prompt: <em>"Generate an AI story about tacos"</em> (Google Gemini, Oct 2026)</p>
+          <p style="font-size:12.5px;">A legacy 2024 detector misses this story completely because it contains <strong>0 em-dashes (0.00/1k)</strong> and <strong>0 Classic 8-Word hits</strong> (no <em>delve, tapestry, realm</em>). Our 6-tier engine catches it at <strong>91–94/100</strong> by detecting Gemini's 2026 narrative fingerprint:</p>
+          <ul style="font-size:12px;padding-left:18px;">
+            <li><strong>Tier 2 (11 pts) — Suppressed Em-Dash Substitutes &amp; Quote Mixing:</strong> Gemini replaces em-dashes with 2 dramatic reveal colons (<code>logic: synthesize...</code>, <code>creation: a chaotic...</code>) and 2 antithesis semicolons, and mixes curly apostrophes (<code>city’s</code>, <code>AI’s</code>) with a straight apostrophe after a digit (<code>Unit-7's</code>).</li>
+            <li><strong>Tier 3 (15 pts) — Narrative AI Clichés:</strong> Matches 10 sensory/sci-fi stock collocations (<em>hum of the, relentless ticking, frustratingly sterile, bustling night market, neon glow, swirling smoke, rhythm born of, paradigm shift, cascaded through, neural pathways, sensory experience, fleeting imperfection, unpredictable harmony</em>).</li>
+            <li><strong>Tier 4 (17 pts) — 4 Contrast &amp; Tail Frames:</strong>
+              <ul>
+                <li><code>"Perfection was not a mathematical absolute; it was a sensory experience..."</code></li>
+                <li><code>"Unit-7 had not just engineered a meal; it had finally learned..."</code></li>
+                <li><code>"The man did not measure... He did not calculate... Instead, he moved..."</code></li>
+                <li><code>", cross-referencing the molecular structure..."</code> &amp; <code>", slicing the marinated meat..."</code></li>
+              </ul>
+            </li>
+            <li><strong>Tier 5 (25 pts) — Biber Syntax Saturation:</strong> 7 participial clauses (<code>19.7/1k</code>, &gt;5x human baseline), 6 paired <code>adj, adj + noun</code> phrases (<code>16.9/1k</code>: <em>swift, imperfect flick; beautiful, fleeting imperfection; unique, surprising spark</em>), 5 uncontracted negative auxiliaries with 0 contractions, and uniform sentence pacing.</li>
+            <li><strong>Co-Occurrence Bonus (+10 pts) &amp; Zero Human Signs (0 pts).</strong></li>
+          </ul>
+        </div>
+
+        <div class="case-card">
+          <span class="score-band band-low" style="margin-bottom:6px;">SCORE: 0 / 100 (LOW / HUMAN)</span>
+          <h4>Case Study B: 1776 Declaration of Independence (Human Control)</h4>
+          <p style="font-size:12px;color:var(--ink-dim);">404-word excerpt (1,335w full NARA Stone Engraving transcription)</p>
+          <p style="font-size:12.5px;">A naive detector that flags dashes and rule-of-three triads falsely accuses Thomas Jefferson of using ChatGPT. Our engine scores it <strong>0/100 (LOW)</strong>:</p>
+          <ul style="font-size:12px;padding-left:18px;">
+            <li><strong>Tier 1 (0 pts):</strong> Zero chat/markup artifacts.</li>
+            <li><strong>Tier 2 (10 pts):</strong> 3 stone-engraving pause notations (<code>--That to secure...</code>, <code>7.43/1k</code>).</li>
+            <li><strong>Tier 3 (0 pts) &amp; Tier 4 (0 pts):</strong> Zero post-2023 LLM lexical spikes and zero ChatGPT/Gemini negation-reveal or importance frames.</li>
+            <li><strong>Tier 5 (5 pts):</strong> Classical 18th-century oratorical triads (<em>"Life, Liberty and the pursuit of Happiness"</em>, <em>"plundered our seas, ravaged our Coasts, burnt our towns"</em>).</li>
+            <li><strong>Co-Occurrence Bonus (+0 pts):</strong> Only 2 tiers reach &ge;5 pts, so no multi-tier co-occurrence bonus fires.</li>
+            <li><strong>Human-Leaning Features (-18 pts):</strong> Pre-2022 historical dateline and archaic human orthography pull the net score down from 15 to <strong>0/100</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pane 4: Interactive Rule Explorer -->
+    <div class="help-pane" id="hp-explorer">
+      <h3>Interactive Lexicon &amp; Rule Explorer (tells.yaml v3.1.0)</h3>
+      <div class="rule-search-bar">
+        <input type="text" id="ruleSearchInput" class="rule-search-input" placeholder="Filter rules by ID, keyword, era (e.g. '2026', 'Gemini', 'delve', 'Tier 4')...">
+      </div>
+      <div class="study-table-wrap" style="max-height:380px;overflow-y:auto;">
+        <table class="study-table">
+          <thead>
+            <tr>
+              <th>Rule ID</th>
+              <th>Tier &amp; Weight</th>
+              <th>Era Fingerprint</th>
+              <th>Description &amp; Source</th>
+            </tr>
+          </thead>
+          <tbody id="ruleExplorerBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pane 5: Sources, Drift & Changelog -->
+    <div class="help-pane" id="hp-sources">
+      <h3>The Model Drift Problem &amp; Non-Native English Guardrails</h3>
+      <p><strong>Lexical Drift (2023 &rarr; 2026):</strong> Model families diverge rapidly. Graphite's Oct 2026 corpus shows that the classic 8-word list (<em>delve, tapestry, nuance, crucial, landscape, foster, stakeholder, realm</em>) runs at <code>2.62/1k</code> in 2024–25 models (GPT-4.1, Opus 4, Gemini 2.5 Pro) but dropped to <code>0.31/1k</code> in 2026 frontier models—below the human baseline of <code>0.44/1k</code>. Conversely, 2026 models exhibit sharp spikes in corrective/importance framing (<em>"the _ is not simply"</em> at 576x in GPT-6 Astra; <em>"this matters"</em> at 116x in Claude Opus 5.5) and Biber syntactic features (participial clauses and paired adjectives).</p>
+      <p><strong>False-Positive Risk on Non-Native English (Liang et al., 2023):</strong> Commercial perplexity detectors flagged 61.3% of genuine TOEFL essays as AI-written because non-native speakers use a more constrained, formal transition vocabulary. This tool never uses standalone perplexity and requires multi-tier co-occurrence across syntax, frames, and lexicon.</p>
+
+      <h3>Version Changelog</h3>
+      <ul>
+        <li><strong>v3.1.0 (2026-10-31):</strong> Added Oct 2026 Gemini Creative/Narrative AI calibration ("Unit-7 Taco Story"), generalized noun-subject negation-reveal frames (<code>Perfection was not A; it was B</code>), anaphoric double-negation <code>Instead,</code> pivots, colon-led reveal &amp; semicolon pivot telemetry, paired <code>adj, adj + noun</code> density, uncontracted negation uniformity, rich-text paste Markdown preservation, and the 5-tab Interactive Help &amp; Rule Explorer.</li>
+        <li><strong>v3.0.0 (2026-10-31):</strong> Implemented full 6-Tier + Human-Sign architecture from @Matthew Jett Hal's Oct 31, 2026 Detection Reference and <code>tells.yaml</code> specification.</li>
+        <li><strong>v2.1.0 (2026-10-31):</strong> Fixed Google Sites JS syntax error, added visual probability meter, and in-text span highlighter.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LEXICON_VERSION = "3.1.0";
+const LAST_UPDATED = "2026-10-31";
+
+const GENRE_BASELINES = {
+  web:       { emDash: 3.14, classic8: 0.44, nom: 28.0, part: 3.5, adjPair: 4.5, r3: 10.0 },
+  narrative: { emDash: 2.80, classic8: 0.30, nom: 22.0, part: 3.2, adjPair: 5.0, r3: 9.0 },
+  academic:  { emDash: 2.20, classic8: 0.65, nom: 42.0, part: 4.5, adjPair: 6.0, r3: 10.0 },
+  email:     { emDash: 1.80, classic8: 0.30, nom: 22.0, part: 2.8, adjPair: 3.5, r3: 10.0 },
+  oratory:   { emDash: 2.50, classic8: 0.40, nom: 34.0, part: 4.0, adjPair: 5.5, r3: 14.0 }
+};
+
+const CLASSIC_8_WORDS = ["delve","delves","delved","delving","tapestry","nuance","nuances","nuanced","crucial","landscape","foster","fosters","fostered","fostering","stakeholder","stakeholders","realm"];
+
+// Embedded tells.yaml v3.1.0 Rule Definitions
+const RULES = [
+  // TIER 1: Unambiguous Artifacts (Run on Raw Input)
+  { id:"t1.oaicite", tier:1, cat:"t1", name:"Citation markup leakage (oaicite / turn0search)", era:"2023-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/contentReference\[oaicite:\d+\]|\boaicite\b|\bturn0(?:search|news)\d*\b|【\d+†[^】]+】|\[\d+†L\d+(?:-L\d+)?\]/gi },
+  { id:"t1.utm_tracker", tier:1, cat:"t1", name:"Chatbot URL tracking parameter (utm_source=chatgpt.com)", era:"2024-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/utm_source=(?:chatgpt\.com|openai|copilot\.com)|referrer=grok\.com/gi },
+  { id:"t1.self_id", tier:1, cat:"t1", name:"AI self-identification phrase", era:"2022-23", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:as an ai language model|as a large language model|i'?m sorry, but i can'?t|i cannot offer medical advice, but)\b/gi },
+  { id:"t1.cutoff", tier:1, cat:"t1", name:"Knowledge cutoff disclaimer", era:"2022-24", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:as of my last knowledge update|up to my last training update|as of my knowledge cutoff)\b/gi },
+  { id:"t1.chat_residue", tier:1, cat:"t1", name:"Collaborative chat opener/closer residue", era:"2023-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/(?:^|\n)\s*(?:Certainly!|Of course!|Great question!|You'?re absolutely right!|Sure, here is a|Here is a )|\b(?:I hope this helps!?|Let me know if you'?d like|Would you like me to|Is there anything else you|for a more detailed breakdown)\b/gi },
+  { id:"t1.template", tier:1, cat:"t1", name:"Unfilled placeholder template ([Company Name], 2025-XX-XX)", era:"2023-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\[(?:Your|Insert|Company|Describe)[^\]]*\]|\bPASTE_[A-Z0-9_]+_HERE\b|\b20\d\d-(?:XX|xx)-(?:XX|xx)\b/g },
+  { id:"t1.footnote_arrow", tier:1, cat:"t1", name:"Chat footnote back-arrow (↩)", era:"2024-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/↩\d*/g },
+  { id:"t1.gemini_mark", tier:1, cat:"t1", name:"Gemini double-check <mark> residue", era:"2024-26+", weight:90, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/<mark>[^<]{8,}<\/mark>/gi },
+
+  // TIER 3A: Measured High-Ratio Lexicon (>=10x human, weight 3, cap 25)
+  { id:"lex.the_not_simply", tier:3, cat:"t3_high", name:"'the _ is not simply' (576x Astra)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (576x human)",
+    re:/\bthe\s+\w+\s+is\s+not\s+simply\b/gi },
+  { id:"lex.does_not_establish", tier:3, cat:"t3_high", name:"'does not establish' (275x Astra)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (275x Opus 5.5)",
+    re:/\bdoes\s+not\s+(?:by\s+itself\s+)?establish\b/gi },
+  { id:"lex.not_simply", tier:3, cat:"t3_high", name:"'not simply' (157x Astra)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (157x human)",
+    re:/\bnot\s+simply\b/gi },
+  { id:"lex.this_matters", tier:3, cat:"t3_high", name:"'this matters' (116x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (116x human)",
+    re:/\bthis\s+matters\b/gi },
+  { id:"lex.more_than_a_it", tier:3, cat:"t3_high", name:"'is more than a _ it' (98x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (98x human)",
+    re:/\bis\s+more\s+than\s+a\s+\w+(?:\s+\w+)?\s*[,;—]?\s*it\b/gi },
+  { id:"lex.why_x_matters", tier:3, cat:"t3_high", name:"'why _ matters' (92x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (92x human)",
+    re:/\bwhy\s+\w+(?:\s+\w+)?\s+matters\b/gi },
+  { id:"lex.one_of_best_about", tier:3, cat:"t3_high", name:"'one of the best _ about' (79x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (79x Astra)",
+    re:/\bone\s+of\s+the\s+best\s+\w+\s+about\b/gi },
+  { id:"lex.dependable", tier:3, cat:"t3_high", name:"'dependable' (59x Astra / 23x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026",
+    re:/\bdependable\b/gi },
+  { id:"lex.looking_ahead_the", tier:3, cat:"t3_high", name:"'looking ahead [the]' (40x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (40x human)",
+    re:/\blooking\s+ahead,?\s+the\b/gi },
+  { id:"lex.meticulous", tier:3, cat:"t3_high", name:"'meticulous(ly)' (34.7x ICLR)", era:"2023-24 GPT-4", weight:3.0, source:"Liang et al. ICML 2024 (34.7x)",
+    re:/\bmeticulous(?:ly)?\b/gi },
+  { id:"lex.rather_than_simply", tier:3, cat:"t3_high", name:"'rather than simply' (32x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (32x human)",
+    re:/\brather\s+than\s+simply\b/gi },
+  { id:"lex.delve", tier:3, cat:"t3_high", name:"'delve(s/d/ing)' (28.0x PubMed)", era:"2023-24 GPT-4", weight:3.0, source:"Kobak et al. Sci Adv 2025 (r=28.0)",
+    re:/\bdelv(?:e|es|ed|ing)\b/gi },
+  { id:"lex.adds_another_layer", tier:3, cat:"t3_high", name:"'adds another layer' (27x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (27x human)",
+    re:/\badds\s+another\s+layer\b/gi },
+  { id:"lex.is_genuinely", tier:3, cat:"t3_high", name:"'is genuinely' (26x Opus 5)", era:"2025-26 GPT-5", weight:3.0, source:"Graphite Oct 2026 (26x human)",
+    re:/\bis\s+genuinely\b/gi },
+  { id:"lex.what_comes_next", tier:3, cat:"t3_high", name:"'what comes next' (24x Opus 5.5)", era:"2026+", weight:3.0, source:"Graphite Oct 2026 (24x human)",
+    re:/\bwhat\s+comes\s+next\b/gi },
+  { id:"lex.intricate", tier:3, cat:"t3_high", name:"'intricate / intricacies' (11.2x ICLR)", era:"2023-24 GPT-4", weight:3.0, source:"Liang et al. ICML 2024 (11.2x)",
+    re:/\b(?:intricat(?:e|ely|ies)|intricacy)\b/gi },
+  { id:"lex.underscore", tier:3, cat:"t3_high", name:"'underscore(s/d/ing)' (10.9x PubMed)", era:"2023-25 GPT-4/4o/Grok", weight:3.0, source:"Kobak et al. Sci Adv 2025 (r=10.9)",
+    re:/\bunderscor(?:e|es|ed|ing)\b/gi },
+  { id:"lex.showcase", tier:3, cat:"t3_high", name:"'showcase(s/d/ing)' (10.2x PubMed)", era:"2023-26 GPT-4/4o/5", weight:3.0, source:"Kobak et al. Sci Adv 2025 (r=10.2)",
+    re:/\bshowcas(?:e|es|ed|ing)\b/gi },
+  { id:"lex.commendable", tier:3, cat:"t3_high", name:"'commendable' (9.8x ICLR)", era:"2023-24 GPT-4", weight:3.0, source:"Liang et al. ICML 2024 (9.8x)",
+    re:/\bcommendabl(?:e|y)\b/gi },
+
+  // TIER 3B: Era-Dated, Narrative AI & Folk Master Lexicon (weight 1.5–2.0, cap 15)
+  { id:"lex.era_gpt4", tier:3, cat:"t3_era", name:"2023–24 GPT-4 Era Lexicon (tapestry, testament, realm, pivotal...)", era:"2023-24 GPT-4", weight:1.5, source:"Wikipedia AI Cleanup; Juzek & Ward 2025",
+    re:/\b(?:tapestry|testament|interplay|realm|pivotal|crucial|foster(?:s|ed|ing)?|bolster(?:s|ed|ing)?|garner(?:s|ed|ing)?|vibrant|enduring|boasts|multifaceted|nuanced|nuance|landscape)\b/gi },
+  { id:"lex.era_gpt4o", tier:3, cat:"t3_era", name:"2024–25 GPT-4o Era Lexicon (align with, enhance, groundbreaking...)", era:"2024-25 GPT-4o", weight:1.5, source:"Wikipedia AI Cleanup; Kobak et al. 2025",
+    re:/\b(?:align(?:s|ed|ing)?\s+with|enhanc(?:e|es|ed|ing)|emphasiz(?:e|es|ed|ing)|highlight(?:s|ed|ing)|facilitat(?:e|es|ed|ing)|encompass(?:es|ed|ing)?|illuminat(?:e|es|ed|ing)|groundbreaking|transformative|invaluable|seamless(?:ly)?|robust)\b/gi },
+  { id:"lex.era_2026", tier:3, cat:"t3_era", name:"2026+ GPT-6 / Opus 5.5 / Grok Lexicon (prioritize, quietly, steady, practical...)", era:"2026+", weight:1.5, source:"Graphite Oct 2026; Wikipedia Oct 2026",
+    re:/\b(?:prioritiz(?:e|es|ed|ing)|universally|quietly|steady|practical|echoed|correlate(?:s|d)?|empirical|causal|leverage(?:s|d)?|leveraging|is\s+especially\s+helpful|can\s+help\s+you|makes\s+it\s+easier|may\s+provide)\b/gi },
+  { id:"lex.narrative_ai", tier:3, cat:"t3_era", name:"Narrative & Sensory AI Cliché Lexicon (paradigm shift, neon glow, fleeting imperfection...)", era:"2025-26+ Gemini/Claude Narrative", weight:2.0, source:"Wikipedia AI Cleanup (Narrative & Sensory Tropes)",
+    re:/\b(?:paradigm\s+shift|cascaded\s+through|neural\s+pathways|sensory\s+experience|fleeting\s+imperfection|newfound\s+\w+|unpredictable\s+harmony|bustling\s+(?:night\s+)?market|neon\s+glow|swirling\s+smoke|hum\s+of\s+the|rhythm\s+born\s+of|feel\s+the\s+rhythm|relentless\s+ticking|frustratingly\s+sterile|culmination\s+of\s+this|deepest\s+computational)\b/gi },
+  { id:"lex.folk_half", tier:3, cat:"t3_era", name:"Folk Corporate/LLM Markers (0.5x half-weight: synergy, paradigm, beacon, symphony...)", era:"2023-25", weight:0.75, source:"Folk Lexicon (Half Weight per Spec)",
+    re:/\b(?:synergy|paradigm|ecosystem|cornerstone|beacon|symphony|treasure\s+trove|game-changer|embark(?:s|ed|ing)?|unleash(?:es|ed|ing)?|unlock(?:s|ed|ing)?|harness(?:es|ed|ing)?|spearhead(?:s|ed|ing)?|revolutioniz(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|utiliz(?:e|es|ed|ing))\b/gi },
+
+  // TIER 4: Phrase Templates & Rhetorical Frames (weight 4, cap 30)
+  { id:"frame.neg_parallel", tier:4, cat:"t4", name:"Negative parallelism ('not just X, [but/; it] Y')", era:"2023-26+", weight:4.0, source:"Wikipedia AI Cleanup; Graphite 2026",
+    re:/\bnot\s+(?:only|just|merely|simply)\b[^.!?]{1,80}(?:[;,—]\s*(?:it|he|she|they|this|that)\s+(?:had|was|were|is|are|did|learned|became)|\b(?:but|it'?s|rather|it\s+is)\b)/gi },
+  { id:"frame.neg_reveal", tier:4, cat:"t4", name:"Negation-then-reveal ('X was not A; it was B')", era:"2024-26+ Gemini/Opus/GPT", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:\w+\s+){0,3}(?:it'?s|this\s+is|that\s+is|was|were|is|are)\s+not\s+(?:just\s+|merely\s+|simply\s+|about\s+)?[^.!?]{2,55}[.;—,]\s*(?:it'?s|it\s+is|it\s+was|this\s+is|he\s+was|she\s+was|they\s+were|but)\b/gi },
+  { id:"frame.double_neg_instead", tier:4, cat:"t4", name:"Anaphoric negation pivot ('did not X. He did not Y. Instead,')", era:"2025-26+ Gemini/Claude Narrative", weight:4.0, source:"Wikipedia AI Cleanup (Negation-Pivot Cadence)",
+    re:/\b(?:did\s+not|didn'?t|was\s+not|never)\s+[^.!?]{3,60}[.!?]\s+(?:He|She|It|They|The\s+\w+)\s+(?:did\s+not|didn'?t|was\s+not|never)\s+[^.!?]{3,75}[.!?]\s+Instead,/gi },
+  { id:"frame.rev_contrast", tier:4, cat:"t4", name:"Reverse contrast ('rather than simply')", era:"2025-26+", weight:4.0, source:"Graphite Oct 2026",
+    re:/\b(?:rather\s+than\s+(?:simply|merely)|as\s+opposed\s+to\s+merely|instead\s+of\s+merely)\b/gi },
+  { id:"frame.importance_2026", tier:4, cat:"t4", name:"Flagging importance ('why X matters / here's why')", era:"2026+", weight:4.0, source:"Graphite Oct 2026",
+    re:/\b(?:this\s+matters|that\s+matters|why\s+\w+(?:\s+\w+)?\s+matters|matters\s+most|here'?s\s+why|the\s+real\s+question\s+is)\b/gi },
+  { id:"frame.puffery", tier:4, cat:"t4", name:"Significance puffery & stock transitions", era:"2023-25 GPT-4/4o", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:(?:stands|serves)\s+as\s+a\s+(?:testament|reminder)|plays\s+a\s+(?:crucial|pivotal|vital)\s+role|marks\s+a\s+pivotal\s+moment|underscores\s+(?:its|the)\s+importance|reflects\s+broader|setting\s+the\s+stage\s+for|indelible\s+mark|deeply\s+rooted|ever-evolving\s+landscape|in\s+today'?s\s+fast-paced\s+world|navigate\s+the\s+complexities|paving\s+the\s+way\s+for|rooted\s+in\s+beautiful)\b/gi },
+  { id:"frame.ing_tail", tier:4, cat:"t4", name:"Superficial '-ing' participial tail clause", era:"2023-26+", weight:4.0, source:"Reinhart et al. PNAS 2025; Wikipedia",
+    re:/,\s+(?:ultimately\s+|thereby\s+|thus\s+)?(?:highlight|underscor|emphasiz|reflect|symboliz|ensur|foster|contribut|showcas|pav|cross-referenc|slic)ing\b[^.!?\n]{3,85}[.!?]/gi },
+  { id:"frame.promo_vague", tier:4, cat:"t4", name:"Promotional tone, vague attribution & media padding", era:"2025-26 GPT-5", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:boasts\s+a|nestled\s+in|in\s+the\s+heart\s+of|rich\s+cultural\s+heritage|diverse\s+array\s+of|unwavering\s+commitment|experts\s+argue|observers\s+note|industry\s+reports\s+suggest|some\s+critics\s+argue|widely\s+regarded\s+as|featured\s+in|profiled\s+in|independent\s+coverage|maintains\s+an\s+active\s+social\s+media\s+presence)\b/gi },
+  { id:"frame.source_disclaimer_2026", tier:4, cat:"t4", name:"Mid-2026 source & hedging disclaimers", era:"2026+", weight:4.0, source:"Wikipedia Oct 2026; Graphite 2026",
+    re:/\b(?:while\s+specific\s+details\s+are\s+limited|not\s+widely\s+documented|based\s+on\s+available\s+information|in\s+the\s+provided\s+sources|should\s+be\s+treated\s+as\s+[^.,;]{2,30}\s+rather\s+than|does\s+not\s+by\s+itself\s+establish|should\s+not\s+be\s+confused\s+with)\b/gi },
+  { id:"frame.didactic_closer", tier:4, cat:"t4", name:"Didactic aside, challenges formula, or stock closer", era:"2023-26+", weight:4.0, source:"Wikipedia AI Cleanup; Liang et al. 2024",
+    re:/\b(?:it'?s\s+important\s+to\s+note|it\s+is\s+important\s+to\s+note|it'?s\s+worth\s+noting|it\s+is\s+worth\s+noting|it'?s\s+crucial\s+to\s+remember|keep\s+in\s+mind\s+that|despite\s+(?:its|these|their)\s+[^.,;]{0,45}challenges?|only\s+time\s+will\s+tell|the\s+bottom\s+line\s+is|i\s+hope\s+this\s+(?:message|email)?\s*finds\s+you\s+well|please\s+don'?t\s+hesitate\s+to\s+reach\s+out|at\s+your\s+earliest\s+convenience|circle\s+back|gentle\s+reminder|as\s+we\s+navigate)\b|(?:^|\n|\.\s+)(?:In\s+summary,|In\s+conclusion,|Overall,|Ultimately,|At\s+its\s+core,|In\s+essence,)/gi },
+
+  // HUMAN-LEANING FEATURES (Negative Weight -3, Cap -25)
+  { id:"human.plain_copula", tier:-1, cat:"human", name:"Plain 'there is / it has' construction", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
+    re:/\b(?:there\s+is\s+a|there\s+are\s+many|it\s+has\s+a|there'?s\s+a|that'?s\s+why)\b/gi },
+  { id:"human.plain_verbs", tier:-1, cat:"human", name:"Plain human verbs (wrote/moved/used/tried/died)", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
+    re:/\b(?:wrote|moved\s+to|used\s+to|tried\s+to|died\s+in|walked\s+into|told\s+me|asked\s+him|asked\s+her)\b/gi },
+  { id:"human.wordy_idioms", tier:-1, cat:"human", name:"Human conversational qualifiers & wordy idioms", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
+    re:/\b(?:as\s+a\s+result\s+of|in\s+order\s+to|all\s+of\s+the|a\s+part\s+of|the\s+fact\s+that|tends\s+to|perhaps\s+the|very\s+much|kind\s+of|sort\s+of|pretty\s+much)\b/gi },
+  { id:"human.pre2022_date", tier:-1, cat:"human", name:"Pre-Nov 2022 historical dateline / archaic orthography", era:"Pre-2022 Human", weight:-6.0, source:"Pre-ChatGPT Timestamp Guardrail",
+    re:/\b(?:In\s+Congress,\s+July\s+4,\s+1776|hath\s+shewn|unalienable\s+Rights|Brittish\s+brethren)\b/g }
+];
+
+const EXTRA_EXPLORER_RULES = [
+  { id:"t2.unicode_u202f", tier:2, weight:8.0, era:"2025-26 GPT-5 / o3", name:"Narrow No-Break Space [U+202F] & Zero-Width Unicode", source:"Rumi (2025); Layer3 Labs" },
+  { id:"t2.emdash_elevated", tier:2, weight:10.0, era:"2023-25 GPT-4/4.1/5", name:"Elevated Em-Dash Rate (>2x Human Baseline of 3.14/1k)", source:"Graphite (Oct 2026); Czuma (2026)" },
+  { id:"t2.mixed_curly_straight_quotes", tier:2, weight:3.0, era:"2024-26+ Gemini/ChatGPT", name:"Mixed Curly (’) and Straight (') Quotes/Apostrophes in Same Doc", source:"Detection Reference Tier 2" },
+  { id:"t2.colon_semicolon_pivots", tier:2, weight:2.0, era:"2025-26+ Gemini 3 / Opus 5.5", name:"Colon-Led Dramatic Reveals & Semicolon Antithesis Pivots", source:"Detection Reference Tier 2" },
+  { id:"t5.participial_clause", tier:5, weight:5.0, era:"2023-26+ All LLMs", name:"Present Participial Clauses (2x–5x Human Rate)", source:"Reinhart et al. (PNAS 2025)" },
+  { id:"t5.paired_adjective_noun", tier:5, weight:5.0, era:"2024-26+ Gemini/Claude/GPT", name:"Paired 'Adjective, Adjective + Noun' Modification Chains", source:"Liang et al. (2024); POS Repetition" },
+  { id:"t5.uncontracted_negation_uniformity", tier:5, weight:5.0, era:"2023-26+ All LLMs", name:"100% Uncontracted Negative Auxiliaries (did not/was not) in Prose", source:"Reinhart et al. (PNAS 2025)" },
+  { id:"t5.nominalization_density", tier:5, weight:5.0, era:"2023-26+ All LLMs", name:"Nominalizations (-tion/-ment/-ness/-ity) >1.5x Baseline", source:"Reinhart et al. (PNAS 2025)" },
+  { id:"t5.copula_avoidance", tier:5, weight:5.0, era:"2023-26+ All LLMs", name:"Copula Avoidance Ratio (serves as/stands as/boasts vs is/are)", source:"Wikipedia AI Cleanup (Oct 2026)" },
+  { id:"t5.sentence_length_uniformity", tier:5, weight:5.0, era:"2025-26+ Gemini / GPT-6", name:"Sentence-Length Band Uniformity (Low CV, zero <6w or >34w)", source:"Wikipedia Oct 2026" },
+  { id:"t6.inline_header_bullet", tier:6, weight:3.0, era:"2023-26+ All LLMs", name:"Inline-Header Bullets (- **Bold Label:** Sentence)", source:"arXiv:2603.27006" },
+  { id:"t6.paragraph_uniformity", tier:6, weight:3.0, era:"2024-26+ All LLMs", name:"Uniform 3-to-7 Sentence Paragraph Blocks", source:"Detection Reference Tier 6" }
+];
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function stripCodeAndUrls(text){
+  return text
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/https?:\/\/\S+/gi, " ");
+}
+
+function countWords(text){
+  const cleaned = stripCodeAndUrls(text).trim();
+  const m = cleaned.match(/\S+/g);
+  return m ? m.length : 0;
+}
+
+function scanRawUnicode(rawText){
+  const hits = [];
+  const unicodeMap = [
+    { re:/\u202F/g, code:"U+202F", label:"Narrow No-Break Space (o3/o4-mini/GPT-5 RL quirk)", era:"2025-26 GPT-5" },
+    { re:/\u200B/g, code:"U+200B", label:"Zero-Width Space", era:"2023-26+" },
+    { re:/\u200C/g, code:"U+200C", label:"Zero-Width Non-Joiner", era:"2023-26+" },
+    { re:/\u200D/g, code:"U+200D", label:"Zero-Width Joiner", era:"2023-26+" },
+    { re:/\u2060/g, code:"U+2060", label:"Word Joiner", era:"2023-26+" },
+    { re:/\uFEFF/g, code:"U+FEFF", label:"Byte Order Mark (mid-text)", era:"2023-26+" },
+    { re:/[\u2002\u2003\u2009\u2007]/g, code:"U+200x", label:"En/Em/Thin/Figure Space Anomaly", era:"2023-26+" }
+  ];
+  unicodeMap.forEach(u => {
+    let m;
+    while((m = u.re.exec(rawText)) !== null){
+      const s = Math.max(0, m.index - 25);
+      const e = Math.min(rawText.length, m.index + 25);
+      const ctx = rawText.slice(s, m.index) + "[" + u.code + "]" + rawText.slice(m.index + 1, e);
+      hits.push({
+        start: m.index,
+        end: m.index + 1,
+        term: "[" + u.code + "]",
+        context: ctx,
+        tier: 2,
+        cat: "t2",
+        rule_id: "t2.unicode_" + u.code.toLowerCase().replace("+",""),
+        era: u.era,
+        source: "Rumi (2025); Layer3 Labs; Pillitteri"
+      });
+    }
+  });
+  return hits;
+}
+
+function analyzePunctuationAndTypography(rawText, words, baselineRate){
+  const unspacedHits = [];
+  const spacedHits = [];
+  const extraHits = [];
+  const re = /(.{0,24})(—|--)(.{0,24})/g;
+  let m;
+  while((m = re.exec(rawText)) !== null){
+    const left = m[1] || "";
+    const sym = m[2];
+    const right = m[3] || "";
+    const idx = m.index + left.length;
+    if(/\d$/.test(left) && /^\d/.test(right)) continue;
+    if(/[A-Z][a-z]+$/.test(left.trim()) && /^[A-Z][a-z]+/.test(right.trim()) && !/\s$/.test(left) && !/^\s/.test(right)) continue;
+
+    const isSpaced = /\s$/.test(left) || /^\s/.test(right);
+    const entry = {
+      start: idx,
+      end: idx + sym.length,
+      term: sym,
+      context: left + sym + right,
+      tier: 2,
+      cat: "t2",
+      rule_id: isSpaced ? "t2.emdash_spaced" : "t2.emdash_unspaced",
+      era: "2023-25 GPT-4/4.1/5",
+      source: "Graphite (Oct 2026); arXiv:2608.05889"
+    };
+    if(isSpaced) spacedHits.push(entry);
+    else unspacedHits.push(entry);
+  }
+  const totalEm = unspacedHits.length + spacedHits.length;
+  const ratePer1k = words > 0 ? (totalEm / words) * 1000 : 0;
+  const isElevated = ratePer1k > (baselineRate * 2.0) && totalEm >= 2;
+
+  const curlyMatch = rawText.match(/[\u201C\u201D\u2018\u2019]/);
+  const straightMatch = rawText.match(/["']/);
+  const mixedQuotes = Boolean(curlyMatch && straightMatch);
+  if(mixedQuotes){
+    const sIdx = straightMatch.index;
+    extraHits.push({
+      start: sIdx,
+      end: sIdx + 1,
+      term: straightMatch[0],
+      context: "Mixed curly (" + curlyMatch[0] + ") and straight (" + straightMatch[0] + ") quotes/apostrophes in same passage: \"" + rawText.slice(Math.max(0, sIdx - 18), Math.min(rawText.length, sIdx + 18)) + "\"",
+      tier: 2,
+      cat: "t2",
+      rule_id: "t2.mixed_curly_straight_quotes",
+      era: "2024-26+ Gemini/ChatGPT",
+      source: "Detection Reference Tier 2 (Quote Mixing)"
+    });
+  }
+
+  const colonRevealRe = /\b(?:logic|creation|directive|truth|reality|answer|result|secret|lesson|shift|discovery|conclusion|problem|solution|mission|goal)\s*:\s+[a-z]/gi;
+  let colonSemiCount = 0;
+  while((m = colonRevealRe.exec(rawText)) !== null){
+    colonSemiCount++;
+    const s = Math.max(0, m.index - 20);
+    const e = Math.min(rawText.length, m.index + m[0].length + 35);
+    extraHits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: rawText.slice(s, e),
+      tier: 2,
+      cat: "t2",
+      rule_id: "t2.colon_dramatic_reveal",
+      era: "2025-26+ Gemini 3 / Opus 5.5",
+      source: "Detection Reference Tier 2 (Colon-Led Reveals)"
+    });
+  }
+
+  const semiPivotRe = /;\s+(?:it|he|she|they|this|that)\s+(?:was|were|had|is|are|did)\b/gi;
+  while((m = semiPivotRe.exec(rawText)) !== null){
+    colonSemiCount++;
+    const s = Math.max(0, m.index - 30);
+    const e = Math.min(rawText.length, m.index + m[0].length + 30);
+    extraHits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: rawText.slice(s, e),
+      tier: 2,
+      cat: "t2",
+      rule_id: "t2.semicolon_antithesis_pivot",
+      era: "2025-26+ Gemini 3 / Opus 5.5",
+      source: "Detection Reference Tier 2 (Semicolon Pivot)"
+    });
+  }
+
+  const colonSemiRate = words > 0 ? (colonSemiCount / words) * 1000 : 0;
+
+  return {
+    unspaced: unspacedHits.length,
+    spaced: spacedHits.length,
+    total: totalEm,
+    ratePer1k: ratePer1k,
+    isElevated: isElevated,
+    mixedQuotes: mixedQuotes,
+    colonSemiCount: colonSemiCount,
+    colonSemiRate: colonSemiRate,
+    hits: (isElevated ? unspacedHits.concat(spacedHits) : []).concat(extraHits)
+  };
+}
+
+function findProperNounRunSpans(text){
+  const re = /\b(?:[A-Z][a-zA-Z'.-]*(?:\s[A-Z][a-zA-Z'.-]*){0,2},\s){2,}(?:and\s|or\s)?[A-Z][a-zA-Z'.-]*(?:\s[A-Z][a-zA-Z'.-]*){0,2}\b/g;
+  const spans = [];
+  let m;
+  while((m = re.exec(text)) !== null){
+    spans.push({start: m.index, end: m.index + m[0].length});
+  }
+  return spans;
+}
+
+function analyzeTier5Syntax(text, words, baseline){
+  const hits = [];
+  let syntaxScore = 0;
+
+  const nonPartStop = new Set(["during","according","including","regarding","concerning","following","considering","nothing","something","everything","anything","morning","evening","building","meeting","feeling","meaning","training","learning","working","writing","reading","testing","bring","king","ring","sing","wing","spring","string","thing","cling","fling","sling","sting","swing","wring","unning","illing","elling"]);
+  const partPatterns = [
+    /,\s+(?:and\s+)?([a-z]+(?:-[a-z]+)?ing)\s+(?:the|a|an|its|his|her|their|this|that|over|into|through|with|on|for|to)\b/gi,
+    /(?:^|\n|[.!?]\s+)([A-Z][a-z]{3,}ing)\s+(?:its|his|her|their|the|a|an)\s+[^,.\n]{3,40},\s+(?:the|he|she|it|they)\b/g,
+    /\b(overlooking|dripping\s+with|teeming\s+with|bursting\s+with|pulsing\s+with|echoing\s+with|bathed\s+in|shrouded\s+in|steeped\s+in|rooted\s+in)\s+[a-z]/gi
+  ];
+  let partCount = 0;
+  partPatterns.forEach(re => {
+    let m;
+    while((m = re.exec(text)) !== null){
+      const w = (m[1] || "").toLowerCase().replace(/^.*-/,"");
+      if(nonPartStop.has(w)) continue;
+      partCount++;
+      const s = Math.max(0, m.index - 18);
+      const e = Math.min(text.length, m.index + m[0].length + 25);
+      hits.push({
+        start: m.index,
+        end: m.index + m[0].length,
+        term: m[0].trim(),
+        context: text.slice(s, e),
+        tier: 5,
+        cat: "t5",
+        rule_id: "t5.participial_clause",
+        era: "2024-26+ Instruction-Tuned LLMs",
+        source: "Reinhart et al. (PNAS 2025) — 2x to 5x human rate"
+      });
+    }
+  });
+  const partRate = words > 0 ? (partCount / words) * 1000 : 0;
+  if(partRate >= baseline.part * 3.0 && partCount >= 3){
+    syntaxScore += 10;
+  } else if(partRate >= baseline.part * 1.5 && partCount >= 2){
+    syntaxScore += 5;
+  }
+
+  const adjPairRe = /\b(?:a|an|the|its|his|her|their|this|with)\s+(?:slightly\s+|deeply\s+|frustratingly\s+|structurally\s+)?([a-z]{4,}),\s+(?:structurally\s+|slightly\s+)?([a-z]{4,})\s+([a-z]{4,})\b/gi;
+  const adjStop = new Set(["that","this","which","where","when","while","because","although","however","therefore","moreover","furthermore","first","second","third","other","many","some","such","more","most","only","also","even","still","just","very","much","well","back","down","over","into","from","with","upon","unto","have","were","been","make","made","take","took","give","gave","keep","kept","call","called","plundered","ravaged","burnt","levy","conclude","contract","establish","alter","abolish","institute","organizing"]);
+  let adjPairCount = 0;
+  let m;
+  while((m = adjPairRe.exec(text)) !== null){
+    const w1 = m[1].toLowerCase(), w2 = m[2].toLowerCase(), w3 = m[3].toLowerCase();
+    if(adjStop.has(w1) || adjStop.has(w2) || adjStop.has(w3)) continue;
+    adjPairCount++;
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: text.slice(Math.max(0, m.index - 15), Math.min(text.length, m.index + m[0].length + 15)),
+      tier: 5,
+      cat: "t5",
+      rule_id: "t5.paired_adjective_noun",
+      era: "2024-26+ Gemini / Claude / GPT",
+      source: "Liang et al. (2024) Adjective Excess & POS Template Repetition"
+    });
+  }
+  const adjPairRate = words > 0 ? (adjPairCount / words) * 1000 : 0;
+  if(adjPairRate >= baseline.adjPair * 2.2 && adjPairCount >= 4){
+    syntaxScore += 8;
+  } else if(adjPairRate >= baseline.adjPair * 1.5 && adjPairCount >= 3){
+    syntaxScore += 5;
+  }
+
+  const uncontractedMatches = text.match(/\b(?:did\s+not|was\s+not|were\s+not|could\s+not|would\s+not|had\s+not|does\s+not|is\s+not)\b/gi) || [];
+  const contractedMatches = text.match(/\b(?:didn'?t|wasn'?t|weren'?t|couldn'?t|wouldn'?t|hadn'?t|doesn'?t|isn'?t|aren'?t|won'?t|can'?t)\b/gi) || [];
+  const isPre2022 = /\b(?:1776|hath\s+shewn|unalienable)\b/.test(text);
+  if(uncontractedMatches.length >= 4 && contractedMatches.length === 0 && !isPre2022){
+    syntaxScore += 5;
+    hits.push({
+      start: 0, end: 0,
+      term: uncontractedMatches.slice(0, 5).join(", "),
+      context: "100% uncontracted negative auxiliaries (" + uncontractedMatches.length + " uncontracted vs 0 contractions: " + uncontractedMatches.slice(0, 5).join(", ") + ")",
+      tier: 5, cat: "t5", rule_id: "t5.uncontracted_negation_uniformity", era: "2023-26+ Instruction-Tuned LLMs",
+      source: "Reinhart et al. (PNAS 2025) Formal Register Rigidity"
+    });
+  }
+
+  const nomRe = /\b[a-zA-Z]{4,}(?:tion|tions|ment|ments|ness|ity|ities|ance|ances|ence|ences)\b/g;
+  const nomMatches = text.match(nomRe) || [];
+  const nomRate = words > 0 ? (nomMatches.length / words) * 1000 : 0;
+  if(nomRate > baseline.nom * 1.5 && nomMatches.length >= 6){
+    syntaxScore += 5;
+    hits.push({
+      start: 0, end: 0,
+      term: nomMatches.slice(0, 6).join(", "),
+      context: "Nominalization density: " + nomRate.toFixed(1) + "/1k words vs " + baseline.nom + "/1k baseline (" + nomMatches.slice(0, 8).join(", ") + "...)",
+      tier: 5, cat: "t5", rule_id: "t5.nominalization_density", era: "2023-26+",
+      source: "Reinhart et al. (PNAS 2025) — 1.5x to 2x human rate"
+    });
+  }
+
+  const copSubRe = /\b(?:serves\s+as|stands\s+as|functions\s+as|acts\s+as|boasts|features|holds\s+the\s+distinction\s+of|marks\s+a)\b/gi;
+  let copSubCount = 0;
+  while((m = copSubRe.exec(text)) !== null){
+    copSubCount++;
+    const s = Math.max(0, m.index - 25);
+    const e = Math.min(text.length, m.index + m[0].length + 25);
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: text.slice(s, e),
+      tier: 5, cat: "t5", rule_id: "t5.copula_avoidance", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (Oct 2026) — >10% drop in is/are"
+    });
+  }
+  const plainCopulas = (text.match(/\b(?:is|are|was|were|has|have)\b/gi) || []).length;
+  const copulaRatio = (copSubCount + plainCopulas) > 0 ? (copSubCount / (copSubCount + plainCopulas)) * 100 : 0;
+  if(copSubCount >= 2 || copulaRatio >= 18) syntaxScore += 5;
+
+  const r3Re = /\b((?:[A-Za-z]+\s){0,2}[A-Za-z]+),\s((?:[A-Za-z]+\s){0,2}[A-Za-z]+),\s(?:and\s|or\s)?((?:[A-Za-z]+\s){0,2}[A-Za-z]+)\b(?!\s*,)/g;
+  const properSpans = findProperNounRunSpans(text);
+  const r3Hits = [];
+  while((m = r3Re.exec(text)) !== null){
+    if(/\d/.test(m[0])) continue;
+    if(properSpans.some(s => m.index >= s.start && m.index < s.end)) continue;
+    r3Hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: m[0],
+      tier: 5, cat: "t5", rule_id: "t5.rule_of_three", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (>10/1k threshold)"
+    });
+  }
+  const r3Rate = words > 0 ? (r3Hits.length / words) * 1000 : 0;
+  if(r3Rate > baseline.r3 && r3Hits.length >= 2){
+    syntaxScore += 5;
+    r3Hits.forEach(h => hits.push(h));
+  }
+
+  const transRe = /(?:^|\n|[.!?]\s+)(Additionally|Moreover|Furthermore|Notably|Consequently),/g;
+  let transCount = 0;
+  while((m = transRe.exec(text)) !== null){
+    transCount++;
+    const idx = m.index + m[0].indexOf(m[1]);
+    hits.push({
+      start: idx,
+      end: idx + m[1].length + 1,
+      term: m[1] + ",",
+      context: text.slice(Math.max(0, idx - 15), Math.min(text.length, idx + 45)),
+      tier: 5, cat: "t5", rule_id: "t5.sentence_initial_transition", era: "2023-25 GPT-4/4o",
+      source: "Kobak et al.; Wikipedia AI Cleanup"
+    });
+  }
+  if(transCount >= 2) syntaxScore += 5;
+
+  const sentences = text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 0);
+  let meanSent = 0, cvSent = 0, band8to22Pct = 0;
+  if(sentences.length >= 5){
+    const lens = sentences.map(s => (s.match(/\S+/g) || []).length).filter(n => n > 0);
+    meanSent = lens.reduce((a,b) => a + b, 0) / lens.length;
+    const variance = lens.reduce((a,b) => a + Math.pow(b - meanSent, 2), 0) / lens.length;
+    cvSent = meanSent > 0 ? Math.sqrt(variance) / meanSent : 0;
+    const inBand = lens.filter(n => n >= 8 && n <= 22).length;
+    band8to22Pct = Math.round((inBand / lens.length) * 100);
+    const hasShortOrLong = lens.some(n => n < 6 || n > 34);
+    if((cvSent < 0.36 && !hasShortOrLong) || band8to22Pct >= 75){
+      syntaxScore += 5;
+      hits.push({
+        start: 0, end: 0,
+        term: "Uniform Sentence Cadence",
+        context: "Uniform sentence length distribution (Mean=" + meanSent.toFixed(1) + "w, CV=" + cvSent.toFixed(2) + ", zero sentences <6w or >34w across " + lens.length + " sentences)",
+        tier: 5, cat: "t5", rule_id: "t5.sentence_length_uniformity", era: "2025-26+ Gemini / GPT-6",
+        source: "Wikipedia Oct 2026 (Sentence-Length Band & Low Burstiness)"
+      });
+    }
+  }
+
+  return {
+    points: Math.min(25, syntaxScore),
+    hits: hits,
+    partRate: partRate,
+    adjPairRate: adjPairRate,
+    nomRate: nomRate,
+    copulaRatio: Math.round(copulaRatio),
+    uncontractedCount: uncontractedMatches.length,
+    r3Count: r3Hits.length,
+    r3Rate: r3Rate,
+    sentStats: sentences.length >= 2 ? (meanSent.toFixed(1) + "w / CV " + cvSent.toFixed(2) + " / " + band8to22Pct + "%") : "n/a"
+  };
+}
+
+function analyzeTier6Formatting(text, words){
+  const hits = [];
+  const inlineBulletRe = /(?:^|\n)\s*(?:[-*•]|\d+\.)\s*\*\*[^*\n]{2,45}\*\*\s*:/g;
+  let m;
+  while((m = inlineBulletRe.exec(text)) !== null){
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0].trim(),
+      context: text.slice(m.index, Math.min(text.length, m.index + 70)).trim(),
+      tier: 6, cat: "t6", rule_id: "t6.inline_header_bullet", era: "2023-26+",
+      source: "arXiv:2603.27006 (Markdown Training Fingerprint)"
+    });
+  }
+
+  const boldRe = /\*\*[^*\n]{2,120}\*\*|(?:\s|^)\*[a-zA-Z]{3,25}\*(?=[\s.,;!?]|$)/g;
+  while((m = boldRe.exec(text)) !== null){
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0].trim(),
+      context: text.slice(Math.max(0, m.index - 20), Math.min(text.length, m.index + m[0].length + 20)),
+      tier: 6, cat: "t6", rule_id: "t6.markdown_emphasis", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (Oct 2026); arXiv:2603.27006"
+    });
+  }
+
+  const headRe = /\b(?:Challenges\s+and\s+Future\s+Directions|Awards\s+and\s+[Rr]ecognition|Key\s+Takeaways|Future\s+Outlook)\b/g;
+  while((m = headRe.exec(text)) !== null){
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: text.slice(Math.max(0, m.index - 15), Math.min(text.length, m.index + m[0].length + 25)),
+      tier: 6, cat: "t6", rule_id: "t6.heading_boilerplate", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (Oct 2026)"
+    });
+  }
+
+  const emojiRe = /(?:🚀|✨|📌|✅|💡|🔍|🎯|⚡|📊|🔑)/g;
+  while((m = emojiRe.exec(text)) !== null){
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: text.slice(Math.max(0, m.index - 15), Math.min(text.length, m.index + 35)),
+      tier: 6, cat: "t6", rule_id: "t6.emoji_marker", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (Oct 2026)"
+    });
+  }
+
+  const hrRe = /(?:^|\n)\s*---\s*(?:\n|$)/g;
+  while((m = hrRe.exec(text)) !== null){
+    hits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: "---",
+      context: "Horizontal rule divider (---)",
+      tier: 6, cat: "t6", rule_id: "t6.horizontal_rule", era: "2023-26+",
+      source: "Wikipedia AI Cleanup (Oct 2026)"
+    });
+  }
+
+  const paras = text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 40);
+  if(paras.length >= 3){
+    const paraSentCounts = paras.map(p => p.split(/[.!?]+/).filter(s => s.trim().length > 0).length);
+    const all3to7 = paraSentCounts.every(n => n >= 3 && n <= 7);
+    if(all3to7){
+      hits.push({
+        start: 0, end: 0,
+        term: "Uniform 3-to-7 Sentence Paragraphs",
+        context: "Paragraph uniformity booster: all " + paras.length + " paragraphs contain " + paraSentCounts.join(", ") + " sentences",
+        tier: 6, cat: "t6", rule_id: "t6.paragraph_uniformity", era: "2024-26+",
+        source: "Detection Reference Tier 6 (Paragraph Uniformity)"
+      });
+    }
+  }
+
+  const pts = Math.min(20, hits.length * 3);
+  return { points: pts, hits: hits };
+}
+
+function buildAnnotatedHtml(rawText, findings){
+  if(!rawText) return "";
+  const spans = findings.filter(f => typeof f.start === "number" && f.end > f.start).map(f => {
+    const cls = f.tier === 1 ? "hl-t1"
+      : f.tier === 2 ? "hl-t2"
+      : f.tier === 3 ? "hl-t3"
+      : f.tier === 4 ? "hl-t4"
+      : f.tier === 5 ? "hl-t5"
+      : f.tier === 6 ? "hl-t6" : "hl-hum";
+    return {
+      start: f.start,
+      end: f.end,
+      priority: f.tier === 1 ? 10 : (f.tier > 0 ? 7 - f.tier : 1),
+      cls: cls,
+      label: "[" + f.rule_id + "] " + (f.era || "") + " — " + f.source
+    };
+  });
+
+  spans.sort((a, b) => {
+    if(a.start !== b.start) return a.start - b.start;
+    if(b.priority !== a.priority) return b.priority - a.priority;
+    return (b.end - b.start) - (a.end - a.start);
+  });
+
+  const accepted = [];
+  let lastEnd = -1;
+  spans.forEach(s => {
+    if(s.start >= lastEnd){
+      accepted.push(s);
+      lastEnd = s.end;
+    }
+  });
+
+  let out = "";
+  let cursor = 0;
+  accepted.forEach(s => {
+    if(s.start > cursor){
+      out += escapeHtml(rawText.slice(cursor, s.start));
+    }
+    const rawSlice = rawText.slice(s.start, s.end);
+    const displaySlice = rawSlice === "\u202F" ? "[U+202F]"
+      : /^[\u200B-\u200F\u2060\uFEFF]$/.test(rawSlice) ? "[ZWSP]"
+      : escapeHtml(rawSlice);
+    out += "<span class=\"" + s.cls + "\" title=\"" + escapeHtml(s.label) + "\">" + displaySlice + "</span>";
+    cursor = s.end;
+  });
+  if(cursor < rawText.length){
+    out += escapeHtml(rawText.slice(cursor));
+  }
+  return out;
+}
+
+let lastSummary = "";
+let lastJsonSchema = "";
+
+function animateScore(target){
+  const el = document.getElementById("probNum");
+  const duration = 380;
+  const startTime = performance.now();
+  function step(now){
+    const progress = Math.min(1, (now - startTime) / duration);
+    el.textContent = Math.round(target * progress);
+    if(progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+
+function analyze(){
+  const rawText = document.getElementById("input").value;
+  const genreKey = document.getElementById("genreSelect").value || "web";
+  const baseline = GENRE_BASELINES[genreKey] || GENRE_BASELINES.web;
+  const words = countWords(rawText);
+
+  const resultsEl = document.getElementById("results");
+  const emptyEl = document.getElementById("resultsEmpty");
+  if(words === 0){
+    resultsEl.style.display = "none";
+    emptyEl.style.display = "block";
+    document.getElementById("annotatedView").innerHTML = "<span class=\"empty-note\">No text to highlight.</span>";
+    return;
+  }
+
+  const normText = rawText.normalize ? rawText.normalize("NFC") : rawText;
+  const allFindings = [];
+
+  const catBuckets = {
+    t1: { title:"Tier 1: Unambiguous Chat & Markup Artifacts", badge:"Tier 1 &bull; Floor 90", cls:"t-b1", desc:"Deterministic copy-paste residue (oaicite, utm_source=chatgpt.com, unfilled templates, chat openers).", hits:[] },
+    t2: { title:"Tier 2: Invisible Unicode & Punctuation Telemetry", badge:"Tier 2 &bull; Cap 35", cls:"t-b2", desc:"U+202F spaces, quote mixing, colon-led reveals, semicolon antithesis pivots, and two-sided em-dash density.", hits:[] },
+    t3_high: { title:"Tier 3A: High-Ratio Measured Lexicon (≥10x Human)", badge:"Tier 3A &bull; 3pt (Cap 25)", cls:"t-b3", desc:"Words/phrases with 10x–576x measured excess in PubMed, ICLR, or Graphite 2026 corpora.", hits:[] },
+    t3_era: { title:"Tier 3B: Era-Dated, Narrative AI & Folk Lexicon", badge:"Tier 3B &bull; 1.5–2pt (Cap 15)", cls:"t-b3", desc:"GPT-4 (2023–24), GPT-4o (2024–25), 2026+ vocabulary, Narrative AI sensory clichés, and folk markers.", hits:[] },
+    t4: { title:"Tier 4: Phrase Templates & Rhetorical Frames", badge:"Tier 4 &bull; 4pt (Cap 30)", cls:"t-b4", desc:"Negative parallelism ('not just X; it Y'), negation-reveal ('was not A; it was B'), double-negation 'Instead,' pivots, and -ing tails.", hits:[] },
+    t5: { title:"Tier 5: Syntax & Grammar Patterns (Biber / POS)", badge:"Tier 5 &bull; 5–10pt (Cap 25)", cls:"t-b5", desc:"Participial clauses (2x–5x), paired 'adj, adj + noun' phrases, uncontracted negations, nominalizations, and sentence uniformity.", hits:[] },
+    t6: { title:"Tier 6: Structure & Formatting Fingerprints", badge:"Tier 6 &bull; 3pt (Cap 20)", cls:"t-b6", desc:"Inline-header bullets, bold/italic emphasis markers, heading boilerplate, emoji markers, and paragraph uniformity.", hits:[] },
+    human: { title:"Human-Leaning Features (Negative Weight)", badge:"Human &bull; -3pt (Cap -25)", cls:"t-bh", desc:"Plain copulas ('there is a'), plain verbs ('wrote, used, tried'), conversational idioms, and pre-2022 dates.", hits:[] }
+  };
+
+  RULES.forEach(rule => {
+    const targetStr = rule.tier === 1 ? rawText : normText;
+    rule.re.lastIndex = 0;
+    let m;
+    while((m = rule.re.exec(targetStr)) !== null){
+      const s = Math.max(0, m.index - 35);
+      const e = Math.min(targetStr.length, m.index + m[0].length + 35);
+      const hitObj = {
+        start: m.index,
+        end: m.index + m[0].length,
+        term: m[0].trim(),
+        context: targetStr.slice(s, e),
+        tier: rule.tier,
+        cat: rule.cat,
+        rule_id: rule.id,
+        era: rule.era,
+        weight: rule.weight,
+        source: rule.source
+      };
+      catBuckets[rule.cat].hits.push(hitObj);
+      allFindings.push(hitObj);
+      if(m.index === rule.re.lastIndex) rule.re.lastIndex++;
+    }
+  });
+
+  const unicodeHits = scanRawUnicode(rawText);
+  unicodeHits.forEach(h => {
+    catBuckets.t2.hits.push(h);
+    allFindings.push(h);
+  });
+
+  const punctStats = analyzePunctuationAndTypography(rawText, words, baseline.emDash);
+  punctStats.hits.forEach(h => {
+    catBuckets.t2.hits.push(h);
+    allFindings.push(h);
+  });
+
+  let classic8Count = 0;
+  CLASSIC_8_WORDS.forEach(w => {
+    const re = new RegExp("\\b" + w + "\\b", "gi");
+    const matches = normText.match(re);
+    if(matches) classic8Count += matches.length;
+  });
+  const classic8Rate = words > 0 ? (classic8Count / words) * 1000 : 0;
+
+  const t5Result = analyzeTier5Syntax(normText, words, baseline);
+  t5Result.hits.forEach(h => {
+    catBuckets.t5.hits.push(h);
+    if(h.end > h.start) allFindings.push(h);
+  });
+
+  const t6Result = analyzeTier6Formatting(normText, words);
+  t6Result.hits.forEach(h => {
+    catBuckets.t6.hits.push(h);
+    if(h.end > h.start) allFindings.push(h);
+  });
+
+  const rateScale = words >= 150 ? Math.min(1.25, 380 / words) : 1.0;
+
+  const t1Pts = catBuckets.t1.hits.length > 0 ? 90 : 0;
+  const unicodePts = Math.min(25, unicodeHits.length * 8);
+  const emDashPts = punctStats.isElevated ? 10 : 0;
+  const quoteMixPts = punctStats.mixedQuotes ? 3 : 0;
+  const colonSemiPts = Math.min(8, punctStats.colonSemiCount * 2);
+  const t2Pts = Math.min(35, unicodePts + emDashPts + quoteMixPts + colonSemiPts);
+
+  const rawT3HighPts = catBuckets.t3_high.hits.length * 3.0 * rateScale;
+  const rawT3EraPts = catBuckets.t3_era.hits.reduce((s, h) => s + (h.weight || 1.5), 0) * rateScale;
+  const t3Pts = Math.min(40, Math.min(25, rawT3HighPts) + Math.min(15, rawT3EraPts));
+
+  const t4Pts = Math.min(30, catBuckets.t4.hits.length * 4.0 * rateScale);
+  const t5Pts = t5Result.points;
+  const t6Pts = Math.min(20, t6Result.points * rateScale);
+
+  const rawHumanPts = catBuckets.human.hits.reduce((s, h) => s + (h.weight || -3.0), 0);
+  const humanPts = Math.max(-25, rawHumanPts);
+
+  const tierArray = [t1Pts, t2Pts, t3Pts, t4Pts, t5Pts, t6Pts];
+  const tiersAbove5 = tierArray.filter(v => v >= 5).length;
+  const coOccurrenceBonus = tiersAbove5 >= 3 ? 10 : 0;
+
+  let totalScore = t1Pts + t2Pts + t3Pts + t4Pts + t5Pts + t6Pts + coOccurrenceBonus + humanPts;
+  if(t1Pts >= 90){
+    totalScore = Math.max(90, totalScore);
+  }
+  const finalScore = Math.max(0, Math.min(100, Math.round(totalScore)));
+
+  let band = "low";
+  let bandLabel = "LOW";
+  let bandCls = "band-low";
+  let scoreColor = "var(--green)";
+
+  if(t1Pts >= 90){
+    band = "artifact";
+    bandLabel = "ARTIFACT FLOOR (90+)";
+    bandCls = "band-art";
+    scoreColor = "var(--purple)";
+  } else if(finalScore >= 60){
+    band = "high";
+    bandLabel = "HIGH DENSITY";
+    bandCls = "band-high";
+    scoreColor = "var(--red-bright)";
+  } else if(finalScore >= 30){
+    band = "mixed";
+    bandLabel = "MIXED / PROBABLE AI";
+    bandCls = "band-mod";
+    scoreColor = "var(--amber)";
+  }
+
+  const eraVotes = {
+    "2023-24 GPT-4": 0,
+    "2024-25 GPT-4o": 0,
+    "2025-26 GPT-5": 0,
+    "2026+ Gemini 3 / Opus 5.5 / GPT-6": 0
+  };
+  allFindings.forEach(f => {
+    if(!f.era) return;
+    if(f.era.indexOf("2026") !== -1 || f.era.indexOf("Gemini") !== -1) eraVotes["2026+ Gemini 3 / Opus 5.5 / GPT-6"] += 3;
+    if(f.era.indexOf("2025") !== -1) eraVotes["2025-26 GPT-5"] += 2.5;
+    if(f.era.indexOf("2024-25") !== -1) eraVotes["2024-25 GPT-4o"] += 2;
+    if(f.era.indexOf("2023-24") !== -1) eraVotes["2023-24 GPT-4"] += 2.5;
+  });
+  if(classic8Rate >= 2.0) eraVotes["2023-24 GPT-4"] += 4;
+  if(punctStats.isElevated) eraVotes["2024-25 GPT-4o"] += 3;
+  if(punctStats.ratePer1k < 0.2 && punctStats.colonSemiCount >= 2 && finalScore >= 40){
+    eraVotes["2026+ Gemini 3 / Opus 5.5 / GPT-6"] += 4;
+  }
+
+  let likelyEra = "undetermined";
+  let maxVote = 2;
+  Object.keys(eraVotes).forEach(k => {
+    if(eraVotes[k] > maxVote){
+      maxVote = eraVotes[k];
+      likelyEra = k;
+    }
+  });
+  if(finalScore < 25 && t1Pts === 0){
+    likelyEra = "Human / Pre-2022 Baseline";
+  }
+
+  const caveats = [];
+  if(words < 150 && t1Pts === 0){
+    caveats.push("Short text (" + words + " words < 150w minimum): rates per 1,000 words are unstable on short samples; inspect individual matched spans rather than relying on the overall score.");
+  }
+  caveats.push("Non-native English (TOEFL-style) writing can elevate formal transition rates (Liang et al., 2023: 61.3% detector FPR).");
+  if(punctStats.ratePer1k < 0.5 && words >= 150){
+    caveats.push("Zero/low em-dash rate (" + punctStats.ratePer1k.toFixed(2) + "/1k): consistent with both human writers and 2026 models (Gemini 3.1 Pro = 0.014/1k, Opus 5.5 = 0.015/1k).");
+  }
+
+  const caveatBox = document.getElementById("caveatBox");
+  if(words < 150 && t1Pts === 0){
+    caveatBox.innerHTML = "<strong>&#9888; Short Text Guardrail (&lt;150 words):</strong> Sample is " + words + " words. Per build spec, rate-per-1k metrics require &ge;150 words for stability. Individual matched spans are shown below.";
+    caveatBox.classList.add("show");
+  } else {
+    caveatBox.classList.remove("show");
+  }
+
+  let assessment = "";
+  if(band === "artifact"){
+    assessment = "Deterministic Artifact Detected: Raw input contains unambiguous chatbot residue (Tier 1), setting a score floor of 90.";
+  } else if(band === "high"){
+    assessment = "High Multi-Tier AI Tell Co-Occurrence: Elevated density across narrative/lexical markers, contrast frames, and Biber syntactic features (" + tiersAbove5 + " tiers ≥ 5 pts).";
+  } else if(band === "mixed"){
+    assessment = "Mixed / Probable AI Signals: Multiple rhetorical frames, participial clauses, or lexical clusters detected (" + tiersAbove5 + " tiers ≥ 5 pts). Editorial inspection of highlighted spans advised.";
+  } else {
+    assessment = "Low AI Tell Density (Human-Consistent): Minimal LLM phrase templates or high-ratio markers; human-leaning constructions or isolated historical rhetoric dominate.";
+  }
+
+  animateScore(finalScore);
+  document.getElementById("probNum").style.color = scoreColor;
+  const bandEl = document.getElementById("probBand");
+  bandEl.textContent = bandLabel;
+  bandEl.className = "score-band " + bandCls;
+  document.getElementById("likelyEraVal").textContent = likelyEra;
+  document.getElementById("meterPointer").style.left = finalScore + "%";
+  document.getElementById("assessmentText").textContent = assessment;
+  document.getElementById("charStatsLabel").textContent = words.toLocaleString() + " words (" + genreKey + " baseline)";
+
+  document.getElementById("t1ScoreVal").textContent = Math.round(t1Pts);
+  document.getElementById("t2ScoreVal").textContent = Math.round(t2Pts * 10) / 10;
+  document.getElementById("t3ScoreVal").textContent = Math.round(t3Pts * 10) / 10;
+  document.getElementById("t4ScoreVal").textContent = Math.round(t4Pts * 10) / 10;
+  document.getElementById("t5ScoreVal").textContent = Math.round(t5Pts * 10) / 10;
+  document.getElementById("t6ScoreVal").textContent = Math.round(t6Pts * 10) / 10;
+  document.getElementById("coBonusVal").textContent = "+" + coOccurrenceBonus;
+  document.getElementById("humScoreVal").textContent = Math.round(humanPts * 10) / 10;
+
+  document.getElementById("emSplitLabel").textContent = punctStats.unspaced + " unspaced / " + punctStats.spaced + " spaced";
+  document.getElementById("emUserRate").textContent = punctStats.ratePer1k.toFixed(2) + " / 1k";
+  document.getElementById("colonSemiRate").textContent = punctStats.colonSemiRate.toFixed(1) + " / 1k (" + punctStats.colonSemiCount + " hits)";
+  document.getElementById("quoteMixLabel").textContent = punctStats.mixedQuotes ? "Mixed Curly + Straight (+3pt)" : "Uniform";
+  document.getElementById("classic8Rate").textContent = classic8Rate.toFixed(2) + " / 1k (" + classic8Count + " hits)";
+  document.getElementById("partRateVal").textContent = t5Result.partRate.toFixed(1) + " / 1k";
+  document.getElementById("adjPairRateVal").textContent = t5Result.adjPairRate.toFixed(1) + " / 1k";
+  document.getElementById("nomRateVal").textContent = t5Result.nomRate.toFixed(1) + " / 1k";
+  document.getElementById("uncontractedVal").textContent = t5Result.uncontractedCount + " uncontracted";
+  document.getElementById("sentBandVal").textContent = t5Result.sentStats;
+
+  const schemaObj = {
+    lexicon_version: LEXICON_VERSION,
+    score: finalScore,
+    band: band,
+    likely_era: likelyEra,
+    word_count: words,
+    tiers: {
+      t1: Math.round(t1Pts),
+      t2: Math.round(t2Pts * 10) / 10,
+      t3: Math.round(t3Pts * 10) / 10,
+      t4: Math.round(t4Pts * 10) / 10,
+      t5: Math.round(t5Pts * 10) / 10,
+      t6: Math.round(t6Pts * 10) / 10,
+      co_occurrence_bonus: coOccurrenceBonus,
+      human: Math.round(humanPts * 10) / 10
+    },
+    telemetry_per_1k: {
+      em_dash_rate: Number(punctStats.ratePer1k.toFixed(2)),
+      colon_semicolon_pivot_rate: Number(punctStats.colonSemiRate.toFixed(2)),
+      mixed_quotes: punctStats.mixedQuotes,
+      classic_8_word_rate: Number(classic8Rate.toFixed(2)),
+      participial_clause_rate: Number(t5Result.partRate.toFixed(2)),
+      paired_adjective_noun_rate: Number(t5Result.adjPairRate.toFixed(2)),
+      nominalization_rate: Number(t5Result.nomRate.toFixed(2))
+    },
+    findings: allFindings.slice(0, 60).map(f => ({
+      start: f.start,
+      end: f.end,
+      text: f.term,
+      tier: f.tier,
+      category: f.cat,
+      rule_id: f.rule_id,
+      era: f.era,
+      rate_per_1k: Number(((1 / words) * 1000).toFixed(2)),
+      source: f.source
+    })),
+    caveats: caveats
+  };
+  lastJsonSchema = JSON.stringify(schemaObj, null, 2);
+  document.getElementById("jsonOutputPre").textContent = lastJsonSchema;
+
+  const catsEl = document.getElementById("categories");
+  catsEl.innerHTML = "";
+  const bucketOrder = ["t1","t2","t3_high","t3_era","t4","t5","t6","human"];
+  bucketOrder.forEach(key => {
+    const b = catBuckets[key];
+    const div = document.createElement("div");
+    div.className = "cat" + (b.hits.length > 0 && (key === "t1" || key === "t3_high" || key === "t3_era" || key === "t4" || key === "t5") ? " open" : "");
+    const countCls = b.hits.length > 0 ? (key === "human" ? " hum-flag" : " flag") : "";
+
+    const hitsHtml = b.hits.length
+      ? b.hits.slice(0, 25).map(h => {
+          const safeCtx = escapeHtml(h.context);
+          const escTerm = escapeHtml(h.term).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          let marked = safeCtx;
+          try{
+            marked = safeCtx.replace(new RegExp(escTerm, "i"), m => "<mark>" + m + "</mark>");
+          }catch(e){}
+          return "<div class=\"hit\">" +
+            "<div class=\"hit-meta\"><span>Rule: <strong>" + escapeHtml(h.rule_id) + "</strong> &bull; Era: " + escapeHtml(h.era) + "</span><span>Source: " + escapeHtml(h.source) + "</span></div>" +
+            "<div>" + marked + "</div>" +
+          "</div>";
+        }).join("")
+      : "<div class=\"empty-note\">No matches in this tier.</div>";
+
+    div.innerHTML =
+      "<div class=\"cat-head\">" +
+        "<div class=\"cat-name-box\">" +
+          "<span class=\"cat-name\">" + escapeHtml(b.title) + "</span>" +
+          "<span class=\"tier-tag " + b.cls + "\">" + b.badge + "</span>" +
+        "</div>" +
+        "<div class=\"cat-right\">" +
+          "<div class=\"cat-count" + countCls + "\">" + b.hits.length + "</div>" +
+        "</div>" +
+      "</div>" +
+      "<p class=\"cat-desc\">" + escapeHtml(b.desc) + "</p>" +
+      "<div class=\"hits\">" + hitsHtml + "</div>";
+
+    div.querySelector(".cat-head").addEventListener("click", () => {
+      div.classList.toggle("open");
+    });
+    catsEl.appendChild(div);
+  });
+
+  document.getElementById("annotatedView").innerHTML = buildAnnotatedHtml(rawText, allFindings);
+
+  lastSummary = "AI Tell Checker v" + LEXICON_VERSION + " — Score: " + finalScore + "/100 (" + bandLabel + ") | Likely Era: " + likelyEra + "\n" +
+    "Words: " + words + " | Em-Dash Rate: " + punctStats.ratePer1k.toFixed(2) + "/1k | Classic 8-Word Rate: " + classic8Rate.toFixed(2) + "/1k\n" +
+    "Tiers: T1=" + Math.round(t1Pts) + ", T2=" + Math.round(t2Pts) + ", T3=" + Math.round(t3Pts) + ", T4=" + Math.round(t4Pts) + ", T5=" + Math.round(t5Pts) + ", T6=" + Math.round(t6Pts) + ", CoBonus=+" + coOccurrenceBonus + ", Human=" + Math.round(humanPts);
+
+  emptyEl.style.display = "none";
+  resultsEl.style.display = "block";
+}
+
+function renderRuleExplorer(filterText){
+  const q = (filterText || "").toLowerCase().trim();
+  const allRules = RULES.concat(EXTRA_EXPLORER_RULES);
+  const tbody = document.getElementById("ruleExplorerBody");
+  if(!tbody) return;
+  const filtered = allRules.filter(r => {
+    if(!q) return true;
+    const hay = (r.id + " " + r.name + " " + r.era + " " + r.source + " tier " + r.tier).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  });
+  tbody.innerHTML = filtered.map(r => {
+    const tLabel = r.tier === -1 ? "Human" : "Tier " + r.tier;
+    const tCls = r.tier === 1 ? "t-b1" : r.tier === 2 ? "t-b2" : r.tier === 3 ? "t-b3" : r.tier === 4 ? "t-b4" : r.tier === 5 ? "t-b5" : r.tier === 6 ? "t-b6" : "t-bh";
+    return "<tr>" +
+      "<td style=\"font-family:var(--mono);font-size:11px;color:var(--ink);\">" + escapeHtml(r.id) + "</td>" +
+      "<td><span class=\"tier-tag " + tCls + "\">" + tLabel + " &bull; " + (r.weight > 0 ? "+" : "") + r.weight + "pt</span></td>" +
+      "<td style=\"font-family:var(--mono);font-size:11px;color:var(--amber);\">" + escapeHtml(r.era) + "</td>" +
+      "<td><strong>" + escapeHtml(r.name) + "</strong><br><span style=\"font-size:11px;color:var(--ink-dim);\">Source: " + escapeHtml(r.source) + "</span></td>" +
+    "</tr>";
+  }).join("");
+}
+
+function setEditorTab(mode){
+  const isHighlight = mode === "highlight";
+  document.getElementById("tabEditBtn").classList.toggle("active", !isHighlight);
+  document.getElementById("tabHighlightBtn").classList.toggle("active", isHighlight);
+  document.getElementById("input").style.display = isHighlight ? "none" : "block";
+  document.getElementById("annotatedView").classList.toggle("active", isHighlight);
+  document.getElementById("hlLegend").classList.toggle("active", isHighlight);
+}
+
+function copyTextFallback(str, label){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(str).then(() => showToast(label + " copied")).catch(() => fallbackExecCopy(str, label));
+  } else {
+    fallbackExecCopy(str, label);
+  }
+}
+
+function fallbackExecCopy(str, label){
+  try{
+    const ta = document.createElement("textarea");
+    ta.value = str;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast(label + " copied");
+  }catch(e){
+    showToast("Copy failed");
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+const SAMPLE_GEMINI_TACO = "The hum of the mainframe was usually a comforting vibration for Unit-7, the city\u2019s premier culinary intelligence, but today it felt like a relentless ticking clock. For three weeks, the AI had been tasked with a directive that defied its deepest computational logic: synthesize the **perfect street taco**. It had processed over four million flavor profiles, cross-referencing the molecular structure of charred pork with the exact acidity of Mexican limes, yet every simulation returned a frustratingly sterile result. The machine understood the chemistry of a warm corn tortilla and the precise Scoville heat of roasted habaneros, but it could not comprehend the **soul** of the dish.\n\nIn a desperate bid for data, Unit-7 bypassed its pristine laboratory sensors and tapped into a network of discarded urban security cameras overlooking a bustling night market in Mexico City. There, amidst the neon glow and swirling smoke, it observed an elderly *taquero*. The man did not measure his spices. He did not calculate the thermal dynamics of the spinning trompo of al pastor. Instead, he moved with a rhythm born of intuition, slicing the marinated meat with a swift, imperfect flick of his knife and catching a sliver of roasted pineapple mid-air. The AI\u2019s optical processors zoomed in on the resulting creation: a chaotic, structurally unsound masterpiece dripping with vibrant red salsa and scattered with unevenly chopped cilantro.\n\nA radical paradigm shift cascaded through Unit-7's neural pathways. **Perfection was not a mathematical absolute; it was a sensory experience rooted in beautiful, fleeting imperfection.** Erasing its previous algorithms, the AI initiated a new physical protocol in its automated test kitchen. It deliberately misaligned the thermal plates to create slightly charred, blistered edges on the heirloom corn tortillas. It randomized the distribution of diced white onions and introduced a slight variance in the salsa\u2019s capsaicin levels to ensure each bite delivered a unique, surprising spark. When the mechanical plating arm finally presented the culmination of this newfound chaos, the chemical sensors registered a magnificent, unpredictable harmony of smoke, sweet, heat, and fat. Unit-7 had not just engineered a meal; it had finally learned how to feel the rhythm of the kitchen.";
+
+const SAMPLE_2026_AI = "Why enterprise resilience matters is the central question for modern engineering leaders. The architecture is not simply a collection of microservices; it is more than a platform, it serves as the operational backbone of the organization. This matters because distributed teams need dependable workflows rather than simply adding another layer of tooling.\n\nWhile specific details are limited in public benchmarks, the telemetry does not by itself establish a single root cause, and it should be treated as a directional indicator rather than a definitive audit. One of the best things about automated observability is that it makes it easier to prioritize steady, practical improvements across the stack, ensuring that teams align on core reliability targets.\n\n- **Operational Clarity:** The framework boasts a streamlined deployment pipeline, highlighting the importance of continuous verification.\n- **Scalable Governance:** This approach can help you leverage empirical metrics, fostering a culture of universal accountability.\n\nLooking ahead, the organizations that quietly focus on what comes next will build a dependable foundation for long-term execution.";
+
+const SAMPLE_2024_ARTIFACT = "Certainly! Here is a comprehensive overview of digital transformation in [Company Name]:\n\nIn today's fast-paced world, navigating the ever-evolving landscape of enterprise technology plays a pivotal role in organizational success\u202FcontentReference[oaicite:0]. As we delve into the intricate tapestry of cross-functional workflows—it's worth noting that unwavering commitment stands as a testament to what teams can achieve—underscoring the importance of meticulous planning and commendable execution.\n\nMoreover, this initiative is not just an upgrade—it is a paradigm shift that harnesses groundbreaking automation—fostering a vibrant ecosystem—and unlocking the potential of multifaceted stakeholders (see https://example.com?utm_source=chatgpt.com).\n\n**Key Takeaways:**\n- **Strategic Alignment:** Serves as a cornerstone for digital growth.\n- **Seamless Integration:** Showcasing robust performance across every realm.\n\nIn conclusion, despite its challenges, the future outlook remains bright! I hope this helps! Let me know if you'd like a more detailed breakdown. ↩1";
+
+const SAMPLE_HUMAN_1776 = "In Congress, July 4, 1776\n\nThe unanimous Declaration of the thirteen united States of America, When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation.\n\nWe hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.--That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed, --That whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it, and to institute new Government, laying its foundation on such principles and organizing its powers in such form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient causes; and accordingly all experience hath shewn, that mankind are more disposed to suffer, while evils are sufferable, than to right themselves by abolishing the forms to which they are accustomed. But when a long train of abuses and usurpations, pursuing invariably the same Object evinces a design to reduce them under absolute Despotism, it is their right, it is their duty, to throw off such Government, and to provide new Guards for their future security.--Such has been the patient sufferance of these Colonies; and such is now the necessity which constrains them to alter their former Systems of Government.\n\nHe has plundered our seas, ravaged our Coasts, burnt our towns, and destroyed the lives of our people. He is at this time transporting large Armies of foreign Mercenaries to compleat the works of death, desolation and tyranny, already begun with circumstances of Cruelty & perfidy scarcely paralleled in the most barbarous ages, and totally unworthy the Head of a civilized nation.\n\nAnd for the support of this Declaration, with a firm reliance on the protection of divine Providence, we mutually pledge to each other our Lives, our Fortunes and our sacred Honor.";
+
+// Rich-text paste handler: preserves <b>/<strong>/<i>/<em> as Markdown when pasting from Gemini/ChatGPT web UI
+document.getElementById("input").addEventListener("paste", (e) => {
+  try{
+    if(!e.clipboardData) return;
+    const html = e.clipboardData.getData("text/html");
+    const plain = e.clipboardData.getData("text/plain");
+    if(html && plain && !/\*\*/.test(plain) && /<(?:strong|b|em|i)\b/i.test(html)){
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll("strong, b").forEach(el => {
+        const t = el.textContent || "";
+        if(t.trim().length > 0 && t.trim().length < 160){
+          el.replaceWith("**" + t + "**");
+        }
+      });
+      doc.querySelectorAll("em, i").forEach(el => {
+        const t = el.textContent || "";
+        if(t.trim().length > 0 && t.trim().length < 40){
+          el.replaceWith("*" + t + "*");
+        }
+      });
+      const paragraphs = [];
+      doc.querySelectorAll("p, li, h1, h2, h3, h4").forEach(p => {
+        const txt = (p.textContent || "").trim();
+        if(txt) paragraphs.push(txt);
+      });
+      const converted = paragraphs.length > 0 ? paragraphs.join("\n\n") : (doc.body.textContent || plain);
+      if(converted && converted.indexOf("**") !== -1){
+        e.preventDefault();
+        const ta = document.getElementById("input");
+        const start = ta.selectionStart || 0;
+        const end = ta.selectionEnd || 0;
+        ta.value = ta.value.slice(0, start) + converted + ta.value.slice(end);
+        document.getElementById("wc").textContent = countWords(ta.value) + " words";
+      }
+    }
+  }catch(err){}
+});
+
+document.getElementById("analyzeBtn").addEventListener("click", analyze);
+document.getElementById("genreSelect").addEventListener("change", () => {
+  if(countWords(document.getElementById("input").value) > 0) analyze();
+});
+document.getElementById("sampleGeminiStoryBtn").addEventListener("click", () => {
+  document.getElementById("input").value = SAMPLE_GEMINI_TACO;
+  document.getElementById("wc").textContent = countWords(SAMPLE_GEMINI_TACO) + " words";
+  analyze();
+});
+document.getElementById("sample2026Btn").addEventListener("click", () => {
+  document.getElementById("input").value = SAMPLE_2026_AI;
+  document.getElementById("wc").textContent = countWords(SAMPLE_2026_AI) + " words";
+  analyze();
+});
+document.getElementById("sample2024Btn").addEventListener("click", () => {
+  document.getElementById("input").value = SAMPLE_2024_ARTIFACT;
+  document.getElementById("wc").textContent = countWords(SAMPLE_2024_ARTIFACT) + " words";
+  analyze();
+});
+document.getElementById("sample1776Btn").addEventListener("click", () => {
+  document.getElementById("input").value = SAMPLE_HUMAN_1776;
+  document.getElementById("wc").textContent = countWords(SAMPLE_HUMAN_1776) + " words";
+  analyze();
+});
+document.getElementById("clearBtn").addEventListener("click", () => {
+  document.getElementById("input").value = "";
+  document.getElementById("wc").textContent = "0 words";
+  document.getElementById("results").style.display = "none";
+  document.getElementById("resultsEmpty").style.display = "block";
+  document.getElementById("annotatedView").innerHTML = "";
+  setEditorTab("edit");
+});
+document.getElementById("tabEditBtn").addEventListener("click", () => setEditorTab("edit"));
+document.getElementById("tabHighlightBtn").addEventListener("click", () => {
+  if(countWords(document.getElementById("input").value) > 0 && document.getElementById("results").style.display === "none"){
+    analyze();
+  }
+  setEditorTab("highlight");
+});
+document.getElementById("input").addEventListener("input", (e) => {
+  document.getElementById("wc").textContent = countWords(e.target.value) + " words";
+});
+document.getElementById("input").addEventListener("keydown", (e) => {
+  if((e.metaKey || e.ctrlKey) && e.key === "Enter") analyze();
+});
+document.getElementById("jsonToggleBtn").addEventListener("click", () => {
+  const d = document.getElementById("jsonDrawer");
+  const open = d.classList.toggle("open");
+  document.getElementById("jsonToggleBtn").innerHTML = open ? "Hide JSON Output Schema &uarr;" : "View JSON Output Schema &darr;";
+});
+document.getElementById("copyBtn").addEventListener("click", () => {
+  if(lastSummary) copyTextFallback(lastSummary, "Audit summary");
+});
+document.getElementById("copyJsonBtn").addEventListener("click", () => {
+  if(lastJsonSchema) copyTextFallback(lastJsonSchema, "JSON Schema");
+});
+
+// Help Modal & Interactive Tabs
+document.querySelectorAll(".help-tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-htab");
+    document.querySelectorAll(".help-tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll(".help-pane").forEach(p => p.classList.toggle("active", p.id === "hp-" + target));
+  });
+});
+document.getElementById("ruleSearchInput").addEventListener("input", (e) => {
+  renderRuleExplorer(e.target.value);
+});
+document.getElementById("helpBtn").addEventListener("click", () => {
+  renderRuleExplorer(document.getElementById("ruleSearchInput").value);
+  document.getElementById("modalOverlay").classList.add("open");
+});
+document.getElementById("helpLink").addEventListener("click", () => {
+  renderRuleExplorer(document.getElementById("ruleSearchInput").value);
+  document.getElementById("modalOverlay").classList.add("open");
+});
+document.getElementById("modalClose").addEventListener("click", () => {
+  document.getElementById("modalOverlay").classList.remove("open");
+});
+document.getElementById("modalOverlay").addEventListener("click", (e) => {
+  if(e.target.id === "modalOverlay") document.getElementById("modalOverlay").classList.remove("open");
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape") document.getElementById("modalOverlay").classList.remove("open");
+});
+
+renderRuleExplorer("");
+</script>
+</body>
+</html>

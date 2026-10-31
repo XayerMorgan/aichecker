@@ -1,0 +1,605 @@
+# AI Tell Checker — Versioned Lexicon & Rule Specification (tells.yaml)
+# Version: 3.0.0
+# Updated: 2026-10-31
+# Author/Reference: @Matthew Jett Hal — "AI Writing Tells: Detection Reference for AI Tell Checker"
+
+version: "3.0.0"
+updated: "2026-10-31"
+baselines:
+  em_dash_per_1k: 3.14
+  classic_8_words_per_1k_human: 0.44
+  classic_8_words_per_1k_2024_ai: 2.62
+  classic_8_words_per_1k_2026_ai: 0.31
+  nominalizations_per_1k_human: 28.0
+  participial_clauses_per_1k_human: 3.5
+  mean_word_length_human: 4.85
+  rule_of_three_per_1k_threshold: 10.0
+
+rules:
+  # ==========================================
+  # TIER 1: Unambiguous Deterministic Artifacts (Sets score floor at 90)
+  # ==========================================
+  - id: "t1.oaicite"
+    tier: 1
+    category: "artifact_citation"
+    pattern: "contentReference\\[oaicite:\\d+\\]|\\boaicite\\b|\\bturn0(search|news)\\d*\\b|【\\d+†[^】]+】|\\[\\d+†L\\d+(-L\\d+)?\\]"
+    type: "regex"
+    weight: 90
+    era: "2023-26+"
+    models: ["ChatGPT", "OpenAI Search"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.utm_tracker"
+    tier: 1
+    category: "artifact_url"
+    pattern: "utm_source=(chatgpt\\.com|openai|copilot\\.com)|referrer=grok\\.com"
+    type: "regex"
+    weight: 90
+    era: "2024-26+"
+    models: ["ChatGPT", "Copilot", "Grok"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.self_id"
+    tier: 1
+    category: "artifact_self_id"
+    pattern: "\\b(as an ai language model|as a large language model|i'?m sorry, but i can'?t|i cannot offer medical advice, but)\\b"
+    type: "regex"
+    weight: 90
+    era: "2022-23"
+    models: ["GPT-3.5", "Early GPT-4", "Claude 1/2"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.cutoff_disclaimer"
+    tier: 1
+    category: "artifact_cutoff"
+    pattern: "\\b(as of my last knowledge update|up to my last training update|as of my knowledge cutoff)\\b"
+    type: "regex"
+    weight: 90
+    era: "2022-24"
+    models: ["GPT-3.5", "GPT-4"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.chat_residue"
+    tier: 1
+    category: "artifact_chat_residue"
+    pattern: "(?:^|\\n)\\s*(Certainly!|Of course!|Great question!|You'?re absolutely right!|Sure, here is|Here is a )|(?:\\b(I hope this helps!?|Let me know if you'?d like|Would you like me to|Is there anything else you|for a more detailed breakdown)\\b)"
+    type: "regex"
+    weight: 90
+    era: "2023-26+"
+    models: ["All Chat Tuned LLMs"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.unfilled_template"
+    tier: 1
+    category: "artifact_template"
+    pattern: "\\[(Your|Insert|Company|Describe)[^\\]]*\\]|\\bPASTE_[A-Z0-9_]+_HERE\\b|\\b20\\d\\d-(XX|xx)-(XX|xx)\\b"
+    type: "regex"
+    weight: 90
+    era: "2023-26+"
+    models: ["All Chat Tuned LLMs"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.footnote_arrow"
+    tier: 1
+    category: "artifact_markup"
+    pattern: "↩\\d*"
+    type: "regex"
+    weight: 90
+    era: "2024-26+"
+    models: ["ChatGPT", "Perplexity", "Claude"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "t1.gemini_mark"
+    tier: 1
+    category: "artifact_markup"
+    pattern: "<mark>[^<]{10,}</mark>"
+    type: "regex"
+    weight: 90
+    era: "2024-26+"
+    models: ["Google Gemini"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # TIER 2: Punctuation, Typography & Invisible Unicode
+  # ==========================================
+  - id: "t2.unicode_nnbsp"
+    tier: 2
+    category: "invisible_unicode"
+    pattern: "\\u202F"
+    type: "raw_unicode"
+    weight: 8
+    era: "2025-26 GPT-5 / o3 / o4-mini"
+    models: ["OpenAI o3", "o4-mini", "GPT-5"]
+    source: "Rumi (Apr 2025); Layer3 Labs; Pillitteri (2025)"
+    added: "2026-10-31"
+
+  - id: "t2.unicode_zwsp"
+    tier: 2
+    category: "invisible_unicode"
+    pattern: "[\\u200B\\u200C\\u200D\\u2060\\uFEFF\\u200E\\u200F]"
+    type: "raw_unicode"
+    weight: 8
+    era: "2023-26+"
+    models: ["Unedited Chat Paste"]
+    source: "Pillitteri (2025)"
+    added: "2026-10-31"
+
+  - id: "t2.emdash_elevated"
+    tier: 2
+    category: "punctuation_era"
+    pattern: "—"
+    type: "rate_check"
+    weight: 10
+    era: "2023-25 GPT-4 / GPT-4.1 / GPT-5"
+    models: ["GPT-4.1 (7.13/1k)", "GPT-5 (6.92/1k)"]
+    source: "Graphite (Oct 2026); arXiv:2603.27006; Czuma (2026)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # TIER 3: Measured Lexical Markers (High Ratio >= 10x & Era Lexicon)
+  # ==========================================
+  - id: "lex.not_simply_the"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bthe\\s+\\w+\\s+is\\s+not\\s+simply\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 576.0
+    era: "2026+ GPT-6 Astra"
+    models: ["GPT-6 Astra"]
+    source: "Graphite AI Tells (Oct 2026) — 576x human"
+    added: "2026-10-31"
+
+  - id: "lex.does_not_establish"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bdoes\\s+not\\s+(by\\s+itself\\s+)?establish\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 275.0
+    era: "2026+ GPT-6 Astra"
+    models: ["GPT-6 Astra"]
+    source: "Graphite AI Tells (Oct 2026) — 275x Opus 5.5 rate"
+    added: "2026-10-31"
+
+  - id: "lex.not_simply"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bnot\\s+simply\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 157.0
+    era: "2026+ GPT-6 Astra"
+    models: ["GPT-6 Astra"]
+    source: "Graphite AI Tells (Oct 2026) — 157x human"
+    added: "2026-10-31"
+
+  - id: "lex.this_matters"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bthis\\s+matters\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 116.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 116x human"
+    added: "2026-10-31"
+
+  - id: "lex.more_than_a_it"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bis\\s+more\\s+than\\s+a\\s+\\w+(\\s+\\w+)?\\s*[,;—]?\\s*it\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 98.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 98x human"
+    added: "2026-10-31"
+
+  - id: "lex.why_x_matters"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bwhy\\s+\\w+(\\s+\\w+)?\\s+matters\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 92.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 92x human"
+    added: "2026-10-31"
+
+  - id: "lex.dependable"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bdependable\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 59.0
+    era: "2026+ GPT-6 / Opus 5.5"
+    models: ["GPT-6 Astra (59x)", "Claude Opus 5.5 (23x)"]
+    source: "Graphite AI Tells (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "lex.looking_ahead_the"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\blooking\\s+ahead,?\\s+the\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 40.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 40x human"
+    added: "2026-10-31"
+
+  - id: "lex.meticulous"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bmeticulous(ly)?\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 34.7
+    era: "2023-24 GPT-4"
+    models: ["GPT-4"]
+    source: "Liang et al. (ICML 2024) — 34.7x per sentence"
+    added: "2026-10-31"
+
+  - id: "lex.rather_than_simply"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\brather\\s+than\\s+simply\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 32.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 32x human"
+    added: "2026-10-31"
+
+  - id: "lex.delve"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bdelv(e|es|ed|ing)\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 28.0
+    era: "2023-24 GPT-4"
+    models: ["GPT-3.5", "GPT-4"]
+    source: "Kobak et al. (Science Advances 2025) — r=28.0"
+    added: "2026-10-31"
+
+  - id: "lex.adds_another_layer"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\badds\\s+another\\s+layer\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 27.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 27x human"
+    added: "2026-10-31"
+
+  - id: "lex.is_genuinely"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bis\\s+genuinely\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 26.0
+    era: "2025-26 Claude Opus 5"
+    models: ["Claude Opus 5"]
+    source: "Graphite AI Tells (Oct 2026) — 26x human"
+    added: "2026-10-31"
+
+  - id: "lex.what_comes_next"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bwhat\\s+comes\\s+next\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 24.0
+    era: "2026+ Claude Opus 5.5"
+    models: ["Claude Opus 5.5"]
+    source: "Graphite AI Tells (Oct 2026) — 24x human"
+    added: "2026-10-31"
+
+  - id: "lex.intricate"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bintricat(e|ely|ies)|intricacy\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 11.2
+    era: "2023-24 GPT-4"
+    models: ["GPT-4"]
+    source: "Liang et al. (ICML 2024) — 11.2x per sentence"
+    added: "2026-10-31"
+
+  - id: "lex.underscore"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bunderscor(e|es|ed|ing)\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 10.9
+    era: "2023-25 GPT-4 / GPT-4o / Grok"
+    models: ["GPT-4", "GPT-4o", "Grok"]
+    source: "Kobak et al. (Science Advances 2025) — r=10.9"
+    added: "2026-10-31"
+
+  - id: "lex.showcase"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bshowcas(e|es|ed|ing)\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 10.2
+    era: "2023-26 GPT-4 / 4o / 5"
+    models: ["GPT-4", "GPT-4o", "GPT-5"]
+    source: "Kobak et al. (Science Advances 2025) — r=10.2"
+    added: "2026-10-31"
+
+  - id: "lex.commendable"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\bcommendabl(e|y)\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 9.8
+    era: "2023-24 GPT-4"
+    models: ["GPT-4"]
+    source: "Liang et al. (ICML 2024) — 9.8x per sentence"
+    added: "2026-10-31"
+
+  - id: "lex.opus_superlatives"
+    tier: 3
+    category: "lexicon_high_ratio"
+    pattern: "\\b(one\\s+of\\s+the\\s+best\\s+\\w+\\s+about|the\\s+most\\s+popular|is\\s+especially\\s+helpful|can\\s+help\\s+you|makes\\s+it\\s+easier|may\\s+provide)\\b"
+    type: "regex"
+    weight: 3.0
+    ratio: 45.0
+    era: "2026+ Opus 5.5 / Astra"
+    models: ["Claude Opus 5.5", "GPT-6 Astra"]
+    source: "Graphite AI Tells (Oct 2026)"
+    added: "2026-10-31"
+
+  # Tier 3B: Era-Specific & Folk Master Lexicon (weight 1.5, cap 15)
+  - id: "lex.era_2023_24_gpt4"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(tapestry|testament|interplay|realm|pivotal|crucial|foster(s|ed|ing)?|bolster(s|ed|ing)?|garner(s|ed|ing)?|vibrant|enduring|boasts|multifaceted|nuanced|nuance|landscape)\\b"
+    type: "regex"
+    weight: 1.5
+    era: "2023-24 GPT-4"
+    models: ["GPT-4", "Claude 2/3"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026); Juzek & Ward (COLING 2025)"
+    added: "2026-10-31"
+
+  - id: "lex.era_2024_25_gpt4o"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(align(s|ed|ing)?\\s+with|enhanc(e|es|ed|ing)|emphasiz(e|es|ed|ing)|highlight(s|ed|ing)|facilitat(e|es|ed|ing)|encompass(es|ed|ing)?|illuminat(e|es|ed|ing)|groundbreaking|transformative|invaluable|seamless(ly)?|robust)\\b"
+    type: "regex"
+    weight: 1.5
+    era: "2024-25 GPT-4o"
+    models: ["GPT-4o", "Claude 3.5 Sonnet"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026); Kobak et al. (2025)"
+    added: "2026-10-31"
+
+  - id: "lex.era_2026_gpt6_grok"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(prioritiz(e|es|ed|ing)|universally|quietly|steady|practical|echoed|correlate(s|d)?|empirical|causal|leverage(s|d)?|leveraging)\\b"
+    type: "regex"
+    weight: 1.5
+    era: "2026+ GPT-6 / Grok"
+    models: ["GPT-6", "Grok"]
+    source: "Wikipedia WikiProject AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "lex.folk_half_weight"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(synergy|paradigm|ecosystem|cornerstone|beacon|symphony|treasure\\s+trove|game-changer|embark(s|ed|ing)?|unleash(es|ed|ing)?|unlock(s|ed|ing)?|harness(es|ed|ing)?|spearhead(s|ed|ing)?|revolutioniz(e|es|ed|ing)|streamlin(e|es|ed|ing))\\b"
+    type: "regex"
+    weight: 0.75
+    era: "2023-25 Folk / Corporate"
+    models: ["General LLM"]
+    source: "Folk markers (0.5x half-weight per spec)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # TIER 4: Phrase Templates & Rhetorical Frames (Weight: 4, Cap: 30)
+  # ==========================================
+  - id: "frame.negative_parallelism"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\bnot\\s+(only|just|merely|simply)\\b[^.!?;]{1,80}\\b(but|it'?s|rather)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2023-26+"
+    models: ["All Instruction-Tuned LLMs"]
+    source: "Wikipedia AI Cleanup; Graphite (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.negation_reveal"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(it'?s|this\\s+is|that\\s+is|it\\s+was)n'?t\\s+(?:not\\s+)?(about\\s+)?\\w+[^.!?;]{0,40}[.;—,]\\s*(it'?s|it\\s+was|this\\s+is|but)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2024-26+"
+    models: ["GPT-4o", "GPT-5", "Claude"]
+    source: "Wikipedia AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.reverse_contrast"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(rather\\s+than\\s+(simply|merely)|as\\s+opposed\\s+to\\s+merely|instead\\s+of\\s+merely)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2025-26+"
+    models: ["Claude Opus 5/5.5", "GPT-6 Astra"]
+    source: "Graphite (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.flagging_importance_2026"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(this\\s+matters|that\\s+matters|why\\s+\\w+(\\s+\\w+)?\\s+matters|matters\\s+most|here'?s\\s+why|the\\s+real\\s+question\\s+is)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2026+ Opus 5.5 / GPT-6"
+    models: ["Claude Opus 5.5", "GPT-6"]
+    source: "Graphite (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.significance_puffery"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b((stands|serves)\\s+as\\s+a\\s+(testament|reminder)|plays\\s+a\\s+(crucial|pivotal|vital)\\s+role|marks\\s+a\\s+pivotal\\s+moment|underscores\\s+(its|the)\\s+importance|reflects\\s+broader|setting\\s+the\\s+stage\\s+for|indelible\\s+mark|deeply\\s+rooted|evolving\\s+landscape|ever-evolving\\s+landscape|in\\s+today'?s\\s+fast-paced\\s+world)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2023-25 GPT-4 / 4o"
+    models: ["GPT-4", "GPT-4o"]
+    source: "Wikipedia AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.superficial_ing_tail"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: ",\\s+(?:ultimately\\s+|thereby\\s+|thus\\s+)?(highlight|underscor|emphasiz|reflect|symboliz|ensur|foster|contribut|showcas|pav)ing\\b[^.!?\\n]{3,75}[.!?]"
+    type: "regex"
+    weight: 4.0
+    era: "2023-26+"
+    models: ["All Instruction-Tuned LLMs"]
+    source: "Reinhart et al. (PNAS 2025); Wikipedia AI Cleanup"
+    added: "2026-10-31"
+
+  - id: "frame.promotional_tone"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(boasts\\s+a|nestled\\s+in|in\\s+the\\s+heart\\s+of|rich\\s+cultural\\s+heritage|diverse\\s+array\\s+of|natural\\s+beauty|unwavering\\s+commitment\\s+to)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2023-26+"
+    models: ["GPT-4", "GPT-4o", "GPT-5"]
+    source: "Wikipedia AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.vague_attribution_notability"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(experts\\s+argue|observers\\s+note|industry\\s+reports\\s+suggest|some\\s+critics\\s+argue|widely\\s+regarded\\s+as|featured\\s+in\\s+major|profiled\\s+in|independent\\s+coverage|maintains\\s+an\\s+active\\s+social\\s+media\\s+presence)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2025-26 GPT-5"
+    models: ["GPT-5", "GPT-4o"]
+    source: "Wikipedia AI Cleanup (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.hedging_source_disclaimers_2026"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(while\\s+specific\\s+details\\s+are\\s+limited|not\\s+widely\\s+documented|based\\s+on\\s+available\\s+information|in\\s+the\\s+provided\\s+sources|should\\s+be\\s+treated\\s+as\\s+[^.,;]{2,30}\\s+rather\\s+than|does\\s+not\\s+by\\s+itself\\s+establish|should\\s+not\\s+be\\s+confused\\s+with)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2026+ GPT-6 / Mid-2026"
+    models: ["GPT-6 Astra", "GPT-5.6", "Claude Opus 5.5"]
+    source: "Wikipedia AI Cleanup (Oct 2026); Graphite (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.didactic_asides_conclusions"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(it'?s\\s+important\\s+to\\s+note|it\\s+is\\s+important\\s+to\\s+note|it'?s\\s+worth\\s+noting|it\\s+is\\s+worth\\s+noting|it'?s\\s+crucial\\s+to\\s+remember|despite\\s+(its|these|their)\\s+[^.,;]{0,45}challenges?|looking\\s+ahead|only\\s+time\\s+will\\s+tell|the\\s+bottom\\s+line\\s+is)\\b|(?:^|\\n|\\.[\\s]+)(In\\s+summary,|In\\s+conclusion,|Overall,|Ultimately,|At\\s+its\\s+core,|In\\s+essence,)"
+    type: "regex"
+    weight: 4.0
+    era: "2023-26+"
+    models: ["All Instruction-Tuned LLMs"]
+    source: "Wikipedia AI Cleanup; Liang et al. (2024)"
+    added: "2026-10-31"
+
+  - id: "frame.customer_service_corporate"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(i\\s+hope\\s+this\\s+(message|email)\\s+finds\\s+you\\s+well|i\\s+hope\\s+this\\s+finds\\s+you\\s+well|i\\s+understand\\s+your\\s+concerns|apologize\\s+for\\s+any\\s+inconvenience|please\\s+don'?t\\s+hesitate\\s+to\\s+reach\\s+out|at\\s+your\\s+earliest\\s+convenience|circle\\s+back|gentle\\s+reminder|as\\s+we\\s+navigate)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2023-26+"
+    models: ["ChatGPT", "Copilot", "Claude"]
+    source: "Wikipedia AI Cleanup; Assured Information (2026)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # HUMAN-LEANING FEATURES (Negative Weight: -3 per hit/feature, Cap: -25)
+  # ==========================================
+  - id: "human.plain_copula_constructions"
+    tier: -1
+    category: "human_sign"
+    pattern: "\\b(there\\s+is\\s+a|there\\s+are\\s+many|it\\s+has\\s+a|there'?s\\s+a|that'?s\\s+why)\\b"
+    type: "regex"
+    weight: -3.0
+    era: "Human Baseline"
+    models: ["Human"]
+    source: "Wikipedia 25-Year Human Comparison (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "human.plain_verbs_qualifiers"
+    tier: -1
+    category: "human_sign"
+    pattern: "\\b(as\\s+a\\s+result\\s+of|in\\s+order\\s+to|all\\s+of\\s+the|a\\s+part\\s+of|the\\s+fact\\s+that|tends\\s+to|kind\\s+of|sort\\s+of|pretty\\s+much)\\b"
+    type: "regex"
+    weight: -3.0
+    era: "Human Baseline"
+    models: ["Human"]
+    source: "Wikipedia 25-Year Human Comparison (Oct 2026)"
+    added: "2026-10-31"
+
+  # ==========================================
+  # v3.1.0 ADDITIONS: Narrative/Creative AI Lexicon & Generalized Contrast/Syntax Frames
+  # ==========================================
+  - id: "lex.narrative_ai_collocations"
+    tier: 3
+    category: "lexicon_era_folk"
+    pattern: "\\b(paradigm\\s+shift|cascaded\\s+through|sensory\\s+experience|fleeting\\s+imperfection|newfound\\s+\\w+|unpredictable\\s+harmony|bustling\\s+(?:night\\s+)?market|neon\\s+glow|swirling\\s+smoke|hum\\s+of\\s+the|rhythm\\s+born\\s+of|feel\\s+the\\s+rhythm|relentless\\s+ticking|frustratingly\\s+sterile|culmination\\s+of\\s+this|deepest\\s+computational)\\b"
+    type: "regex"
+    weight: 2.0
+    era: "2024-26+ Gemini / Claude / GPT Narrative"
+    models: ["Google Gemini", "Claude", "GPT-4o/5/6"]
+    source: "Wikipedia AI Cleanup (Narrative & Promotional Register)"
+    added: "2026-10-31"
+
+  - id: "frame.general_negation_reveal"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(?:\\w+\\s+){0,3}(?:was|were|is|are|had)\\s+not\\s+(?:just\\s+|merely\\s+|simply\\s+)?[^.!?]{3,65}[;—,]\\s*(?:it|he|she|they|this|that)\\s+(?:was|were|is|are|had)\\b"
+    type: "regex"
+    weight: 4.0
+    era: "2024-26+ Gemini / Claude / GPT"
+    models: ["Google Gemini", "Claude Opus", "GPT-4o/5/6"]
+    source: "Wikipedia AI Cleanup; Graphite (Oct 2026)"
+    added: "2026-10-31"
+
+  - id: "frame.double_negation_instead"
+    tier: 4
+    category: "rhetorical_frame"
+    pattern: "\\b(?:did\\s+not|didn'?t|was\\s+not|never)\\s+[^.!?]{3,60}[.!?]\\s+(?:He|She|It|They|The\\s+\\w+)\\s+(?:did\\s+not|didn'?t|was\\s+not|never)\\s+[^.!?]{3,70}[.!?]\\s+Instead,"
+    type: "regex"
+    weight: 4.0
+    era: "2024-26+ Narrative AI"
+    models: ["Google Gemini", "Claude", "GPT"]
+    source: "Wikipedia AI Cleanup (Negation-Pivot Cadence)"
+    added: "2026-10-31"
