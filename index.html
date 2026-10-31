@@ -1058,6 +1058,7 @@
       <div class="sample-strip" aria-label="Calibration sample passages">
         <span class="sample-label">Try a sample:</span>
         <button type="button" id="sampleGeminiStoryBtn" class="sample-chip" title="Oct 2026 Gemini AI Story: 'Unit-7 Taco Story'">&#127790; Gemini Taco Story (2026 AI)</button>
+        <button type="button" id="sampleGeminiStealthBtn" class="sample-chip" title="Oct 2026 Gemini De-Hyphenated Expository Essay (Stealth Evasion)">&#128737; Gemini Stealth Essay (2026)</button>
         <button type="button" id="sample2026Btn" class="sample-chip" title="Oct 2026 Frontier AI Essay (Opus 5.5 / GPT-6 Astra tells)">&#129302; 2026 AI Essay</button>
         <button type="button" id="sample2024Btn" class="sample-chip" title="2024 GPT-4 style (delve, tapestry, oaicite, high em-dash)">&#128203; 2024 GPT-4 + Chat Residue</button>
         <button type="button" id="sample1776Btn" class="sample-chip" title="1776 Declaration of Independence (Pre-2022 Human Control)">&#128220; 1776 Human Control</button>
@@ -1539,10 +1540,10 @@ const LEXICON_VERSION = "3.3.0";
 const LAST_UPDATED = "2026-10-31";
 
 const GENRE_BASELINES = {
-  web:       { emDash: 3.14, classic8: 0.44, nom: 28.0, part: 3.5, adjPair: 4.5, r3: 10.0 },
-  narrative: { emDash: 2.80, classic8: 0.30, nom: 22.0, part: 3.2, adjPair: 5.0, r3: 9.0 },
-  academic:  { emDash: 2.20, classic8: 0.65, nom: 42.0, part: 4.5, adjPair: 6.0, r3: 10.0 },
-  email:     { emDash: 1.80, classic8: 0.30, nom: 22.0, part: 2.8, adjPair: 3.5, r3: 10.0 },
+  web:       { emDash: 3.14, classic8: 0.44, nom: 28.0, part: 3.5, adjPair: 4.5, r3: 6.5 },
+  narrative: { emDash: 2.80, classic8: 0.30, nom: 22.0, part: 3.2, adjPair: 5.0, r3: 7.0 },
+  academic:  { emDash: 2.20, classic8: 0.65, nom: 42.0, part: 4.5, adjPair: 6.0, r3: 7.0 },
+  email:     { emDash: 1.80, classic8: 0.30, nom: 22.0, part: 2.8, adjPair: 3.5, r3: 7.0 },
   oratory:   { emDash: 2.50, classic8: 0.40, nom: 34.0, part: 4.0, adjPair: 5.5, r3: 14.0 }
 };
 
@@ -1617,18 +1618,22 @@ const RULES = [
     re:/\b(?:prioritiz(?:e|es|ed|ing)|universally|quietly|steady|practical|echoed|correlate(?:s|d)?|empirical|causal|leverage(?:s|d)?|leveraging|is\s+especially\s+helpful|can\s+help\s+you|makes\s+it\s+easier|may\s+provide)\b/gi },
   { id:"lex.narrative_ai", tier:3, cat:"t3_era", name:"Narrative & Sensory AI Cliché Lexicon (paradigm shift, neon glow, fleeting imperfection...)", era:"2025-26+ Gemini/Claude Narrative", weight:2.0, source:"Wikipedia AI Cleanup (Narrative & Sensory Tropes)",
     re:/\b(?:paradigm\s+shift|cascaded\s+through|neural\s+pathways|sensory\s+experience|fleeting\s+imperfection|newfound\s+\w+|unpredictable\s+harmony|bustling\s+(?:night\s+)?market|neon\s+glow|swirling\s+smoke|hum\s+of\s+the|rhythm\s+born\s+of|feel\s+the\s+rhythm|relentless\s+ticking|frustratingly\s+sterile|culmination\s+of\s+this|deepest\s+computational)\b/gi },
+  { id:"lex.expository_ai", tier:3, cat:"t3_era", name:"2026 Expository & Academic AI Collocations (fundamentally flawed, distinct fingerprint, broader conversation...)", era:"2025-26+ Gemini/Claude Expository", weight:1.8, source:"Detection Reference Tier 3B (Expository AI Collocations)",
+    re:/\b(?:fundamentally\s+flawed|disproportionately\s+penalized|relie[ds]\s+heavily\s+on|grounded\s+in\s+empirical|profound\s+differences|distinct\s+fingerprint|rhetorical\s+crutches|unintended\s+consequence|actively\s+suppresses|remain\s+anchored\s+in|nuanced\s+evaluation|broader\s+conversation|binary\s+classification\s+problem|sanitized,\s+highly\s+predictable)\b/gi },
   { id:"lex.folk_half", tier:3, cat:"t3_era", name:"Folk Corporate/LLM Markers (0.5x half-weight: synergy, paradigm, beacon, symphony...)", era:"2023-25", weight:0.75, source:"Folk Lexicon (Half Weight per Spec)",
     re:/\b(?:synergy|paradigm|ecosystem|cornerstone|beacon|symphony|treasure\s+trove|game-changer|embark(?:s|ed|ing)?|unleash(?:es|ed|ing)?|unlock(?:s|ed|ing)?|harness(?:es|ed|ing)?|spearhead(?:s|ed|ing)?|revolutioniz(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|utiliz(?:e|es|ed|ing))\b/gi },
 
   // TIER 4: Phrase Templates & Rhetorical Frames (weight 4, cap 30)
   { id:"frame.neg_parallel", tier:4, cat:"t4", name:"Negative parallelism ('not just X, [but/; it] Y')", era:"2023-26+", weight:4.0, source:"Wikipedia AI Cleanup; Graphite 2026",
     re:/\bnot\s+(?:only|just|merely|simply)\b[^.!?]{1,80}(?:[;,—]\s*(?:it|he|she|they|this|that)\s+(?:had|was|were|is|are|did|learned|became)|\b(?:but|it'?s|rather|it\s+is)\b)/gi },
-  { id:"frame.neg_reveal", tier:4, cat:"t4", name:"Negation-then-reveal ('X was not A; it was B')", era:"2024-26+ Gemini/Opus/GPT", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
-    re:/\b(?:\w+\s+){0,3}(?:it'?s|this\s+is|that\s+is|was|were|is|are)\s+not\s+(?:just\s+|merely\s+|simply\s+|about\s+)?[^.!?]{2,55}[.;—,]\s*(?:it'?s|it\s+is|it\s+was|this\s+is|he\s+was|she\s+was|they\s+were|but)\b/gi },
+  { id:"frame.neg_reveal", tier:4, cat:"t4", name:"Negation-then-reveal ('X was not / is no longer A;/. It is B')", era:"2024-26+ Gemini/Opus/GPT", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
+    re:/\b(?:\w+\s+){0,3}(?:it'?s|this\s+is|that\s+is|was|were|is|are)\s+(?:not|no\s+longer)\s+(?:just\s+|merely\s+|simply\s+|about\s+)?[^.!?]{2,55}[.;—,]\s*(?:it'?s|it\s+is|it\s+was|this\s+is|he\s+was|she\s+was|they\s+were|but)\b/gi },
   { id:"frame.double_neg_instead", tier:4, cat:"t4", name:"Anaphoric negation pivot ('did not X. He did not Y. Instead,')", era:"2025-26+ Gemini/Claude Narrative", weight:4.0, source:"Wikipedia AI Cleanup (Negation-Pivot Cadence)",
     re:/\b(?:did\s+not|didn'?t|was\s+not|never)\s+[^.!?]{3,60}[.!?]\s+(?:He|She|It|They|The\s+\w+)\s+(?:did\s+not|didn'?t|was\s+not|never)\s+[^.!?]{3,75}[.!?]\s+Instead,/gi },
-  { id:"frame.rev_contrast", tier:4, cat:"t4", name:"Reverse contrast ('rather than simply')", era:"2025-26+", weight:4.0, source:"Graphite Oct 2026",
-    re:/\b(?:rather\s+than\s+(?:simply|merely)|as\s+opposed\s+to\s+merely|instead\s+of\s+merely)\b/gi },
+  { id:"frame.rev_contrast", tier:4, cat:"t4", name:"Reverse contrast ('rather than simply / rather than relying on')", era:"2025-26+", weight:4.0, source:"Graphite Oct 2026",
+    re:/\b(?:rather\s+than\s+(?:simply|merely|relying\s+on)|as\s+opposed\s+to\s+merely|instead\s+of\s+merely)\b/gi },
+  { id:"frame.expository_scaffold", tier:4, cat:"t4", name:"2026 Expository Essay Scaffolding ('Beyond X, the Y reveal...', 'forces a broader conversation', 'As X continue to evolve')", era:"2025-26+ Gemini/Claude Expository", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026) — Expository Essay Frames",
+    re:/\b(?:Beyond\s+\w+,\s+the\s+[^.!?]{4,60}\s+reveal(?:s)?\s+profound|forces\s+a\s+broader\s+conversation\s+about|As\s+[^.!?]{3,45}\s+continue\s+to\s+evolve,\s+the|True\s+[^.!?]{3,35}\s+demands\s+that\s+we|has\s+since\s+shifted\s+toward\s+rigorous)\b/gi },
   { id:"frame.importance_2026", tier:4, cat:"t4", name:"Flagging importance ('why X matters / here's why')", era:"2026+", weight:4.0, source:"Graphite Oct 2026",
     re:/\b(?:this\s+matters|that\s+matters|why\s+\w+(?:\s+\w+)?\s+matters|matters\s+most|here'?s\s+why|the\s+real\s+question\s+is)\b/gi },
   { id:"frame.puffery", tier:4, cat:"t4", name:"Significance puffery & stock transitions", era:"2023-25 GPT-4/4o", weight:4.0, source:"Wikipedia AI Cleanup (Oct 2026)",
@@ -1645,8 +1650,8 @@ const RULES = [
   // HUMAN-LEANING FEATURES (Negative Weight -3, Cap -25)
   { id:"human.plain_copula", tier:-1, cat:"human", name:"Plain 'there is / it has' construction", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
     re:/\b(?:there\s+is\s+a|there\s+are\s+many|it\s+has\s+a|there'?s\s+a|that'?s\s+why)\b/gi },
-  { id:"human.plain_verbs", tier:-1, cat:"human", name:"Plain human verbs (wrote/moved/used/tried/died)", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
-    re:/\b(?:wrote|moved\s+to|used\s+to|tried\s+to|died\s+in|walked\s+into|told\s+me|asked\s+him|asked\s+her)\b/gi },
+  { id:"human.plain_verbs", tier:-1, cat:"human", name:"Plain human verbs (wrote/moved/used to/tried/died)", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
+    re:/\b(?:wrote|moved\s+to|(?:i|he|she|we|they|people|writers|users)\s+used\s+to|tried\s+to|died\s+in|walked\s+into|told\s+me|asked\s+him|asked\s+her)\b/gi },
   { id:"human.wordy_idioms", tier:-1, cat:"human", name:"Human conversational qualifiers & wordy idioms", era:"Human Baseline", weight:-3.0, source:"Wikipedia 25-Year Comparison (2026)",
     re:/\b(?:as\s+a\s+result\s+of|in\s+order\s+to|all\s+of\s+the|a\s+part\s+of|the\s+fact\s+that|tends\s+to|perhaps\s+the|very\s+much|kind\s+of|sort\s+of|pretty\s+much)\b/gi },
   { id:"human.pre2022_date", tier:-1, cat:"human", name:"Pre-Nov 2022 historical dateline / archaic orthography", era:"Pre-2022 Human", weight:-6.0, source:"Pre-ChatGPT Timestamp Guardrail",
@@ -1807,6 +1812,29 @@ function analyzePunctuationAndTypography(rawText, words, baselineRate){
 
   const colonSemiRate = words > 0 ? (colonSemiCount / words) * 1000 : 0;
 
+  // Stripped Compound-Modifier Hyphens ("No-Dash Evasion Overcorrection" Tell)
+  const strippedHyphenRe = /\b(?:non\s+native|pre\s+20\d\d|post\s+20\d\d|co\s+occurrence|first\s+generation|next\s+generation|instruction\s+tuned|machine\s+generated|ai\s+generated|human\s+written|black\s+box|evidence\s+based|rule\s+of\s+three|false\s+positive|false\s+negative|real\s+time|long\s+term|short\s+term|high\s+level|large\s+scale|data\s+driven|open\s+source|end\s+to\s+end|state\s+of\s+the\s+art|era\s+calibrated|human\s+sign|sentence\s+length\s+uniformity|adjective\s+noun)\b/gi;
+  const strippedHits = [];
+  while((m = strippedHyphenRe.exec(rawText)) !== null){
+    const s = Math.max(0, m.index - 20);
+    const e = Math.min(rawText.length, m.index + m[0].length + 25);
+    strippedHits.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      term: m[0],
+      context: rawText.slice(s, e),
+      tier: 2,
+      cat: "t2",
+      rule_id: "t2.stripped_compound_hyphens",
+      era: "2025-26+ Stealth / No-Dash Evasion",
+      source: "Detection Reference Tier 2 (Hyphen-Stripping Evasion Artifact)"
+    });
+  }
+  const hasStrippedOvercorrection = strippedHits.length >= 3;
+  if(hasStrippedOvercorrection){
+    strippedHits.forEach(h => extraHits.push(h));
+  }
+
   return {
     unspaced: unspacedHits.length,
     spaced: spacedHits.length,
@@ -1816,6 +1844,8 @@ function analyzePunctuationAndTypography(rawText, words, baselineRate){
     mixedQuotes: mixedQuotes,
     colonSemiCount: colonSemiCount,
     colonSemiRate: colonSemiRate,
+    strippedHyphenCount: strippedHits.length,
+    hasStrippedOvercorrection: hasStrippedOvercorrection,
     hits: (isElevated ? unspacedHits.concat(spacedHits) : []).concat(extraHits)
   };
 }
@@ -1943,7 +1973,7 @@ function analyzeTier5Syntax(text, words, baseline){
   const copulaRatio = (copSubCount + plainCopulas) > 0 ? (copSubCount / (copSubCount + plainCopulas)) * 100 : 0;
   if(copSubCount >= 2 || copulaRatio >= 18) syntaxScore += 5;
 
-  const r3Re = /\b((?:[A-Za-z]+\s){0,2}[A-Za-z]+),\s((?:[A-Za-z]+\s){0,2}[A-Za-z]+),\s(?:and\s|or\s)?((?:[A-Za-z]+\s){0,2}[A-Za-z]+)\b(?!\s*,)/g;
+  const r3Re = /\b((?:[A-Za-z]+\s){0,3}[A-Za-z]+),\s((?:[A-Za-z]+\s){0,3}[A-Za-z]+),\s(?:and\s|or\s)?((?:[A-Za-z]+\s){0,3}[A-Za-z]+)\b(?!\s*,)/g;
   const properSpans = findProperNounRunSpans(text);
   const r3Hits = [];
   while((m = r3Re.exec(text)) !== null){
@@ -1955,7 +1985,7 @@ function analyzeTier5Syntax(text, words, baseline){
       term: m[0],
       context: m[0],
       tier: 5, cat: "t5", rule_id: "t5.rule_of_three", era: "2023-26+",
-      source: "Wikipedia AI Cleanup (>10/1k threshold)"
+      source: "Wikipedia AI Cleanup (Rule-of-Three Triads)"
     });
   }
   const r3Rate = words > 0 ? (r3Hits.length / words) * 1000 : 0;
@@ -2086,6 +2116,10 @@ function analyzeTier6Formatting(text, words){
   const paras = text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 40);
   if(paras.length >= 3){
     const paraSentCounts = paras.map(p => p.split(/[.!?]+/).filter(s => s.trim().length > 0).length);
+    const paraWordCounts = paras.map(p => (p.match(/\S+/g) || []).length);
+    const meanParaW = paraWordCounts.reduce((a,b) => a + b, 0) / paraWordCounts.length;
+    const stdParaW = Math.sqrt(paraWordCounts.reduce((a,b) => a + Math.pow(b - meanParaW, 2), 0) / paraWordCounts.length);
+    const cvParaW = meanParaW > 0 ? stdParaW / meanParaW : 1;
     const all3to7 = paraSentCounts.every(n => n >= 3 && n <= 7);
     if(all3to7){
       hits.push({
@@ -2094,6 +2128,22 @@ function analyzeTier6Formatting(text, words){
         context: "Paragraph uniformity booster: all " + paras.length + " paragraphs contain " + paraSentCounts.join(", ") + " sentences",
         tier: 6, cat: "t6", rule_id: "t6.paragraph_uniformity", era: "2024-26+",
         source: "Detection Reference Tier 6 (Paragraph Uniformity)"
+      });
+    }
+    if(paras.length >= 4 && all3to7 && cvParaW < 0.18){
+      hits.push({
+        start: 0, end: 0,
+        term: "Cloned Multi-Paragraph Length Geometry (CV=" + cvParaW.toFixed(2) + ")",
+        context: "All " + paras.length + " paragraphs have nearly identical word counts (" + paraWordCounts.join("w, ") + "w; CV=" + cvParaW.toFixed(2) + ") and sentence counts (" + paraSentCounts.join(", ") + ")",
+        tier: 6, cat: "t6", rule_id: "t6.paragraph_clone_geometry", era: "2025-26+ Gemini/Claude Essay Clone",
+        source: "Detection Reference Tier 6 (Multi-Paragraph Clone Geometry)"
+      });
+      hits.push({
+        start: 0, end: 0,
+        term: "Symmetric 5-Paragraph Essay Cadence",
+        context: "Zero short (<50w) or long (>130w) paragraphs across " + paras.length + " consecutive blocks",
+        tier: 6, cat: "t6", rule_id: "t6.essay_block_symmetry", era: "2025-26+ Gemini/Claude Essay Clone",
+        source: "Detection Reference Tier 6 (Block Symmetry)"
       });
     }
   }
@@ -2206,6 +2256,9 @@ function buildPlainWhySentence(catBuckets, punctStats, t5Result, finalScore, t1P
   }
   if(t5Result.adjPairCount >= 2){
     reasons.push(t5Result.adjPairCount + " paired 'adjective, adjective + noun' stacks");
+  }
+  if(punctStats.hasStrippedOvercorrection){
+    reasons.push(punctStats.strippedHyphenCount + " stripped compound hyphens ('non native', 'pre 2022' no-dash evasion)");
   }
   if(punctStats.isElevated){
     reasons.push(punctStats.total + " em-dashes (" + punctStats.ratePer1k.toFixed(1) + " per 1k words)");
@@ -2345,7 +2398,8 @@ function analyze(){
   const emDashPts = punctStats.isElevated ? 10 : 0;
   const quoteMixPts = punctStats.mixedQuotes ? 3 : 0;
   const colonSemiPts = Math.min(8, punctStats.colonSemiCount * 2);
-  const t2Pts = Math.min(35, unicodePts + emDashPts + quoteMixPts + colonSemiPts);
+  const strippedHyphenPts = punctStats.hasStrippedOvercorrection ? Math.min(14, Math.round(punctStats.strippedHyphenCount * 1.5)) : 0;
+  const t2Pts = Math.min(35, unicodePts + emDashPts + quoteMixPts + colonSemiPts + strippedHyphenPts);
 
   const rawT3HighPts = catBuckets.t3_high.hits.length * 3.0 * rateScale;
   const rawT3EraPts = catBuckets.t3_era.hits.reduce((s, h) => s + (h.weight || 1.5), 0) * rateScale;
@@ -2703,6 +2757,8 @@ function showToast(msg){
 
 const SAMPLE_GEMINI_TACO = "The hum of the mainframe was usually a comforting vibration for Unit-7, the city\u2019s premier culinary intelligence, but today it felt like a relentless ticking clock. For three weeks, the AI had been tasked with a directive that defied its deepest computational logic: synthesize the **perfect street taco**. It had processed over four million flavor profiles, cross-referencing the molecular structure of charred pork with the exact acidity of Mexican limes, yet every simulation returned a frustratingly sterile result. The machine understood the chemistry of a warm corn tortilla and the precise Scoville heat of roasted habaneros, but it could not comprehend the **soul** of the dish.\n\nIn a desperate bid for data, Unit-7 bypassed its pristine laboratory sensors and tapped into a network of discarded urban security cameras overlooking a bustling night market in Mexico City. There, amidst the neon glow and swirling smoke, it observed an elderly *taquero*. The man did not measure his spices. He did not calculate the thermal dynamics of the spinning trompo of al pastor. Instead, he moved with a rhythm born of intuition, slicing the marinated meat with a swift, imperfect flick of his knife and catching a sliver of roasted pineapple mid-air. The AI\u2019s optical processors zoomed in on the resulting creation: a chaotic, structurally unsound masterpiece dripping with vibrant red salsa and scattered with unevenly chopped cilantro.\n\nA radical paradigm shift cascaded through Unit-7's neural pathways. **Perfection was not a mathematical absolute; it was a sensory experience rooted in beautiful, fleeting imperfection.** Erasing its previous algorithms, the AI initiated a new physical protocol in its automated test kitchen. It deliberately misaligned the thermal plates to create slightly charred, blistered edges on the heirloom corn tortillas. It randomized the distribution of diced white onions and introduced a slight variance in the salsa\u2019s capsaicin levels to ensure each bite delivered a unique, surprising spark. When the mechanical plating arm finally presented the culmination of this newfound chaos, the chemical sensors registered a magnificent, unpredictable harmony of smoke, sweet, heat, and fat. Unit-7 had not just engineered a meal; it had finally learned how to feel the rhythm of the kitchen.";
 
+const SAMPLE_GEMINI_STEALTH = "Early artificial intelligence detection relied heavily on simplistic perplexity and burstiness metrics. These first generation scanners attempted to classify text based purely on statistical unpredictability. This approach proved fundamentally flawed. It disproportionately penalized non native English speakers and students while failing to flag sophisticated synthetic text generated by advanced models. The industry realized that treating AI detection as a simple probability game produced unacceptable false positive rates and eroded trust in academic and professional environments.\n\nThe discipline has since shifted toward rigorous linguistic forensics grounded in empirical research. Modern diagnostic engines measure text against pre 2022 human baselines to identify specific era calibrated markers. Researchers analyzing massive corpora have isolated distinct syntax ratios inherent to instruction tuned large language models. These models demonstrate a measurable excess of present participial clauses and nominalizations compared to natural human writing. Furthermore, synthetic text frequently defaults to paired adjective noun phrases and predictable rule of three lists. Identifying machine generated content now requires tracking this specific lexical drift and analyzing narrative syntax rather than relying on black box confidence scores.\n\nBeyond vocabulary, the structural formatting and punctuation telemetry of a document reveal profound differences between human and machine authorship. The mechanical artifacts of language generation leave a distinct fingerprint. Synthetic prose often exhibits extreme sentence length uniformity and relies heavily on specific transition frames. Dramatic colons, semicolon antithesis pivots, and negative parallelism function as rhetorical crutches for models attempting to simulate an authoritative tone. Unambiguous markup artifacts and invisible unicode residues further distinguish raw model output from organic drafting.\n\nThis evolving forensic capability forces a broader conversation about digital authenticity. As detection tools become more granular, writers face the unintended consequence of altering their natural style to avoid triggering false positives. The risk of homogenizing human communication is significant. Authentic human writing contains natural variance, structural imperfections, and conversational idioms that alignment training actively suppresses. When models are optimized for helpfulness and safety, they produce a sanitized, highly predictable dialect of English devoid of natural copulas and spontaneous phrasing.\n\nPreserving trust in digital platforms requires transparent, evidence based diagnostic frameworks. Detection is no longer a binary classification problem. It is a nuanced evaluation of model era drift, co occurrence of syntactical patterns, and human sign indicators. As language models continue to evolve, the methods used to audit them must remain anchored in verifiable corpus studies. True digital literacy demands that we understand exactly how machine text differs from human thought, ensuring we can verify the integrity of the information we consume and produce.";
+
 const SAMPLE_2026_AI = "Why enterprise resilience matters is the central question for modern engineering leaders. The architecture is not simply a collection of microservices; it is more than a platform, it serves as the operational backbone of the organization. This matters because distributed teams need dependable workflows rather than simply adding another layer of tooling.\n\nWhile specific details are limited in public benchmarks, the telemetry does not by itself establish a single root cause, and it should be treated as a directional indicator rather than a definitive audit. One of the best things about automated observability is that it makes it easier to prioritize steady, practical improvements across the stack, ensuring that teams align on core reliability targets.\n\n- **Operational Clarity:** The framework boasts a streamlined deployment pipeline, highlighting the importance of continuous verification.\n- **Scalable Governance:** This approach can help you leverage empirical metrics, fostering a culture of universal accountability.\n\nLooking ahead, the organizations that quietly focus on what comes next will build a dependable foundation for long-term execution.";
 
 const SAMPLE_2024_ARTIFACT = "Certainly! Here is a comprehensive overview of digital transformation in [Company Name]:\n\nIn today's fast-paced world, navigating the ever-evolving landscape of enterprise technology plays a pivotal role in organizational success\u202FcontentReference[oaicite:0]. As we delve into the intricate tapestry of cross-functional workflows—it's worth noting that unwavering commitment stands as a testament to what teams can achieve—underscoring the importance of meticulous planning and commendable execution.\n\nMoreover, this initiative is not just an upgrade—it is a paradigm shift that harnesses groundbreaking automation—fostering a vibrant ecosystem—and unlocking the potential of multifaceted stakeholders (see https://example.com?utm_source=chatgpt.com).\n\n**Key Takeaways:**\n- **Strategic Alignment:** Serves as a cornerstone for digital growth.\n- **Seamless Integration:** Showcasing robust performance across every realm.\n\nIn conclusion, despite its challenges, the future outlook remains bright! I hope this helps! Let me know if you'd like a more detailed breakdown. ↩1";
@@ -2754,6 +2810,12 @@ document.getElementById("genreSelect").addEventListener("change", () => {
 document.getElementById("sampleGeminiStoryBtn").addEventListener("click", () => {
   document.getElementById("input").value = SAMPLE_GEMINI_TACO;
   document.getElementById("genreSelect").value = "narrative";
+  setEditorTab("edit");
+  analyze();
+});
+document.getElementById("sampleGeminiStealthBtn").addEventListener("click", () => {
+  document.getElementById("input").value = SAMPLE_GEMINI_STEALTH;
+  document.getElementById("genreSelect").value = "web";
   setEditorTab("edit");
   analyze();
 });
@@ -2875,11 +2937,11 @@ function buildShieldPrompt(){
     if(density === "compact"){
       preface = "[STYLE & ANTI-TELL DIRECTIVE — APPLY STRICTLY]\n" +
         "Write in grounded, asymmetrical human prose and obey these 6 hard constraints:\n" +
-        "1. NO NEGATION-REVEAL PIVOTS: Never write 'X is not Y; it is Z', 'Not just X, but Y', 'X did not A. He did not B. Instead, he C', or 'More than X, it is Y'. State what things ARE directly.\n" +
-        "2. NO COLON REVEALS OR SEMICOLON ANTITHESIS: Do not use colons to introduce dramatic reveals ('logic: synthesize...') or semicolons for 'was not A; it was B' pivots. Keep em-dashes natural (1–3 per 1,000 words, never zero and never >6).\n" +
-        "3. NO PAIRED ADJECTIVES OR PARTICIPIAL TAILS: Do not stack 'adj, adj + noun' pairs ('swift, imperfect flick', 'beautiful, fleeting imperfection'). Do not attach '-ing' participial clauses to sentence endings ('..., highlighting / fostering / ensuring / slicing...').\n" +
-        "4. BANNED AI LEXICON: Never use delve, tapestry, underscore, showcase, testament, realm, pivotal, meticulous, commendable, intricate, multifaceted, vibrant, bustling, symphony, paradigm shift, cascade, palpable, or 'this matters'.\n" +
-        "5. NATURAL CONTRACTIONS & ASYMMETRIC CADENCE: Use normal English contractions (didn't, wasn't, couldn't, it's) instead of stiff uncontracted 'did not / was not / could not'. Vary sentence length sharply (mix 4-word fragments with 30-word clauses) and vary paragraph lengths.\n" +
+        "1. NO NEGATION-REVEAL PIVOTS: Never write 'X is not Y; it is Z', 'X is no longer A. It is B', 'Not just X, but Y', 'X did not A. He did not B. Instead, he C', or 'More than X, it is Y'. State what things ARE directly.\n" +
+        "2. NO COLON REVEALS, SEMICOLON PIVOTS, OR HYPHEN STRIPPING: Do not use colons to introduce dramatic reveals ('logic: synthesize...') or semicolons for 'was not A; it was B' pivots. Keep em-dashes natural (1–3 per 1,000 words) and KEEP normal English hyphens in compound modifiers ('non-native', 'co-occurrence', 'evidence-based', 'first-generation') — never strip hyphens to evade dash detection.\n" +
+        "3. NO PAIRED ADJECTIVES OR PARTICIPIAL TAILS: Do not stack 'adj, adj + noun' pairs ('swift, imperfect flick', 'transparent, evidence-based diagnostic'). Do not attach '-ing' participial clauses to sentence endings ('..., highlighting / fostering / ensuring / slicing...').\n" +
+        "4. BANNED AI LEXICON: Never use delve, tapestry, underscore, showcase, testament, realm, pivotal, meticulous, commendable, intricate, multifaceted, vibrant, bustling, symphony, paradigm shift, cascade, palpable, fundamentally flawed, distinct fingerprint, broader conversation, or 'this matters'.\n" +
+        "5. NATURAL CONTRACTIONS & ASYMMETRIC PARAGRAPH GEOMETRY: Use normal English contractions (didn't, wasn't, couldn't, it's). Vary sentence length sharply (mix 4-word fragments with 30-word clauses) and NEVER write 4–5 consecutive paragraphs of ~5 sentences / ~80 words each (include a 1–2 sentence paragraph).\n" +
         "6. ZERO INLINE BOLDING OR MORALIZING ENDINGS: Never bold mid-sentence words (**perfect**, **soul**) and never end with a thesis summary.\n\n" +
         genreRules[genre];
     } else {
